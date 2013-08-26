@@ -1,0 +1,27 @@
+# /etc/conf.d/zram-swap
+
+# This is an integer specifing which zram device number to use.
+# It starts at 0 for the first device.
+# When unset, we default to device 0.
+# Unless you use compressed ramdisks for something else, you should
+# use the default setting.
+#DEVICE=0
+
+# This specifies the size of the swap device in bytes.
+# You can include a suffix of K, M, or G for kilobytes, megabytes, and
+# gigabytes.
+# When unset, we default to using 1/4 of the system memory.
+# Note that this is the apparent size of the device, not the ammount of
+# space it uses in memory.  The actual ammount of space will usually be
+# a little more than half this value.
+#DEV_SIZE=64M
+
+# Use this to specify any parameters to pass to the zram module when it
+# is loaded.
+# Use num_devices to specify how many devices to create by default.
+# If you don't use compressed ramdisks for something else, you should
+# probably leave this empty.
+#MOD_PARAMS="num_devices=4"
+
+# Uncomment this if you want the module unloaded when zram-swap is stopped.
+#UNLOAD_ZRAM="YES"

@@ -1,0 +1,72 @@
+#!/sbin/runscript
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need localmount sysfs procfs
+    after swap
+}
+
+load_zram() {
+    # Try to load zram if it isn't alread loaded or compiled in.
+    local kversion result
+    kversion=`uname -r`
+    if [ "`lsmod | grep -c zram` `grep -c zram /lib/modules/$kversion/modules.builtin`" = "0 0" ] ; then
+        ebegin "Loading zram kernel module"
+        modprobe -s zram $MOD_PARAMS
+        result=$?
+        eend $result
+        return $result
+    fi
+    return 0
+}
+
+start() {
+    if load_zram ; then
+        if [ -z $DEVICE ] ; then
+            DEVICE="0"
+        fi
+        if [ `swapon -s | grep -c /dev/zram$DEVICE` -ne 0 ] ; then
+            # Don't do anything if $DEVICE is already listed as swap, but
+            # but still pretend everything worked.
+            ewarn "/dev/zram$DEVICE is already being used as swap, skipping activation."
+            return 0
+        fi
+        size=$((64*1024*1024))
+        if [ -z $DEV_SIZE ] ; then
+            mem=`head -n 1 /proc/meminfo | cut -d ':' -f 2 | head -c -4`
+            size="$(($mem/4))K"
+        else
+            size=$DEV_SIZE
+        fi
+        ebegin "Setting size of /dev/zram$DEVICE to $size"
+        echo $size > /sys/block/zram$DEVICE/disksize
+        eend $?
+        ebegin "Activating zram swap device"
+        mkswap /dev/zram$DEVICE 2&>1 > /dev/null
+        swapon -d -p 8 /dev/zram$DEVICE
+        eend $?
+    else
+        eerror "zram isn't compiled into the kernel, and the module couldn't be loaded."
+        eerror "Make sure that CONFIG_ZRAM is set to either y or m in your kernel config."
+        return 1
+    fi
+    return 0
+}
+
+stop() {
+    if [ -z $DEVICE ] ; then
+        DEVICE=0
+    fi
+    ebegin "Deactivating zram swap device"
+    swapoff /dev/zram$DEVICE 2&>1 > /dev/null
+    echo 1 > /sys/block/zram$DEVICE/reset
+    eend 0
+    if [ x$UNLOAD_ZRAM = "xYES" ] ; then
+        ebegin "Unloading zram kernel module"
+        modprobe -r -s zram
+        ewend $?
+    fi
+    return 0
+}

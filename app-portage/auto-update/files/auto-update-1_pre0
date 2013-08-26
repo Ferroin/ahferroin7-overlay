@@ -6,10 +6,10 @@ import smtplib
 from socket import getfqdn
 
 #TODO: Move these config variables to a seperate file.
-MAILSERVER='gmail.com'
-MAILUSER='ahferroin7'
-MAILPASS='e2f720d4'
-DESTADDR='ahferroin7@gmail.com'
+MAILSERVER=''
+MAILUSER=''
+MAILPASS=''
+DESTADDR=''
 FROMADDR='auto-update@' + getfqdn()
 SYNC=False
 EIX=False

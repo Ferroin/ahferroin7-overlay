@@ -18,6 +18,7 @@ app-portage/gentoolkit
 "
 
 src_install() {
+	cp "${FILESDIR}"/auto-update-${PV} "${WORK}"/auto-update
 	into /usr
-	dosbin "${FILESDIR}"/auto-update-${PV}
+	dosbin "${WORK}"/auto-update
 }

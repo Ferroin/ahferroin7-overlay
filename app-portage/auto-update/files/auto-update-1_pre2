@@ -31,6 +31,12 @@ def main() {
     del getfqdn
     del parser
 
+    if MAILSERVER == None:
+        MAILSERVER = 'localhost'
+
+    if DESTADDR == None:
+        DESTADDR = 'root@localhost'
+
     msg = 'From: ' + FROMADDR +'\r\n'
     msg += 'To: ' + DESTADDR + '\r\n'
     null = open('/dev/null', 'r+b')
@@ -38,6 +44,7 @@ def main() {
     def send_message(msg):
         server = smtplib.SMTP()
         server.connect(MAILSERVER)
+	if MAILUSER and MAILPASS:
         server.login(MAILUSER, MAILPASS)
         server.sendmail(msg)
         server.quit()

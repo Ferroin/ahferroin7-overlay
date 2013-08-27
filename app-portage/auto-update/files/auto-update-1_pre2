@@ -3,12 +3,19 @@
 
 import subprocess
 import smtplib
-import configparser
-from socket import getfqdn
 
 def main() {
+    import argparse
+    parser = argparse.ArgumentParser('Automated updates for gentoo.')
+    parser.add_argument('-c', '--config', default='/etc/auto-update.conf',
+    help='Specify an alternate configuration file to use.',
+    target='config')
+    parser.parse_args()
+    del argparse
+    import configparser
+    from socket import getfqdn
     config = configparser.ConfigParser()
-    config.read('/etc/auto-update.conf')
+    config.read(parser.config)
     MAILSERVER=config['mail']['server']
     MAILUSER=config['mail']['user']
     MAILPASS=config['mail']['pass']
@@ -19,6 +26,10 @@ def main() {
     DEPCLEAN=config.getBoolean('gentoo', 'depclean')
     ECLEAN=config.getBoolean('gentoo', 'eclean')
     KERNCHECK=config.getBoolean('gentoo', 'kernel_check')
+    del configparser
+    del config
+    del getfqdn
+    del parser
 
     msg = 'From: ' + FROMADDR +'\r\n'
     msg += 'To: ' + DESTADDR + '\r\n'

@@ -73,5 +73,5 @@ src_install() {
 	mkdir -p "${WORK}"/etc/conf.d
 	cp "${FILESDIR}"/zram-swap-conf-${PV} "${WORK}"/etc/conf.d/zram-swap
 	into /etc/conf.d
-	doins "${WORK}"conf.d/zram-swap
+	newins "${WORK}"conf.d/zram-swap
 }

@@ -5,6 +5,8 @@
 
 depend() {
     need localmount sysfs procfs
+    # We need to start AFTER swap so that the in kernel hibernate
+    # works correctly.
     after swap
 }
 
@@ -12,7 +14,7 @@ load_zram() {
     # Try to load zram if it isn't alread loaded or compiled in.
     local kversion result
     kversion=`uname -r`
-    if [ "`lsmod | grep -c zram` `grep -c zram /lib/modules/$kversion/modules.builtin`" = "0 0" ] ; then
+    if [ "`lsmod | grep -c zram` `ls /sys/block | grep -c zram`" = "0 0" ] ; then
         ebegin "Loading zram kernel module"
         modprobe -s zram $MOD_PARAMS
         result=$?
@@ -28,7 +30,7 @@ start() {
             DEVICE="0"
         fi
         if [ `swapon -s | grep -c /dev/zram$DEVICE` -ne 0 ] ; then
-            # Don't do anything if $DEVICE is already listed as swap, but
+            # Don't do anything if $DEVICE is already listed as swap,
             # but still pretend everything worked.
             ewarn "/dev/zram$DEVICE is already being used as swap, skipping activation."
             return 0
@@ -45,6 +47,8 @@ start() {
         eend $?
         ebegin "Activating zram swap device"
         mkswap /dev/zram$DEVICE 2&>1 > /dev/null
+	# Make sure that we have discard set, this will cause pages
+	# to actually be freed when the kernel removes them.
         swapon -d -p 8 /dev/zram$DEVICE
         eend $?
     else
@@ -61,6 +65,8 @@ stop() {
     fi
     ebegin "Deactivating zram swap device"
     swapoff /dev/zram$DEVICE 2&>1 > /dev/null
+    # Reset the block device after we deactivate it
+    # this frees up any memory it may have been using
     echo 1 > /sys/block/zram$DEVICE/reset
     eend 0
     if [ x$UNLOAD_ZRAM = "xYES" ] ; then

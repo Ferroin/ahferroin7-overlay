@@ -1,0 +1,9 @@
+DEFINED_PHASES=install
+DESCRIPTION=Automated update script for Gentoo
+EAPI=4
+HOMEPAGE=https://github.com/Ferroin/gentoo-utils-overlay
+KEYWORDS=~x86 ~amd64 ~arm ~ppc ~sparc
+LICENSE=GPL-2
+RDEPEND=app-portage/gentoolkit
+SLOT=0
+_md5_=e544ca1e82b3a1eeaaf50dd32d118596

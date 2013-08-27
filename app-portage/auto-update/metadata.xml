@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+auto-update is intended to be an easy way to automatically manage system
+updates on Gentoo.  Special handling is planned for as many of the special
+cases as possible (updating portage first, running python-updater or
+perl-cleaner when needed, etc.).
+
+Other planned features include:
+	* Using sys-process/at in addition to cron to schedule updates
+	  when the system is not being utilized.
+	* A standalone daemon with even more advanced scheduling options.
+</longdescription>
+</pkgmetadata>

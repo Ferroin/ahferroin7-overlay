@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+This is a simple initscript to setup swapspace on a compressed ramdisk
+using the zram kernel module.  Zram itself uses a redicullously fast
+compression algorithm that on average reduces data size by about 1/3
+(the compression is even better for swap pages cause they tend to have
+a lot of repeats and runs of zeroes).  By default, we create a ramdisk
+sized at 1/4 of the total ammount of system memory (this takes up about
+1/8 of system memory when full).  Restarting the initscript will
+reinitialize the ramdisk, freeing up any memory it may be using.
+I've personally timed I/O to a zram ramdisk as being at least as fast
+as the same I/O to a SATA III hard disk, and usually faster.
+
+Please note that to use this, you need to be using a kernel built with:
+	CONFIG_ZSMALLOC=y
+and
+	CONFIG_ZRAM=y
+or
+	CONFIG_ZRAM=m
+
+Please also note that upstream (kernel.org) still don't consider this
+to be production quality despite the large number of successful users.
+As such, using the above configs marks your kernel as 'tainted', which
+may make it harder to get support from kernel.org with respect to any
+bugs you may find.
+</longdescription>
+</pkgmetadata>

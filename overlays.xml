@@ -1,0 +1,12 @@
+<repositories version='1.0'>
+    <repo quality='unstable' status='unofficial'>
+        <name>ahferroin7-overlay</name>
+        <description lang='en'>An overlay for software from ahferroin7</description>
+        <homepage>https://github.com/Ferroin/ahferroin7-overlay</homepage>
+        <owner type='person'>
+            <email>ahferroin7@gmail.com</email>
+            <name>Austin S. Hemmelgarn</name>
+        </owner>
+        <source type='git'>git://github.com/Ferroin/ahferroin7-overlay</source>
+    </repo>
+</repositories>

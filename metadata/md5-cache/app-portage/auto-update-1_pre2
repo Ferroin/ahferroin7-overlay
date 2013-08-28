@@ -4,6 +4,6 @@ EAPI=4
 HOMEPAGE=https://github.com/Ferroin/gentoo-utils-overlay
 KEYWORDS=~x86 ~amd64 ~arm ~ppc ~sparc
 LICENSE=GPL-2
-RDEPEND=app-portage/gentoolkit
+RDEPEND=app-portage/gentoolkit >=dev-lang/python-3.2
 SLOT=0
-_md5_=e544ca1e82b3a1eeaaf50dd32d118596
+_md5_=41872a49846396aaa9b811d5971085f0

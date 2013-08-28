@@ -7,4 +7,4 @@ KEYWORDS=~x86 ~amd64 ~arm ~ppc ~sparc
 LICENSE=GPL-2
 RDEPEND=sys-apps/openrc virtual/linux-sources
 SLOT=0
-_md5_=9c80671c5dc1d698708833c0dddc46d8
+_md5_=c6b60e8c8f3a462cd198153d30a150b3

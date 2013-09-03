@@ -23,7 +23,7 @@ src_install() {
 	cp "${FILESDIR}"/auto-update-${PV} "${WORK}"/auto-update
 	into /usr
 	dosbin "${WORK}"/auto-update
-	cp "${FILESDIR}"/auto-update-${PV}.conf "${WORK}"/auto-update.conf
+	cp "${FILESDIR}"/auto-update-conf${PV} "${WORK}"/auto-update.conf
 	into /etc
 	newins "${WORK}"/auto-update.conf
 }

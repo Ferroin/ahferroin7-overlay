@@ -41,6 +41,8 @@ def main() {
     KERNCHECK=config.getBoolean('gentoo', 'kernel_check')
     KPKG=config['gentoo']['kernel_package']
     PYTHONUPDATE=config.getBoolean('gentoo', 'python_update')
+    REVDEPREBUILD=config.getBoolean('gentoo', 'revdep_rebuild')
+    PRESERVEDREBUILD=config.getBoolean('gentoo', 'preserved_rebuild')
     del configparser
     del config
     del getfqdn
@@ -81,7 +83,7 @@ def main() {
         subprocess.call('eix-update', stdout=null, stderr=null)
 
     # Use equery to determine the current portage ebuild, and the newest
-    # installable portage ebuild
+    # installable (non-masked) portage ebuild
     current_portage = subprocess.check_output('equery', '--quiet', '--no-color',
                       'list', '--format=$cpv', 'portage', universal_newlines=True)
     current_portage = subprocess.check_output('equery', 'which',
@@ -106,7 +108,7 @@ def main() {
 
     pyversions = subprocess.check_output('equery', '-q', '-C', 'list',
                  '--format=$cpv', 'dev-lang/python', 'dev-java/jython',
-                 'dev-python/pypy').splitlines()
+                 'dev-python/pypy', 'dev-python/pypy-bin').splitlines()
 
     try:
         update = subprocess.check_output('emerge', '--update', '--deep',
@@ -119,19 +121,30 @@ def main() {
         send_message(msg)
         return 1
 
+    if PRESERVEDREBUILD:
+        try:
+            update = subprocess.check_output('emerge', '--oneshot', '@preserved-rebuild',
+                     stderr=subprocess.STDOUT, universal_newline=True)
+        except subprocess.CalledProcessError:
+            extra_msg += 'Running `emerge --oneshot @preserved-rebuild` failed.\r\n'
+            extra_msg += 'You should almost certaily rerun it manually.\r\n\r\n'
+
     newpyversions = subprocess.check_output('equery', '-q', '-C', 'list',
-                    '--format=$cpv', 'dev-lang/python').splitlines()
+                    '--format=$cpv', 'dev-lang/python', 'dev-java/jython',
+                    'dev-python/pypy', 'dev-python/pypy-bin').splitlines()
     if pyversions != newpyversions:
         if PYTHONUPDATE:
             try:
                 subprocess.call('python-updater', stdout=null, stderr=null)
             except subprocess.CalledProcessError:
-                extra_msg += 'Running python-updater failed, it needs to be rerun manually.\r\n'
+                extra_msg += 'Running python-updater failed, it needs to be rerun manually.\r\n\r\n'
         else:
-            extra_msg += 'Python has been updated, you should run probably python-updater.\r\n'
+            extra_msg += 'Python has been updated, you should run probably python-updater.\r\n\r\n'
 
     if DEPCLEAN:
         subprocess.call('emerge', '--depclean', stdout=null, stderr=null)
+
+    if REVDEPREBUILD:
         subprocess.call('revdep-rebuild', stdout=null, stderr=null)
 
     if ECLEAN:
@@ -145,7 +158,7 @@ def main() {
     confupdate = subprocess.check_output('ls', '-R', '/etc')
     confupdate = subprocess.check_output('grep', '-c', '._cfg', confupdate)
 
-    msg += confupdate + ' config files need to be manually merged.\r\n'
+    msg += confupdate + ' config files need to be manually merged.\r\n\r\n'
 
     if KERNCHECK:
         kversion_current = subprocess.check_output('uname', '-v').partition('-')[0]
@@ -153,6 +166,7 @@ def main() {
                           '--format=$fullversion', KPKG)
         if kversion_current != kversion_source:
             msg += 'Kernel sources have been updated, kernel rebuild required.\r\n'
+            msg += 'Don\'t forget to update any out of tree modules as well.\r\n'
 
     msg += extra_msg
     send_message(msg)

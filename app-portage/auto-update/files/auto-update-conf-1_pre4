@@ -1,7 +1,7 @@
 # Default configuration file for auto-update
 # This get's parsed using python's configparser
 
-# This section is just booleans controling the update process
+# This section is just controlls what passes get run during the update
 [gentoo]
 
 # Set this to 0 to disable running emerge --sync
@@ -10,8 +10,14 @@ sync=1
 # Set this to 1 to enable running eix-update after syncing the portage tree.
 eix=0
 
-# Set this to 1 to run emerge --depclean after merging updates
-depclean=0
+# Set this to 0 to not run emerge --oneshot @preserved-rebuild when needed.
+preserved_rebuild=1
+
+# Set this to 0 to not run emerge --depclean after merging updates
+depclean=1
+
+# Set this to 0 to not run revdep-rebuild after updating
+revdep_rebuild=1
 
 # Set this to 0 to disable cleaning up old packages and distfiles
 eclean=1

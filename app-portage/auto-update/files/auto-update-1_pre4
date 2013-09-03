@@ -96,7 +96,7 @@ def main() {
         portage_update = True
         try:
             portupdate = subprocess.check_output('emerge', '--oneshot', 'portage',
-                     stderr=subprocess.STDOUT, universal_newlines=True)
+                         stderr=subprocess.STDOUT, universal_newlines=True)
         except subprocess.CalledProcessError:
             msg += 'Subject: Automatic Update Failed\r\n\r\n'
             msg += 'Update failed while running `emerge --oneshot portage`\r\n'
@@ -112,7 +112,7 @@ def main() {
 
     try:
         update = subprocess.check_output('emerge', '--update', '--deep',
-                 '--with-bdeps=y', '--newuse', 'world', stdout=subprocess.STDOUT,
+                 '--with-bdeps=y', '--newuse', 'world', stderr=subprocess.STDOUT,
                  universal_newline=True)
     except subprocess.CalledProcessError:
         msg += 'Subject: Automatic Update Failed\r\n\r\n'

@@ -18,10 +18,15 @@ sys-fs/lvm2
 virtual/cron"
 RDEPEND="${DEPEND}"
 
+src_compile() {
+	mkdir -p ${S}
+	cp -ra "${FILESDIR}"/${PV} "${S}"
+}
+
 src_install() {
 	exeinto /etc/cron.hourly
-	doexe "${FILESDIR}"/${PV}/snapback
-	doexe "${FILESDIR}"/${PV}/snapclean
+	doexe "${S}"/${PV}/snapback
+	doexe "${S}"/${PV}/snapclean
 	insinto /etc/conf.d
-	newins "${FILESDIR}"/${PV}/conf/snapback
+	newins "${S}"/${PV}/conf/snapback
 }

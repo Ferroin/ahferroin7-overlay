@@ -1,0 +1,29 @@
+# /etc/conf.d/snapback: configuration for /etc/cron.d/snap{back,clean}
+
+# TARGETS is a space delimited list of lvs to include in the snapshots
+# The names should be just like the ones you would pass to lvm
+# (ie, they need to include the volume-group).
+TARGETS="vg/root vg/usr vg/var vg/home vg/srv"
+
+# DESTPV, if defined, indicates where you want your snapshots stored
+# If you leave it empty, they will just go where lvm thinks they should
+# Note that this is currently only for ALL snapshots from snapback
+DESTPV=""
+
+# SNAPFREQ is the ammount of time between each snapback run
+# This is how often snapshots are taken. If left as an empty string,
+# we default to once daily.
+SNAPFREQ=""
+
+# CLEANFREQ is the ammount of time between each snapclean run
+# This is how often your old backups get automatically deleted.
+# If left as an empty string, we never delete any automatically.
+# The unit defaults to hours, but you can add d for days, w for weeks
+# m for months or y for years. This generally should be no more frequent
+# than SNAPFREQ.
+CLEANFREQ="1w"
+
+# KEEPSNAPS is the number of snapshots to keep for each lv.
+# If there are fewer than this number of snapback snapshots for a
+# given lv, then none of them are removed for that lv.
+KEEPSNAPS="7"

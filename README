@@ -6,5 +6,7 @@ Unless otherwise stated, everything in here is under the GNU GPL version 2
 
 Currently, the programs in this overlay are:
 app-portage/auto-update         An automatic update script for portage.
+sys-apps/snapback               A LVM2 based system restore backup
+                                auto-generator.
 sys-apps/zram-swap              An initscript to setup swap on a compressed
                                 ramdisk.

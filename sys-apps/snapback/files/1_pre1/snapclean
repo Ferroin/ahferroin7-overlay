@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. /etc/snapback.conf
+
+for lvol in ${TARGETS} ; do
+    snaps=`lvs --noheadings --options lv_path | grep "${lvol}.[[:digit:]]{8}" | cut -d / -f 3,4 -s | sort`
+    for count in seq ${KEEP} ; do
+        snaps=`echo ${snaps} | tail -c +1`
+    done
+    for oldsnap in ${snaps} ; do
+        lvremove ${oldsnap}
+    done
+done

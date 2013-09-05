@@ -1,0 +1,11 @@
+#!/bin/sh
+
+. /etc/conf.d/snapback
+
+# Here is the part thactually does the snapshots.
+for lvol in ${TARGETS} ; do
+    snapsize=$((`lvs --noheadings --nosuffix --units b --options lv_size ${lvol}`/10))
+    snapsize=$((${snapsize}-(${snapsize}%512)))
+    lvname=`echo ${lvol} | cut -d / -f 2 -s`
+    lvcreate -s ${lvol} -L ${snapsize}B -n ${lvol}.`date '+%Y%m%d'` ${DESTPV}
+done

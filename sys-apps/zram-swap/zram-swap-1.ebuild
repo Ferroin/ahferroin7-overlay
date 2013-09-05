@@ -66,12 +66,8 @@ pkg_pretend() {
 }
 
 src_install() {
-	mkdir -p "${WORK}"/etc/init.d
-	cp "${FILESDIR}"/zram-swap-${PV} "${WORK}"/etc/init.d/zram-swap
 	exeinto /etc/init.d
-	doexe "${WORK}"/zram-swap
-	mkdir -p "${WORK}"/etc/conf.d
-	cp "${FILESDIR}"/zram-swap-conf-${PV} "${WORK}"/etc/conf.d/zram-swap
+	doexe "${FILESDIR}"/${PV}/zram-swap
 	into /etc/conf.d
-	newins "${WORK}"conf.d/zram-swap
+	newins "${WORK}"/${PV}/conf/zram-swap
 }

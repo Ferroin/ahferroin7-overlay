@@ -20,10 +20,8 @@ RDEPEND="
 "
 
 src_install() {
-	cp "${FILESDIR}"/auto-update-${PV} "${WORK}"/auto-update
 	into /usr
-	dosbin "${WORK}"/auto-update
-	cp "${FILESDIR}"/auto-update-conf${PV} "${WORK}"/auto-update.conf
+	dosbin "${FILESDIR}"/${PV}/auto-update
 	into /etc
-	newins "${WORK}"/auto-update.conf
+	newins "${FILESDIR}"/${PV}/auto-update.conf
 }

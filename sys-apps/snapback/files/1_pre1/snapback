@@ -1,11 +1,38 @@
-#!/bin/sh
+#!/bin/bash
 
 . /etc/conf.d/snapback
 
-# Here is the part thactually does the snapshots.
-for lvol in ${TARGETS} ; do
-    snapsize=$((`lvs --noheadings --nosuffix --units b --options lv_size ${lvol}`/10))
-    snapsize=$((${snapsize}-(${snapsize}%512)))
-    lvname=`echo ${lvol} | cut -d / -f 2 -s`
-    lvcreate -s ${lvol} -L ${snapsize}B -n ${lvol}.`date '+%Y%m%d'` ${DESTPV}
-done
+do_snap() {
+    if [ -z ${SNAPFREQ} ] ; then
+        SNAPFREQ="0 * * *"
+    fi
+    snaphour=`echo ${SNAPFREQ} | cut -d ' ' -f 1 -s`
+    if [ ! `date "+%_H"` = $snaphour ] ; then
+        return false;
+    fi
+    snapmday=`echo ${SNAPFREQ} | cut -d ' ' -f 2 -s`
+    if [ ! `date "+%_d"` = $snapmday ] ; then
+        return false;
+    fi
+    snapmonth=`echo ${SNAPFREQ} | cut -d ' ' -f 3 -s`
+    if [ ! `date "+%_m"` = $snapmonth ] ; then
+        return false;
+    fi
+    snapwday=`echo ${SNAPFREQ} | cut -d ' ' -f 4 -s`
+    if [ ! `date "+%w"` = $snapmonth ] ; then
+        if [ ! `date "+%u"` = $((${snapwday}-7)) ] ; then
+            return false;
+        fi
+    fi
+    return true;
+}
+
+# Here is the part thac tually does the snapshots.
+if [ do_snap ] ; then
+    for lvol in ${TARGETS} ; do
+        snapsize=$((`lvs --noheadings --nosuffix --units b --options lv_size ${lvol}`/10))
+        snapsize=$((${snapsize}-(${snapsize}%512)))
+        lvname=`echo ${lvol} | cut -d / -f 2 -s`
+        lvcreate -s ${lvol} -L ${snapsize}B -n ${lvol}.`date '+%Y%m%d'` ${DESTPV}
+    done
+fi

@@ -10,20 +10,21 @@ TARGETS="vg/root vg/usr vg/var vg/home vg/srv"
 # Note that this is currently only for ALL snapshots from snapback
 DESTPV=""
 
-# SNAPFREQ is the ammount of time between each snapback run
-# This is how often snapshots are taken. If left as an empty string,
-# we default to once daily.
-SNAPFREQ=""
+# SNAPFREQ is used to specify when snapback gets run.
+# The format is just like that for specifying a cronjob without the minutes
+# ie four space delimited fields for hour, day of month, month, and day of week
+# If left as an empty string, we default to running at around midnight daily.
+SNAPFREQ="0 * * *"
 
-# CLEANFREQ is the ammount of time between each snapclean run
-# This is how often your old backups get automatically deleted.
-# If left as an empty string, we never delete any automatically.
-# The unit defaults to hours, but you can add d for days, w for weeks
-# m for months or y for years. This generally should be no more frequent
-# than SNAPFREQ.
-CLEANFREQ="1w"
+# CLEANFREW is used to specify when snapclean gets run
+# The format is just like that for specifying a cronjob without the minutes
+# ie four space delimited fields for hour, day of month, month, and day of week
+# If left as an empty string, we default to running at around midnight on
+# Sundays.
+CLEANFREQ="0 * * 0"
 
 # KEEPSNAPS is the number of snapshots to keep for each lv.
 # If there are fewer than this number of snapback snapshots for a
 # given lv, then none of them are removed for that lv.
+# If not defined, we default to keeping a week's worth of backups
 KEEPSNAPS="7"

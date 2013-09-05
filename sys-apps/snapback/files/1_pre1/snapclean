@@ -1,10 +1,38 @@
-#!/bin/sh
+#!/bin/bash
 
-. /etc/snapback.conf
+. /etc/conf.d/snapback
+
+do_snap() {
+    if [ -z ${CLEANFREQ} ] ; then
+        CLEANFREQ="1 * * 0"
+    fi
+    snaphour=`echo ${CLEANFREQ} | cut -d ' ' -f 1 -s`
+    if [ ! `date "+%_H"` = $snaphour ] ; then
+        return false;
+    fi
+    snapmday=`echo ${CLEANFREQ} | cut -d ' ' -f 2 -s`
+    if [ ! `date "+%_d"` = $snapmday ] ; then
+        return false;
+    fi
+    snapmonth=`echo ${CLEANFREQ} | cut -d ' ' -f 3 -s`
+    if [ ! `date "+%_m"` = $snapmonth ] ; then
+        return false;
+    fi
+    snapwday=`echo ${CLEANFREQ} | cut -d ' ' -f 4 -s`
+    if [ ! `date "+%w"` = $snapmonth ] ; then
+        if [ ! `date "+%u"` = $((${snapwday}-7)) ] ; then
+            return false;
+        fi
+    fi
+    return true;
+}
 
 for lvol in ${TARGETS} ; do
     snaps=`lvs --noheadings --options lv_path | grep "${lvol}.[[:digit:]]{8}" | cut -d / -f 3,4 -s | sort`
-    for count in seq ${KEEP} ; do
+    if [ `echo ${snaps} | wc -l` -le ${KEEPSNAPS} ] ; then
+        continue ;
+    fi
+    for count in seq ${KEEPSNAPS} ; do
         snaps=`echo ${snaps} | tail -c +1`
     done
     for oldsnap in ${snaps} ; do

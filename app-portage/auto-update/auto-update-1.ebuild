@@ -27,5 +27,5 @@ src_install() {
 	into /usr
 	dosbin "${FILESDIR}"/${PV}/auto-update
 	into /etc
-	doins "${FILESDIR}"/${PV}/auto-update.conf
+	doins "${FILESDIR}"/${PV}/conf/auto-update.conf
 }

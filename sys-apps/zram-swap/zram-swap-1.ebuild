@@ -71,7 +71,7 @@ src_unpack() {
 
 src_install() {
 	doinitd "${FILESDIR}"/${PV}/zram-swap
-	doconfd "${WORK}"/${PV}/conf/zram-swap
+	doconfd "${FILESDIR}"/${PV}/conf/zram-swap
 	ewarn "Be advised, using the zram kernel module marks your kernel as tainted."
 	ewarn "This may make it harder to get help with kernel oopses and panics."
 }

@@ -18,7 +18,8 @@ sys-fs/lvm2
 virtual/cron"
 RDEPEND="${DEPEND}"
 
-src_prepare() {
+src_unpack() {
+	S="${WORKDIR}"
 	mkdir -p ${S}
 	cp -ra "${FILESDIR}"/${PV} "${S}"
 }

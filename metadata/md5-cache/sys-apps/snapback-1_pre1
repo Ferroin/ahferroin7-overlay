@@ -1,4 +1,4 @@
-DEFINED_PHASES=install prepare
+DEFINED_PHASES=install unpack
 DEPEND=sys-fs/lvm2 virtual/cron
 DESCRIPTION=LVM2 snapshot based deleted file recovery.
 EAPI=5
@@ -7,4 +7,4 @@ KEYWORDS=~amd64
 LICENSE=GPL-2
 RDEPEND=sys-fs/lvm2 virtual/cron
 SLOT=0
-_md5_=735573478b432909fc4b647dea308338
+_md5_=b4b71c85476e0443e3ce024ec57bd691

@@ -65,9 +65,13 @@ pkg_pretend() {
 	fi
 }
 
+src_unpack() {
+	S="${WORKDIR}"
+}
+
 src_install() {
-	exeinto /etc/init.d
-	doexe "${FILESDIR}"/${PV}/zram-swap
-	into /etc/conf.d
-	newins "${WORK}"/${PV}/conf/zram-swap
+	doinitd "${FILESDIR}"/${PV}/zram-swap
+	doconfd "${WORK}"/${PV}/conf/zram-swap
+	ewarn "Be advised, using the zram kernel module marks your kernel as tainted."
+	ewarn "This may make it harder to get help with kernel oopses and panics."
 }

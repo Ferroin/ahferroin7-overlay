@@ -10,7 +10,7 @@ SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64 ~arm ~ppc ~sparc"
+KEYWORDS="~x86 ~amd64 ~arm ~ppc ~sparc ~mips"
 IUSE=""
 
 DEPEND=""
@@ -19,9 +19,13 @@ RDEPEND="
 >=dev-lang/python-3.2
 "
 
+src_unpack() {
+	S=${WORKDIR}
+}
+
 src_install() {
 	into /usr
 	dosbin "${FILESDIR}"/${PV}/auto-update
 	into /etc
-	newins "${FILESDIR}"/${PV}/auto-update.conf
+	doins "${FILESDIR}"/${PV}/auto-update.conf
 }

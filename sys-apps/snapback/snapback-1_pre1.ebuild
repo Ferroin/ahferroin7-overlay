@@ -14,20 +14,21 @@ KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND="
+sys-process/cronbase
+"
+RDEPEND="
+${DEPEND}
 sys-fs/lvm2
-virtual/cron"
-RDEPEND="${DEPEND}"
+virtual/cron
+"
 
 src_unpack() {
 	S="${WORKDIR}"
-	mkdir -p ${S}
 	cp -ra "${FILESDIR}"/${PV} "${S}"
 }
 
 src_install() {
 	exeinto /etc/cron.hourly
-	doexe "${S}"/${PV}/snapback
-	doexe "${S}"/${PV}/snapclean
-	insinto /etc/conf.d
-	newins "${S}"/${PV}/conf/snapback
+	doexe "${S}"/${PV}/snapback "${S}"/${P}/snapclean
+	doconfd "${S}"/${PV}/conf/snapback
 }

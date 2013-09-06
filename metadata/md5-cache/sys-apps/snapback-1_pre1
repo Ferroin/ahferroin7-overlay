@@ -1,10 +1,10 @@
 DEFINED_PHASES=install unpack
-DEPEND=sys-fs/lvm2 virtual/cron
+DEPEND=sys-process/cronbase
 DESCRIPTION=LVM2 snapshot based deleted file recovery.
 EAPI=5
 HOMEPAGE=https://github.com/Ferroin/ahferroin7-overlay
 KEYWORDS=~amd64
 LICENSE=GPL-2
-RDEPEND=sys-fs/lvm2 virtual/cron
+RDEPEND=sys-process/cronbase sys-fs/lvm2 virtual/cron
 SLOT=0
-_md5_=b4b71c85476e0443e3ce024ec57bd691
+_md5_=53c47626fec0311a1e0c578a13d5f23e

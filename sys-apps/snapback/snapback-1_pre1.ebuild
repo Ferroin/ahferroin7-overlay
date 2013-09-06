@@ -10,7 +10,7 @@ SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~x86 ~arm ~mips ~sparc ~ppc"
 IUSE=""
 
 DEPEND="
@@ -24,13 +24,12 @@ virtual/cron
 
 src_unpack() {
 	S="${WORKDIR}"
-	cp -ra "${FILESDIR}"/${PV} "${S}"
 }
 
 src_install() {
 	exeinto /etc/cron.hourly
-	doexe "${S}"/snapback "${S}"/snapclean
-	doconfd "${S}"/conf/snapback
+	doexe "${FILESDIR}"/${PV}/snapback "${FILESDIR}"/${PV}/snapclean
+	doconfd "${FILESDIR}"/${PV}/conf/snapback
 	einfo "Make sure you edit the configuration in /etc/conf.d/snapback"
 	einfo "Until you edit the configuration and add RUN=1, snapback"
 	einfo "won't do anything at all."

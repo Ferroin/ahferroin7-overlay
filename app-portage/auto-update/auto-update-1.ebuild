@@ -26,6 +26,6 @@ src_unpack() {
 src_install() {
 	into /usr
 	dosbin "${FILESDIR}"/${PV}/auto-update
-	into /etc
+	insinto /etc
 	doins "${FILESDIR}"/${PV}/conf/auto-update.conf
 }

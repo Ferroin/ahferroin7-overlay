@@ -1,5 +1,11 @@
 # /etc/conf.d/snapback: configuration for /etc/cron.d/snap{back,clean}
 
+# RUN determines whether or not snapback and snapclean actually do
+# anything, if undefined or defined as an empty string, they do
+# nothing.  Make sure an uncomment this when you have configured the
+# other variables.
+#RUN=1
+
 # TARGETS is a space delimited list of lvs to include in the snapshots
 # The names should be just like the ones you would pass to lvm
 # (ie, they need to include the volume-group).

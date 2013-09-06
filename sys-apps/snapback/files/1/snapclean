@@ -3,6 +3,9 @@
 . /etc/conf.d/snapback
 
 do_snap() {
+    if [ -z ${RUN} ] ; then
+        return false;
+    fi
     if [ -z ${CLEANFREQ} ] ; then
         CLEANFREQ="1 * * 0"
     fi

@@ -3,6 +3,9 @@
 . /etc/conf.d/snapback
 
 do_snap() {
+    if [ -z ${RUN} ] ; then
+        return false;
+    fi
     if [ -z ${SNAPFREQ} ] ; then
         SNAPFREQ="0 * * *"
     fi

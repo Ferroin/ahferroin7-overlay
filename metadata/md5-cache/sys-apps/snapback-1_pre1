@@ -7,4 +7,4 @@ KEYWORDS=~amd64
 LICENSE=GPL-2
 RDEPEND=sys-process/cronbase sys-fs/lvm2 virtual/cron
 SLOT=0
-_md5_=53c47626fec0311a1e0c578a13d5f23e
+_md5_=620eeefe183533fc8c8b703ae0c1cd1b

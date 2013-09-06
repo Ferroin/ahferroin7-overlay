@@ -10,28 +10,36 @@ do_snap() {
         SNAPFREQ="0 * * *"
     fi
     snaphour=`echo ${SNAPFREQ} | cut -d ' ' -f 1 -s`
-    if [ ! `date "+%_H"` = $snaphour ] ; then
-        return false;
+    if [ ${snaphour} != "*" ] ; then
+        if [ `date "+%_H"` != ${snaphour} ] ; then
+            return false;
+        fi
     fi
     snapmday=`echo ${SNAPFREQ} | cut -d ' ' -f 2 -s`
-    if [ ! `date "+%_d"` = $snapmday ] ; then
-        return false;
+    if [ ${snapmday} != "*" ] ; then
+        if [ `date "+%_d"` != ${snapmday} ] ; then
+            return false;
+        fi
     fi
     snapmonth=`echo ${SNAPFREQ} | cut -d ' ' -f 3 -s`
-    if [ ! `date "+%_m"` = $snapmonth ] ; then
-        return false;
+    if [ ${snapmonth} != "*" ] ; then
+        if [ `date "+%_m"` != ${snapmonth} ] ; then
+            return false;
+        fi
     fi
     snapwday=`echo ${SNAPFREQ} | cut -d ' ' -f 4 -s`
-    if [ ! `date "+%w"` = $snapmonth ] ; then
-        if [ ! `date "+%u"` = $((${snapwday}-7)) ] ; then
-            return false;
+    if [ ${snapwday} != "*" ] ; then
+        if [ `date "+%w"` != ${snapwday} ] ; then
+            if [ `date "+%u"` != $((${snapwday}-7)) ] ; then
+                return false;
+            fi
         fi
     fi
     return true;
 }
 
 # Here is the part thac tually does the snapshots.
-if [ do_snap ] ; then
+if do_snap ; then
     for lvol in ${TARGETS} ; do
         snapsize=$((`lvs --noheadings --nosuffix --units b --options lv_size ${lvol}`/10))
         snapsize=$((${snapsize}-(${snapsize}%512)))

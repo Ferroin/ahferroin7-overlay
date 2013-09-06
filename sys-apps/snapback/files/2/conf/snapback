@@ -9,7 +9,7 @@
 # TARGETS is a space delimited list of lvs to include in the snapshots
 # The names should be just like the ones you would pass to lvm
 # (ie, they need to include the volume-group).
-TARGETS="vg/root vg/usr vg/var vg/home vg/srv"
+TARGETS="vg00/lvol0"
 
 # DESTPV, if defined, indicates where you want your snapshots stored
 # If you leave it empty, they will just go where lvm thinks they should
@@ -25,9 +25,9 @@ SNAPFREQ="0 * * *"
 # CLEANFREW is used to specify when snapclean gets run
 # The format is just like that for specifying a cronjob without the minutes
 # ie four space delimited fields for hour, day of month, month, and day of week
-# If left as an empty string, we default to running at around midnight on
+# If left as an empty string, we default to running at around 1AM on
 # Sundays.
-CLEANFREQ="0 * * 0"
+CLEANFREQ="1 * * 0"
 
 # KEEPSNAPS is the number of snapshots to keep for each lv.
 # If there are fewer than this number of snapback snapshots for a

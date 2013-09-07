@@ -1,4 +1,4 @@
-DEFINED_PHASES=install unpack
+DEFINED_PHASES=install postinst unpack
 DEPEND=sys-process/cronbase
 DESCRIPTION=LVM2 snapshot based deleted file recovery.
 EAPI=5
@@ -7,4 +7,4 @@ KEYWORDS=~amd64 ~x86 ~arm ~mips ~sparc ~ppc
 LICENSE=GPL-2
 RDEPEND=sys-process/cronbase sys-fs/lvm2 virtual/cron
 SLOT=0
-_md5_=1ff230705ca4b0feab9a4dc353a93386
+_md5_=1fff695cd67b012a419f404e9c5cd85d

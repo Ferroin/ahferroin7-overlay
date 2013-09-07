@@ -30,6 +30,9 @@ src_install() {
 	exeinto /etc/cron.hourly
 	doexe "${FILESDIR}"/${PV}/snapback "${FILESDIR}"/${PV}/snapclean
 	doconfd "${FILESDIR}"/${PV}/conf/snapback
+}
+
+pkg_postinst() {
 	einfo "Make sure you edit the configuration in /etc/conf.d/snapback"
 	einfo "Until you edit the configuration and add RUN=1, snapback"
 	einfo "won't do anything at all."

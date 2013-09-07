@@ -6,28 +6,28 @@ do_snap() {
     if [ -z ${RUN} ] ; then
         return false;
     fi
-    if [ -z ${SNAPFREQ} ] ; then
-        SNAPFREQ="0 * * *"
+    if [ -z ${CLEANFREQ} ] ; then
+        CLEANFREQ="1 * * *"
     fi
-    snaphour=`echo ${SNAPFREQ} | cut -d ' ' -f 1 -s`
+    snaphour=`echo ${CLEANFREQ} | cut -d ' ' -f 1 -s`
     if [ ${snaphour} != "*" ] ; then
         if [ `date "+%_H"` != ${snaphour} ] ; then
             return false;
         fi
     fi
-    snapmday=`echo ${SNAPFREQ} | cut -d ' ' -f 2 -s`
+    snapmday=`echo ${CLEANFREQ} | cut -d ' ' -f 2 -s`
     if [ ${snapmday} != "*" ] ; then
         if [ `date "+%_d"` != ${snapmday} ] ; then
             return false;
         fi
     fi
-    snapmonth=`echo ${SNAPFREQ} | cut -d ' ' -f 3 -s`
+    snapmonth=`echo ${CLEANFREQ} | cut -d ' ' -f 3 -s`
     if [ ${snapmonth} != "*" ] ; then
         if [ `date "+%_m"` != ${snapmonth} ] ; then
             return false;
         fi
     fi
-    snapwday=`echo ${SNAPFREQ} | cut -d ' ' -f 4 -s`
+    snapwday=`echo ${CLEANFREQ} | cut -d ' ' -f 4 -s`
     if [ ${snapwday} != "*" ] ; then
         if [ `date "+%w"` != ${snapwday} ] ; then
             if [ `date "+%u"` != $((${snapwday}-7)) ] ; then
@@ -38,12 +38,17 @@ do_snap() {
     return true;
 }
 
-# Here is the part thac tually does the snapshots.
 if do_snap ; then
     for lvol in ${TARGETS} ; do
-        snapsize=$((`lvs --noheadings --nosuffix --units b --options lv_size ${lvol}`/10))
-        snapsize=$((${snapsize}-(${snapsize}%512)))
-        lvname=`echo ${lvol} | cut -d / -f 2 -s`
-        lvcreate -s ${lvol} -L ${snapsize}B -n ${lvol}.`date '+%Y%m%d'` ${DESTPV}
+        snaps=`lvs --noheadings --options lv_path | grep "${lvol}.[[:digit:]]{8}" | cut -d / -f 3,4 -s | sort`
+        if [ `echo ${snaps} | wc -l` -le ${KEEPSNAPS} ] ; then
+            continue ;
+        fi
+        for count in seq ${KEEPSNAPS} ; do
+            snaps=`echo ${snaps} | tail -c +1`
+        done
+        for oldsnap in ${snaps} ; do
+            lvremove ${oldsnap}
+        done
     done
 fi

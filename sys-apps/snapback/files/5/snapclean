@@ -4,7 +4,7 @@
 
 do_snap() {
     if [ -z ${RUN} ] ; then
-        return 1;
+        exit 0;
     fi
     if [ -z ${CLEANFREQ} ] ; then
         CLEANFREQ="1 * * *"
@@ -12,43 +12,40 @@ do_snap() {
     snaphour=`echo ${CLEANFREQ} | cut -d ' ' -f 1 -s`
     if [ ${snaphour} != "*" ] ; then
         if [ `date "+%_H"` != ${snaphour} ] ; then
-            return 1;
+            exit 0;
         fi
     fi
     snapmday=`echo ${CLEANFREQ} | cut -d ' ' -f 2 -s`
     if [ ${snapmday} != "*" ] ; then
         if [ `date "+%_d"` != ${snapmday} ] ; then
-            return 1;
+            exit 0;
         fi
     fi
     snapmonth=`echo ${CLEANFREQ} | cut -d ' ' -f 3 -s`
     if [ ${snapmonth} != "*" ] ; then
         if [ `date "+%_m"` != ${snapmonth} ] ; then
-            return 1;
+            exit 0;
         fi
     fi
     snapwday=`echo ${CLEANFREQ} | cut -d ' ' -f 4 -s`
     if [ ${snapwday} != "*" ] ; then
         if [ `date "+%w"` != ${snapwday} ] ; then
             if [ `date "+%u"` != $((${snapwday}-7)) ] ; then
-                return 1;
+                exit 0;
             fi
         fi
     fi
-    return 0;
 }
 
-if [ do_snap -eq 0 ] ; then
-    for lvol in ${TARGETS} ; do
-        snaps=`lvs --noheadings --options lv_path | grep "${lvol}.[[:digit:]]{8}" | cut -d / -f 3,4 -s | sort`
-        if [ `echo ${snaps} | wc -l` -le ${KEEPSNAPS} ] ; then
-            continue ;
-        fi
-        for count in seq ${KEEPSNAPS} ; do
-            snaps=`echo ${snaps} | tail -c +1`
-        done
-        for oldsnap in ${snaps} ; do
-            lvremove ${oldsnap}
-        done
+for lvol in ${TARGETS} ; do
+    snaps=`lvs --noheadings --options lv_path | grep "${lvol}.[[:digit:]]{8}" | cut -d / -f 3,4 -s | sort`
+    if [ `echo ${snaps} | wc -l` -le ${KEEPSNAPS} ] ; then
+        continue ;
+    fi
+    for count in seq ${KEEPSNAPS} ; do
+        snaps=`echo ${snaps} | tail -c +1`
     done
-fi
+    for oldsnap in ${snaps} ; do
+        lvremove ${oldsnap}
+    done
+done

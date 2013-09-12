@@ -34,15 +34,16 @@ def main() {
     MAILPASS=config['mail']['pass']
     DESTADDR=config['mail']['destination']
     FROMADDR='auto-update@' + getfqdn()
-    SYNC=config.getBoolean('gentoo', 'sync')
-    EIX=config.getBoolean('gentoo', 'eix')
-    DEPCLEAN=config.getBoolean('gentoo', 'depclean')
-    ECLEAN=config.getBoolean('gentoo', 'eclean')
-    KERNCHECK=config.getBoolean('gentoo', 'kernel_check')
+    SYNC=config.getBoolean('gentoo', 'sync') | False
+    EIX=config.getBoolean('gentoo', 'eix') | False
+    DEPCLEAN=config.getBoolean('gentoo', 'depclean') | True
+    ECLEAN=config.getBoolean('gentoo', 'eclean') | False
+    KERNCHECK=config.getBoolean('gentoo', 'kernel_check') | False
     KPKG=config['gentoo']['kernel_package']
-    PYTHONUPDATE=config.getBoolean('gentoo', 'python_update')
-    REVDEPREBUILD=config.getBoolean('gentoo', 'revdep_rebuild')
-    PRESERVEDREBUILD=config.getBoolean('gentoo', 'preserved_rebuild')
+    PYTHONUPDATE=config.getBoolean('gentoo', 'python_update') | True
+    PERLCLEAN=config.getBoolean('gentoo', 'perl_clean') | True
+    REVDEPREBUILD=config.getBoolean('gentoo', 'revdep_rebuild') | True
+    PRESERVEDREBUILD=config.getBoolean('gentoo', 'preserved_rebuild') | True
     del configparser
     del config
     del getfqdn
@@ -110,6 +111,8 @@ def main() {
                  '--format=$cpv', 'dev-lang/python', 'dev-java/jython',
                  'dev-python/pypy', 'dev-python/pypy-bin').splitlines()
 
+    perlversion = subprocess.check_output('perl', '--version')
+
     try:
         update = subprocess.check_output('emerge', '--update', '--deep',
                  '--with-bdeps=y', '--newuse', 'world', stderr=subprocess.STDOUT,
@@ -139,7 +142,17 @@ def main() {
             except subprocess.CalledProcessError:
                 extra_msg += 'Running python-updater failed, it needs to be rerun manually.\r\n\r\n'
         else:
-            extra_msg += 'Python has been updated, you should run probably python-updater.\r\n\r\n'
+            extra_msg += 'Python has been updated, you should probably run python-updater.\r\n\r\n'
+
+    newperlversion = subprocess.check_output('perl', '--version')
+    if perlversion != newperlversion:
+        if PERLCLEAN:
+            try:
+                subprocess.call('perl-cleaner', '--all', stdout=null, stderr=null)
+            except subprocess.CalledProcessError:
+                extra_msg += 'Running perl-cleaner failed, it needs to be rerun manually.\r\n\r\n'
+        else:
+            extra_msg += 'Perl has been updated, you need to run perl-cleaner.\r\n\r\n'
 
     if DEPCLEAN:
         subprocess.call('emerge', '--depclean', stdout=null, stderr=null)

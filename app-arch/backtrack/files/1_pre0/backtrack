@@ -1,0 +1,61 @@
+#!/bin/bash
+
+if [ -z $DUMPTIME ] ; then
+    DUMPTIME=0
+fi
+
+if [ `date +%H` -ne $DUMPTIME ] ; then
+    exit 0;
+fi
+
+if [ -z $DUMPLIST ] ; then
+    exit 1;
+fi
+
+if [ -z $DUMPDEST ] ; then
+    exit 1;
+fi
+
+dumplvl=6
+
+if [ `date +%u` -eq 1 ] ; then
+    dumplvl=3
+fi
+
+if [ `date +%d` -eq 01 ] ; then
+    dumplvl=0
+fi
+
+for fs in $DUMPLIST ; do
+    dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.`date +%F`.dump
+    dump -$dumplvl -a -b 64 -j9 -q -u -f $dumpname $fs
+done
+
+if [ dumplvl -eq 0 ] ; then
+    if [ -z $KEEPMONTHS ] ; then
+        KEEPMONTHS=4
+    fi
+    prunedate=`date -d "$KEEPMONTHS months ago" +%F`
+    for fs in $DUMPLIST ; do
+        dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.$prunedate.dump
+        rm -f $dumpname
+    done
+fi
+
+if [ dumplvl -eq 3 ] ; then
+    if [ -z $KEEPWEEKS ] ; then
+        KEEPWEEKS=4
+    fi
+    for day in Tuesday Wednesday Thursday Friday Saturday Sunday ; do
+        prunedate=`date -d "last $day" +%F`
+        for fs in $DUMPLIST ; do
+            dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.$prunedate.dump
+            rm -f $dumpname
+        done
+    done
+    prunedate=`date -d "$KEEPWEEKS weeks ago" +%F`
+    for fs in $DUMPLIST ; do
+        dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.`date +%F`.dump
+        rm -f $dumpname
+    done
+fi

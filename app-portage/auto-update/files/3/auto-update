@@ -34,7 +34,8 @@ def main() {
     MAILPASS=config['mail']['pass']
     DESTADDR=config['mail']['destination']
     FROMADDR='auto-update@' + getfqdn()
-    SYNC=config.getBoolean('gentoo', 'sync') | False
+    SYNC=config.getBoolean('gentoo', 'sync') | True
+    LAYMAN=config.getBoolean('gentoo', 'layman') | False
     EIX=config.getBoolean('gentoo', 'eix') | False
     DEPCLEAN=config.getBoolean('gentoo', 'depclean') | True
     ECLEAN=config.getBoolean('gentoo', 'eclean') | False
@@ -77,6 +78,17 @@ def main() {
             msg += 'Subject: Update Failed\r\n\r\n'
             msg += 'Update failed while running `emerge --sync`\r\n'
             msg += 'Command output:\r\n' + sync_output.replace('\n', '\r\n')
+            send_message(msg)
+            return 1
+
+    if LAYMAN:
+        try:
+            layman_output = subprocess.check_output('layman', '-S',
+                            stderr=subprocess.STDOUT, universal_newline=True)
+        except subprocess.CallseProcessError:
+            msg += 'Subject: Update Failed\r\n\r\n'
+            msg += 'Update failed while running `layman -S`\r\n'
+            msg += 'Command output:\r\n' + layman_output.replace('\n', '\r\n')
             send_message(msg)
             return 1
 

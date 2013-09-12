@@ -13,15 +13,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
-import subprocess
+import os
 import smtplib
 
-def main() {
+def main(): 
     import argparse
     parser = argparse.ArgumentParser('Automated updates for gentoo.')
     parser.add_argument('-c', '--config', default='/etc/auto-update.conf',
     help='Specify an alternate configuration file to use.',
-    target='config')
+    dest='config')
     args = parser.parse_args()
     del argparse
     del parser
@@ -34,17 +34,17 @@ def main() {
     MAILPASS=config['mail']['pass']
     DESTADDR=config['mail']['destination']
     FROMADDR='auto-update@' + getfqdn()
-    SYNC=config.getBoolean('gentoo', 'sync') | True
-    LAYMAN=config.getBoolean('gentoo', 'layman') | False
-    EIX=config.getBoolean('gentoo', 'eix') | False
-    DEPCLEAN=config.getBoolean('gentoo', 'depclean') | True
-    ECLEAN=config.getBoolean('gentoo', 'eclean') | False
-    KERNCHECK=config.getBoolean('gentoo', 'kernel_check') | False
+    SYNC=config['gentoo'].getboolean('sync')
+    LAYMAN=config['gentoo'].getboolean('layman')
+    EIX=config['gentoo'].getboolean('eix')
+    DEPCLEAN=config['gentoo'].getboolean('depclean')
+    ECLEAN=config['gentoo'].getboolean('eclean')
+    KERNCHECK=config['gentoo'].getboolean('kernel_check')
     KPKG=config['gentoo']['kernel_package']
-    PYTHONUPDATE=config.getBoolean('gentoo', 'python_update') | True
-    PERLCLEAN=config.getBoolean('gentoo', 'perl_clean') | True
-    REVDEPREBUILD=config.getBoolean('gentoo', 'revdep_rebuild') | True
-    PRESERVEDREBUILD=config.getBoolean('gentoo', 'preserved_rebuild') | True
+    PYTHONUPDATE=config['gentoo'].getboolean('python_update')
+    PERLCLEAN=config['gentoo'].getboolean('perl_cleaner')
+    REVDEPREBUILD=config['gentoo'].getboolean('revdep_rebuild')
+    PRESERVEDREBUILD=config['gentoo'].getboolean('preserved_rebuild')
     del configparser
     del config
     del getfqdn
@@ -73,7 +73,7 @@ def main() {
     if SYNC:
         try:
             sync_output = subprocess.check_output('emerge', '--sync',
-                          stderr=subprocess.STDOUT, universal_newline=True)
+                          stderr=subprocess.STDOUT, universal_newlines=True)
         except subprocess.CalledProcessError:
             msg += 'Subject: Update Failed\r\n\r\n'
             msg += 'Update failed while running `emerge --sync`\r\n'
@@ -84,7 +84,7 @@ def main() {
     if LAYMAN:
         try:
             layman_output = subprocess.check_output('layman', '-S',
-                            stderr=subprocess.STDOUT, universal_newline=True)
+                            stderr=subprocess.STDOUT, universal_newlines=True)
         except subprocess.CallseProcessError:
             msg += 'Subject: Update Failed\r\n\r\n'
             msg += 'Update failed while running `layman -S`\r\n'
@@ -93,31 +93,28 @@ def main() {
             return 1
 
     if EIX:
-        subprocess.call('eix-update', stdout=null, stderr=null)
+        os.system('eix-update')
 
     # Use equery to determine the current portage ebuild, and the newest
     # installable (non-masked) portage ebuild
     current_portage = subprocess.check_output('equery', '--quiet', '--no-color',
-                      'list', '--format=$cpv', 'portage', universal_newlines=True)
+                      'list', '--format=$cpv', 'portage', universal_newliness=True)
     current_portage = subprocess.check_output('equery', 'which',
-                      '=' + current_portage, universal_newlines=True)
+                      '=' + current_portage, universal_newliness=True)
     max_portage = subprocess.check_output('equery', 'which', 'portage',
-                  universal_newlines=True)
+                  universal_newliness=True)
 
     # If the ebuild paths don't match, then we need to update portage
     if max_portage != current_portage:
-        portage_update = True
         try:
             portupdate = subprocess.check_output('emerge', '--oneshot', 'portage',
-                         stderr=subprocess.STDOUT, universal_newlines=True)
+                         stderr=subprocess.STDOUT, universal_newliness=True)
         except subprocess.CalledProcessError:
             msg += 'Subject: Automatic Update Failed\r\n\r\n'
             msg += 'Update failed while running `emerge --oneshot portage`\r\n'
             msg += 'Command output:\r\n' + portupdate.replace('\n', '\r\n')
             send_message(msg)
             return 1
-    else:
-        portage_update = False
 
     pyversions = subprocess.check_output('equery', '-q', '-C', 'list',
                  '--format=$cpv', 'dev-lang/python', 'dev-java/jython',
@@ -128,7 +125,7 @@ def main() {
     try:
         update = subprocess.check_output('emerge', '--update', '--deep',
                  '--with-bdeps=y', '--newuse', 'world', stderr=subprocess.STDOUT,
-                 universal_newline=True)
+                 universal_newlines=True)
     except subprocess.CalledProcessError:
         msg += 'Subject: Automatic Update Failed\r\n\r\n'
         msg += 'Update failed while running `emerge --update --deep --with-bdeps=y --newuse world\r\n'
@@ -139,7 +136,7 @@ def main() {
     if PRESERVEDREBUILD:
         try:
             update = subprocess.check_output('emerge', '--oneshot', '@preserved-rebuild',
-                     stderr=subprocess.STDOUT, universal_newline=True)
+                     stderr=subprocess.STDOUT, universal_newlines=True)
         except subprocess.CalledProcessError:
             extra_msg += 'Running `emerge --oneshot @preserved-rebuild` failed.\r\n'
             extra_msg += 'You should almost certaily rerun it manually.\r\n\r\n'
@@ -149,9 +146,8 @@ def main() {
                     'dev-python/pypy', 'dev-python/pypy-bin').splitlines()
     if pyversions != newpyversions:
         if PYTHONUPDATE:
-            try:
-                subprocess.call('python-updater', stdout=null, stderr=null)
-            except subprocess.CalledProcessError:
+            retval = os.system('python-updater')
+            if retval != 0:
                 extra_msg += 'Running python-updater failed, it needs to be rerun manually.\r\n\r\n'
         else:
             extra_msg += 'Python has been updated, you should probably run python-updater.\r\n\r\n'
@@ -159,24 +155,23 @@ def main() {
     newperlversion = subprocess.check_output('perl', '--version')
     if perlversion != newperlversion:
         if PERLCLEAN:
-            try:
-                subprocess.call('perl-cleaner', '--all', stdout=null, stderr=null)
-            except subprocess.CalledProcessError:
+                retval = os.system('perl-cleaner --all')
+            if retval != 0:
                 extra_msg += 'Running perl-cleaner failed, it needs to be rerun manually.\r\n\r\n'
         else:
             extra_msg += 'Perl has been updated, you need to run perl-cleaner.\r\n\r\n'
 
     if DEPCLEAN:
-        subprocess.call('emerge', '--depclean', stdout=null, stderr=null)
+        os.system('emerge --depclean')
 
     if REVDEPREBUILD:
-        subprocess.call('revdep-rebuild', stdout=null, stderr=null)
+        os.system('revdep-rebuild')
 
     if ECLEAN:
-        subprocess.call('eclean -dv packages', stdout=null, stderr=null)
-        subprocess.call('eclean -dv distfiles', stdout=null, stderr=null)
+        os.system('eclean -dv packages')
+        os.system('eclean -dv distfiles')
 
-    subprocess.call('etc-update', '-p')
+    os.system('etc-update -p')
 
     msg += 'Subject: Automatic Update Successful\r\n\r\n'
 

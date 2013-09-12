@@ -25,8 +25,8 @@ src_unpack() {
 
 src_install() {
 	exeinto /etc/cron.hourly
-	doexe "${FILESDIR}"/$P/backtrack
-	doconfd "${FILESDIR}"/$P/conf/backtrack
+	doexe "${FILESDIR}"/${PV}/backtrack
+	doconfd "${FILESDIR}"/${PV}/conf/backtrack
 }
 
 pkg_postinst() {

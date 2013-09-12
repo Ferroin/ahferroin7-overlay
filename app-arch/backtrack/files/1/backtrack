@@ -28,7 +28,9 @@ fi
 
 for fs in $DUMPLIST ; do
     dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.`date +%F`.dump
+    fsfreeze -f $fs
     dump -$dumplvl -a -b 64 -j9 -q -u -f $dumpname $fs
+    fsfreeze -u $fs
 done
 
 if [ dumplvl -eq 0 ] ; then

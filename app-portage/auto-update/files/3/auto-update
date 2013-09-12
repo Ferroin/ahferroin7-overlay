@@ -16,7 +16,7 @@
 import os
 import smtplib
 
-def main(): 
+def main():
     import argparse
     parser = argparse.ArgumentParser('Automated updates for gentoo.')
     parser.add_argument('-c', '--config', default='/etc/auto-update.conf',
@@ -59,7 +59,7 @@ def main():
     msg = 'From: ' + FROMADDR +'\r\n'
     msg += 'To: ' + DESTADDR + '\r\n'
     extra_msg = ''
-    null = open('/dev/null', 'r+b')
+    os.system('touch /var/tmp/auto-update.tmp ; truncate -s 0 /var/tmp/auto-update.tmp')
 
     def send_message(msg):
         server = smtplib.SMTP()
@@ -70,11 +70,18 @@ def main():
         server.quit()
         return True
 
+    def getoutput(command):
+        os.system(command + ' > /var/tmp/auto-update.tmp'
+        with open('/var/tmp/auto-update.tmp', 'r') as tmp:
+            rdata = tmp.read()
+            tmp.truncate(size=0)
+            return rdata
+
     if SYNC:
-        try:
-            sync_output = subprocess.check_output('emerge', '--sync',
-                          stderr=subprocess.STDOUT, universal_newlines=True)
-        except subprocess.CalledProcessError:
+        retval = os.system('emerge --sync 2>&1 | tee /var/log/auto-update/emerge-sync.log')
+        if retval != 0:
+            with open('/var/log/auto-update/emerge-sync.log', 'r') as log:
+                sync_output = log.read()
             msg += 'Subject: Update Failed\r\n\r\n'
             msg += 'Update failed while running `emerge --sync`\r\n'
             msg += 'Command output:\r\n' + sync_output.replace('\n', '\r\n')
@@ -82,10 +89,10 @@ def main():
             return 1
 
     if LAYMAN:
-        try:
-            layman_output = subprocess.check_output('layman', '-S',
-                            stderr=subprocess.STDOUT, universal_newlines=True)
-        except subprocess.CallseProcessError:
+        retval = os.system('layman -S 2>&1 | tee /var/log/auto-update/layman-sync.log')
+        if retval != 0:
+            with open('/var/log/auto-update/layman-sync.log', 'r') as log:
+                layman_output = log.read()
             msg += 'Subject: Update Failed\r\n\r\n'
             msg += 'Update failed while running `layman -S`\r\n'
             msg += 'Command output:\r\n' + layman_output.replace('\n', '\r\n')
@@ -97,36 +104,29 @@ def main():
 
     # Use equery to determine the current portage ebuild, and the newest
     # installable (non-masked) portage ebuild
-    current_portage = subprocess.check_output('equery', '--quiet', '--no-color',
-                      'list', '--format=$cpv', 'portage', universal_newliness=True)
-    current_portage = subprocess.check_output('equery', 'which',
-                      '=' + current_portage, universal_newliness=True)
-    max_portage = subprocess.check_output('equery', 'which', 'portage',
-                  universal_newliness=True)
+    current_portage = getoutput('equery which =`equery --quiet --no-color list --format \\$cpv portage`')
+    max_portage = getoutput('equery which portage')
 
     # If the ebuild paths don't match, then we need to update portage
     if max_portage != current_portage:
-        try:
-            portupdate = subprocess.check_output('emerge', '--oneshot', 'portage',
-                         stderr=subprocess.STDOUT, universal_newliness=True)
-        except subprocess.CalledProcessError:
+        retval = os.system('emerge --oneshot portage 2>&1 | tee /var/log/auto-update/portage-update.log')
+        if retval != 0:
+            with open('/var/log/auto-update/portage-update.log', 'r') as log:
+                portupdate = log.read()
             msg += 'Subject: Automatic Update Failed\r\n\r\n'
             msg += 'Update failed while running `emerge --oneshot portage`\r\n'
             msg += 'Command output:\r\n' + portupdate.replace('\n', '\r\n')
             send_message(msg)
             return 1
 
-    pyversions = subprocess.check_output('equery', '-q', '-C', 'list',
-                 '--format=$cpv', 'dev-lang/python', 'dev-java/jython',
-                 'dev-python/pypy', 'dev-python/pypy-bin').splitlines()
+    pyversions = getoutput('equery -q -C list --format=\\$cpv dev-lang/python dev-java/jython dev-python/pypy dev-python/pypy-bin').splitlines()
 
-    perlversion = subprocess.check_output('perl', '--version')
+    perlversion = getoutput('perl --version')
 
-    try:
-        update = subprocess.check_output('emerge', '--update', '--deep',
-                 '--with-bdeps=y', '--newuse', 'world', stderr=subprocess.STDOUT,
-                 universal_newlines=True)
-    except subprocess.CalledProcessError:
+    retval = os.system('emerge --update --deep --with-bdeps=y world 2>&1 | tee /var/log/auto-update/update.log')
+    if retval != 0:
+        with open('/var/log/auto-update/update.log', 'r') as log:
+            update = log.read()
         msg += 'Subject: Automatic Update Failed\r\n\r\n'
         msg += 'Update failed while running `emerge --update --deep --with-bdeps=y --newuse world\r\n'
         msg += 'Command output:\r\n' + update.replace('\n', '\r\n')
@@ -134,16 +134,12 @@ def main():
         return 1
 
     if PRESERVEDREBUILD:
-        try:
-            update = subprocess.check_output('emerge', '--oneshot', '@preserved-rebuild',
-                     stderr=subprocess.STDOUT, universal_newlines=True)
-        except subprocess.CalledProcessError:
+        retval = os.system('emerge --oneshot @preserved-rebuild 2>&1 | tee /var/log/auto-update/preserved-rebuild.log')
+        if retval != 0:
             extra_msg += 'Running `emerge --oneshot @preserved-rebuild` failed.\r\n'
             extra_msg += 'You should almost certaily rerun it manually.\r\n\r\n'
 
-    newpyversions = subprocess.check_output('equery', '-q', '-C', 'list',
-                    '--format=$cpv', 'dev-lang/python', 'dev-java/jython',
-                    'dev-python/pypy', 'dev-python/pypy-bin').splitlines()
+    newpyversions = getoutput('equery -q -C list --format=\\$cpv dev-lang/python dev-java/jython dev-python/pypy dev-python/pypy-bin').splitlines()
     if pyversions != newpyversions:
         if PYTHONUPDATE:
             retval = os.system('python-updater')
@@ -152,7 +148,7 @@ def main():
         else:
             extra_msg += 'Python has been updated, you should probably run python-updater.\r\n\r\n'
 
-    newperlversion = subprocess.check_output('perl', '--version')
+    newperlversion = getoutput('perl --version')
     if perlversion != newperlversion:
         if PERLCLEAN:
                 retval = os.system('perl-cleaner --all')
@@ -175,15 +171,13 @@ def main():
 
     msg += 'Subject: Automatic Update Successful\r\n\r\n'
 
-    confupdate = subprocess.check_output('ls', '-R', '/etc')
-    confupdate = subprocess.check_output('grep', '-c', '._cfg', confupdate)
+    confupdate = getoutput('ls -R /etc | grep -c ._cfg -')
 
     msg += confupdate + ' config files need to be manually merged.\r\n\r\n'
 
     if KERNCHECK:
-        kversion_current = subprocess.check_output('uname', '-v').partition('-')[0]
-        kversion_source = subprocess.check_output('equery', '-q', '-C', 'list',
-                          '--format=$fullversion', KPKG)
+        kversion_current = getoutput('uname -v').partition('-')[0]
+        kversion_source = getoutput('equery -q -C list --format=$fullversion ' + KPKG)
         if kversion_current != kversion_source:
             msg += 'Kernel sources have been updated, kernel rebuild required.\r\n'
             msg += 'Don\'t forget to update any out of tree modules as well.\r\n'

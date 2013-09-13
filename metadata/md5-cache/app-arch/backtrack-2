@@ -6,4 +6,4 @@ KEYWORDS=~x86 ~amd64 ~arm ~ppc ~sparc ~mips
 LICENSE=GPL-2
 RDEPEND=>=dev-lang/python-3.2 app-arch/dump
 SLOT=0
-_md5_=577663fe80d8111a64cd34c7870c82f9
+_md5_=680dac70912e706c3eaf1ca5dec1ae4d

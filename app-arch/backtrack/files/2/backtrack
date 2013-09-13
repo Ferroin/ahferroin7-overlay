@@ -8,7 +8,7 @@ if [ `date +%H` -ne $DUMPTIME ] ; then
     exit 0;
 fi
 
-if [ -z $DUMPLIST ] ; then
+if [ -z $DUMPUMOUNT $DUMPFREEZE $DUMPSNAP ] ; then
     exit 1;
 fi
 
@@ -26,11 +26,31 @@ if [ `date +%d` -eq 01 ] ; then
     dumplvl=0
 fi
 
-for fs in $DUMPLIST ; do
+dumplist="$DUMPUMOUNT $DUMPFREEZE $DUMPSNAP"
+
+for fs in $DUMPUMOUNT ; do
+    dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.`date +%F`.dump
+    umount $fs
+    remount=$?
+    dump -$dumplvl -a -b 64 -j9 -q -u -f $dumpname $fs
+    if [ remount -eq 0 ] ; then
+        mount $fs
+    fi
+done
+
+for fs in $DUMPFREEZE ; do
     dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.`date +%F`.dump
     fsfreeze -f $fs
     dump -$dumplvl -a -b 64 -j9 -q -u -f $dumpname $fs
     fsfreeze -u $fs
+done
+
+for fs in $DUMPSNAP ; do
+    lvcreate --snapshot --size 512M ${fs}.snap $fs
+    dumpname="${DUMPDEST}"/`echo ${fs}.snap | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.`date +%F`.dump
+    fsck -p ${fs}.snap
+    dump -$dumplvl -a -b 64 -j9 -q -u -f $dumpname $fs
+    lvremove --force ${fs}.snap
 done
 
 if [ dumplvl -eq 0 ] ; then
@@ -39,7 +59,7 @@ if [ dumplvl -eq 0 ] ; then
     fi
     prunedate=`date -d "$KEEPMONTHS months ago" +%F`
     for fs in $DUMPLIST ; do
-        dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.$prunedate.dump
+        dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.${prunedate}.dump
         rm -f $dumpname
     done
 fi
@@ -51,7 +71,7 @@ if [ dumplvl -eq 3 ] ; then
     for day in Tuesday Wednesday Thursday Friday Saturday Sunday ; do
         prunedate=`date -d "last $day" +%F`
         for fs in $DUMPLIST ; do
-            dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.$prunedate.dump
+            dumpname="${DUMPDEST}"/`echo $fs | cut -d '/' --output-delimiter='-' -f 1 --complement -s`.${prunedate}.dump
             rm -f $dumpname
         done
     done

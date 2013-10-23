@@ -72,6 +72,3 @@ start() {
         fi
     done
 }
-
-stop() {
-}

@@ -1,0 +1,77 @@
+#!/sbin/runscript
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need sysfs
+    after modules
+}
+
+start() {
+    cfq_params="slice_idle back_seek_max back_seek_penalty fifo_expire_async fifo_expire_sync group_idle latency target_latency slice_async slice_async_rq slice_sync quantum"
+    deadline_params="read_expire write_expire fifo_batch writes_starved front_merges"
+    for device in all `ls /sys/block` ; do
+        tmp="sched_${device}"
+        if [ "${!tmp}" ] ; then
+            if [ ${device} = all ] ; then
+                ebegin "Setting default I/O scheduler to ${!tmp}"
+                for device2 in `ls /sys/block` ; do
+                    echo "${!tmp}" > /sys/block/${device2}/device/queue/scheduler 2>/dev/null
+                done
+                eend 0
+            else
+                if grep -q "${!tmp}" /sys/block/${device}/device/queue/scheduler ; then
+                    ebegin "Setting I/O scheduler ${!tmp} for device ${device}"
+                    echo "${!tmp}" > /sys/block/${device}/device/queue/scheduler
+                    eend $?
+                else
+                    eerror "Requested I/O scheduler ${!tmp} not found."
+                fi
+            fi
+        fi
+        if [ "${!tmp}" = cfq ] ; then
+            tmp="cfq_${device}"
+            for param in ${cfq_params} ; do
+                tmp2="${!tmp}_${param}"
+                if [ "${!tmp2}" ] ; then
+                    if [ ${device} = all ] ; then
+                        ebegin "Setting default for CFQ parameter ${param} to ${!tmp2}"
+                        for device2 in `ls /sys/block` ; do
+                            if grep -q "[cfq]" /sys/block/${device}/queue/scheduler ; then
+                                echo "${!tmp2}" > /sys/block/${device}/device/queue/iosched/${param}
+                            fi
+                        done
+                        eend $?
+                    else
+                        ebegin "Setting CFQ parameter ${param} to ${!tmp2} for device ${device}"
+                        echo "${!tmp2}" > /sys/block/${device}/queue/iosched/${param}
+                        eend $?
+                    fi
+                fi
+            done
+        elif [ "${!tmp}" = deadline ] ; then
+            tmp="deadline_${device}"
+            for param in ${deadline_params} ; do
+                tmp2="${!tmp}_${param}"
+                if [ "${!tmp2}" ] ; then
+                    if [ ${device} = all ] ; then
+                        ebegin "Setting default for Deadline parameter ${param} to ${!tmp2}"
+                        for device2 in `ls /sys/block` ; do
+                            if grep -q "[deadline]" /sys/block/${device}/queue/scheduler ; then
+                                echo "${!tmp2}" > /sys/block/${device}/device/queue/iosched/${param}
+                            fi
+                        done
+                    else
+                        ebegin "Setting Deadline paramater ${param} to ${!tmp2} for device ${device}"
+                        echo "${!tmp2}" > /sys/block/${device}/queue/iosched/${param}
+                        eend $?
+                    fi
+                fi
+            done
+        fi
+    done
+}
+
+stop() {
+}

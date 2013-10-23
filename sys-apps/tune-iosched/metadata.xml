@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+This is a relatively simple initscript to allow user configured
+tuning of the block I/O schedkulers on linux systems.  It allows
+per-device tuning, as well as tuning based on certain device
+parameters.  Individuals who use this should make a point to read
+file:///usr/src/linux/Documentation/block/CFQ-iosched.txt and
+file:///usr/src/linux/Documentation/block/Deadline-iosched.txt.
+In general, the most common uses for this script are setting a noop
+scheduler on SSD's, disabling CFQ's low-latency mode to boost throughput
+on file servers, and using more sane settings than the default on high-end
+storage devices (ie. RAID controllers).
+</longdescription>
+</pkgmetadata>

@@ -10,11 +10,10 @@ SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64 ~arm ~ppc ~sparc"
+KEYWORDS="x86 amd64 arm ~ppc ~sparc ~mips ~alpha ~hppa ~ia64 ~m64k ~sh -x86-fbsd -amd64-fbsd -sparc-fbsd"
 IUSE=""
 
 DEPEND="
-sys-apps/openrc
 virtual/linux-sources
 "
 RDEPEND="${DEPEND}"
@@ -72,6 +71,9 @@ src_unpack() {
 src_install() {
 	doinitd "${FILESDIR}"/${PV}/zram-swap
 	doconfd "${FILESDIR}"/${PV}/conf/zram-swap
+}
+
+pkg_postinst() {
 	ewarn "Be advised, using the zram kernel module marks your kernel as tainted."
 	ewarn "This may make it harder to get help with kernel oopses and panics."
 }

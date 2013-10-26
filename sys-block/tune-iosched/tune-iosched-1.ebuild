@@ -10,11 +10,11 @@ SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~x86 ~amd64 ~arm ~ppc ~sparc"
+KEYWORDS="x86 amd64 arm ~ppc ~sparc ~mips ~alpha ~hppa ~ia64 ~m64k ~sh -x86-fbsd -amd64-fbsd -sparc-fbsd"
 IUSE=""
 
 DEPEND="
-virtual/linux-sources
+!sys-block/iosched-ctld
 "
 RDEPEND="${DEPEND}"
 

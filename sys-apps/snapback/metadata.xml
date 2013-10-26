@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-<longdescription lang="en">
-Snapback is a LVM2 snapshot based backup-like service designed primarily
-for the recovery of old versions of files and deleted files.
-</longdescription>
-</pkgmetadata>

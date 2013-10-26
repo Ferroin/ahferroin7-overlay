@@ -1,0 +1,20 @@
+#!/sbin/runscript
+# Copyright 1999-2013 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need localmount sysfs
+}
+
+start() {
+    ebegin "Starting iosched-ctld"
+    start-stop-daemon --start --exec /usr/sbin/iosched-ctld --pidfile /run/iosched-ctld.pid --interpreted --background --make-pidfile
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping iosched-ctld"
+    start-stop-daemon --stop --exec /usr/sbin/iosched-ctld --pidfile /run/iosched-ctld.pid --interpreted
+    eend $?
+}

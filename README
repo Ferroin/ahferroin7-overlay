@@ -3,6 +3,8 @@ official Portage tree when I created it.  Some day I'll probably try
 to get this stuff merged into the official tree.
 
 Currently, the programs in this overlay are:
+sys-apps/iosched-ctld           A shell based daemon for configuring I/O
+                                scheduling.
 sys-apps/snapback               A LVM2 based system restore backup
                                 auto-generator.
 sys-apps/tune-iosched           An initscript to fine tune block I/O

@@ -1,0 +1,6 @@
+# Allow all programs to create cordumps, but make the dump only readable by
+# the program's EUID.
+fs.suid_dumpable = 2
+
+# Configure a sane pattern for coredump names
+kernel.core_pattern = /var/crash/%e.%p.%u.core

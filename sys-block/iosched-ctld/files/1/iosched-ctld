@@ -20,8 +20,8 @@
 
 # If the parameters for CFQ and Deadline schedulers are defined in the
 # configfile, use those definitions, otherwise use some sane defaults
-cfq_params=${cfq_params:-""}
-deadline_params=${deadline_params:-""}
+cfq_params=${cfq_params:-"slice_idle back_seek_max back_seek_penalty fifo_expire_async fifo_expire_sync group_idle latency target_latency slice_async slice_async_rq slice_sync quantum"}
+deadline_params=${deadline_params:-"read_expire write_expire fifo_batch writes_starved front_merges"}
 
 # Used to configure the parameters for a given device.
 # Takes two parameters, the device to configure, and the scheduler
@@ -79,5 +79,5 @@ while true ; do
         (configure_device ${device}) &
         sleep 0.1
     done
-    sleep 1
+    sleep 2
 done

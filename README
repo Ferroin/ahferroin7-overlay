@@ -3,6 +3,8 @@ official Portage tree when I created it.  Some day I'll probably try
 to get this stuff merged into the official tree.
 
 Currently, the programs in this overlay are:
+app-portage/disowned            A shell script to automate finding files that
+                                aren't owned by any package.
 sys-apps/zram-swap              An initscript to setup swap on a compressed
                                 ramdisk.
 sys-block/iosched-ctld          A shell based daemon for configuring I/O

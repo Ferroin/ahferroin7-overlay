@@ -1,0 +1,58 @@
+#!/sbin/runscript
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need localmount
+    after swap # We need to be started AFTER swap, otherwise hibernate won't work
+    after swapfiles
+    keyword -jail -openvz -prefix -vserver -lxc
+}
+
+start() {
+    if [ -z ${SWAPFILE} ] ; then
+        eerror "btrfs-swap has not been configured, you need to edit /etc/conf.d/btrfs-swap"
+        exit 0
+    else
+        if [ ${REMOVE} -eq 1 ] ; then
+            if [ -e ${SWAPFILE} ] ; then
+                ebegin "Removing old swapfile"
+                rm -f ${SWAPFILE}
+                eend $?
+            fi
+        fi
+        if [ -z ${SIZE} ] ; then
+            SIZE=$(head -n 1 /proc/meminfo | cut -d ':' -f 2 | head -c -4)
+        fi
+        ebegin "Creating swapfile"
+        touch ${SWAPFILE}
+        chown root:root ${SWAPFILE}
+        chmod 600 ${SWAPFILE}
+        chattr +SC ${SWAPFILE}
+        truncate -s ${SIZE} ${SWAPFILE}
+        loopdev=$(losetup -f --show ${SWAPFILE})
+        mkswap ${loopdev}
+        eend $?
+        ebegin "Activating swapfile"
+        swapon -d -p 0 ${loopdev}
+        eend $?
+    fi
+}
+
+stop() {
+    if [ -z ${SWAPFILE} ] ; then
+        eerror "btrfs-swap has not been configured, you need to edit /etc/conf.d/btrfs-swap"
+        exit 0
+    else
+        loopdev=$(losetup -j ${SWAPFILE} | cut -d ":" -f 0 -s)
+        ebegin "Deactivating swapfile"
+        swapoff ${loopdev}
+        eend $?
+        if [ ${REMOVE} -eq 1 ] ; then
+            ebegin "Removing swapfile"
+            rm -f ${SWAPFILE}
+            eend $?
+        fi
+    fi
+}

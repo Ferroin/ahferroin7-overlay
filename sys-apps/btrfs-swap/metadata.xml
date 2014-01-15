@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+This is a simple init-script to setup a swapfile on a BTRFS volume.
+It sanely handles preallocating the file, and correctly handles setup
+of the loop device that is needed for swap to work on BTRFS.  It can
+also remove the file during shutdown, which is useful on SSD's and when
+doing a filesystem balance.
+</longdescription>
+</pkgmetadata>

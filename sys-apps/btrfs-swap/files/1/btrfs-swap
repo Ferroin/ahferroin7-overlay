@@ -24,6 +24,7 @@ start() {
         fi
         if [ -z ${SIZE} ] ; then
             SIZE=$(head -n 1 /proc/meminfo | cut -d ':' -f 2 | head -c -4)
+            SIZE="${SIZE}K"
         fi
         ebegin "Creating swapfile"
         touch ${SWAPFILE}

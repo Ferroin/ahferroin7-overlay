@@ -15,3 +15,6 @@
 # Units are K, M, G, T, P, E, Z, Y (powers of 1024) or KB, MB, ... (pow-
 # ers of 1000).
 #SIZE=64M
+
+# REMOVE is either 0 to leave the swap file during shutdown, or 1 to remove it
+REMOVE=1

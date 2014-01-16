@@ -10,7 +10,7 @@ SRC_URI=""
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="x86 amd64 arm ~ppc ~sparc ~mips ~alpha ~hppa ~ia64 ~m64k ~sh -x86-fbsd -amd64-fbsd -sparc-fbsd"
+KEYWORDS="~x86 ~amd64 ~arm ~ppc ~sparc ~mips ~alpha ~hppa ~ia64 ~m64k ~sh -x86-fbsd -amd64-fbsd -sparc-fbsd"
 IUSE=""
 
 DEPEND="
@@ -37,5 +37,5 @@ pkg_postinst() {
 	einfo
 	einfo "By default, any crashdump older than one week will be deleted every,"
 	einfo "day at midnight.  Make sure that if you need to save a dump, you"
-	einfo "you move it somewhere else."
+	einfo "move it somewhere else."
 }

@@ -1,0 +1,48 @@
+#!/sbin/runscript
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need sysfs proc
+    keyword -jail -openvz -prefix -vserver -lxc
+}
+
+start() {
+    if [ "${SATA_PM}" ] ; then
+        if [ -d /sys/class/scsi_host ] ; then
+            for dir in $(ls /sys/class/scsi_host) ; do
+                if [ -e "${dir}/link_power_management_policy" ] ; then
+                    host=$(echo ${dir} | cut -d / -f 5)
+                    einfo "Enabling link power management for SATA/SCSI ${host}"
+                    echo ${SATA_PM} > ${dir}/link_power_management_policy
+                fi
+            done
+        fi
+    fi
+    if [ "${PCI_ASPM}" ] ; then
+        if [ -d /sys/bus/pci/devices ] ; then
+            for dir in $(ls /sys/bus/pci/devices) ; do
+                if [ -e "${dir}/power/control" ] ; then
+                    device=$(echo ${dir} | cut -d / -f 6)
+                    einfo "Enabling ASPM for PCI device ${device}"
+                    echo auto > ${dir}/control
+                fi
+            done
+        fi
+    fi
+    if [ "${USB_PM}" ] ; then
+        if [ -d /sys/bus/usb/devices ] ; then
+            for dir in $(ls /sys/bus/usb/devices) ; do
+                if [ -e "${dir}/power/control" ] ; then
+                    device=$(echo ${dir} | cut -d / -f 6)
+                    einfo "Enabling USB autosuspend for device ${device}"
+                    echo auto > ${dir}/control
+                fi
+            done
+        fi
+    fi
+}
+
+stop() {
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+An init-script to configure power-management settings on boot.
+It currently spports enabling the following power management options:
+    * SATA link power management
+    * USB auto-suspend
+    * PCI-Express Active State Power Management
+</longdescription>
+</pkgmetadata>

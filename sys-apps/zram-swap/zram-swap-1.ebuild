@@ -5,7 +5,7 @@
 EAPI=4
 
 DESCRIPTION="An initscript to setup swap on a compressed ramdisk."
-HOMEPAGE="https://github.com/Ferroin/gentoo-utils-overlay"
+HOMEPAGE="https://github.com/Ferroin/ahferroin7-overlay"
 SRC_URI=""
 
 LICENSE="GPL-2"

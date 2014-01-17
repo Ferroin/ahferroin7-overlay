@@ -46,7 +46,7 @@ stop() {
         eerror "btrfs-swap has not been configured, you need to edit /etc/conf.d/btrfs-swap"
         exit 0
     else
-        loopdev=$(losetup -j ${SWAPFILE} | cut -d ":" -f 0 -s)
+        loopdev=$(losetup -j ${SWAPFILE} | cut -d ":" -f 1 -s)
         ebegin "Deactivating swapfile"
         swapoff ${loopdev}
         eend $?

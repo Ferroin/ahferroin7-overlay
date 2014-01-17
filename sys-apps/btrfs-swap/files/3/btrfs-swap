@@ -4,8 +4,7 @@
 # $Header: $
 
 depend() {
-    need localmount
-    after swap # We need to be started AFTER swap, otherwise hibernate won't work
+    need localmount after swap # We need to be started AFTER swap, otherwise hibernate won't work
     after swapfiles
     keyword -jail -openvz -prefix -vserver -lxc
 }
@@ -49,6 +48,7 @@ stop() {
         loopdev=$(losetup -j ${SWAPFILE} | cut -d ":" -f 1 -s)
         ebegin "Deactivating swapfile"
         swapoff ${loopdev}
+        losetup -d ${loopdev}
         eend $?
         if [ ${REMOVE} -eq 1 ] ; then
             ebegin "Removing swapfile"

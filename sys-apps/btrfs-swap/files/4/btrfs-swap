@@ -4,7 +4,8 @@
 # $Header: $
 
 depend() {
-    need localmount after swap # We need to be started AFTER swap, otherwise hibernate won't work
+    need localmount
+    after swap # We need to be started AFTER swap, otherwise hibernate won't work
     after swapfiles
     keyword -jail -openvz -prefix -vserver -lxc
 }

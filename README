@@ -12,5 +12,3 @@ sys-block/iosched-ctld          A shell based daemon for configuring I/O
                                 scheduling.
 sys-block/tune-iosched          An initscript to fine tune block I/O
                                 scheduling
-sys-process/coremgr             Some simple configuration for secure
-                                coredumps on production systems.

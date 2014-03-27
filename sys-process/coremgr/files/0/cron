@@ -1,1 +1,0 @@
-00 0 * * * root find /var/crash/*.core -mtime +6 -delete

@@ -12,3 +12,5 @@ sys-block/iosched-ctld          A shell based daemon for configuring I/O
                                 scheduling.
 sys-block/tune-iosched          An initscript to fine tune block I/O
                                 scheduling
+sys-fs/fscleaner                A cron job to automate basic filesystem
+                                maintnence tasks.

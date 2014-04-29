@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+Fscleaner is a relatively simple cron job for preformaing maintnence on
+a variety of filesystems.  It includes support for:
+	* Running fstrim on a given set of filesystems
+	* Running zerofree on a given set of filesystems
+	* Defragmenting EXT4 filesystems
+	* Balancing, scrubbing, and defragmenting BTRFS file systems
+
+I plan to eventually also include support for the following:
+	* Batch deduplication on BTRFs file systems
+	* Balancing, scrubbing, and resilvering ZFS file systems
+	* Preforming hardlink based deduplication in sspecific directories
+	* XFS defragmentation using xfs_fsr
+</longdescription>
+</pkgmetadata>

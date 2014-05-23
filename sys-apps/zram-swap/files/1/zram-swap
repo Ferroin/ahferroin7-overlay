@@ -13,7 +13,6 @@ depend() {
 load_zram() {
     # Try to load zram if it isn't alread loaded or compiled in.
     local kversion result
-    kversion=`uname -r`
     if [ "`lsmod | grep -c zram` `ls /sys/block | grep -c zram`" = "0 0" ] ; then
         ebegin "Loading zram kernel module"
         modprobe -s zram $MOD_PARAMS
@@ -38,7 +37,7 @@ start() {
         size=$((64*1024*1024))
         if [ -z $DEV_SIZE ] ; then
             mem=`head -n 1 /proc/meminfo | cut -d ':' -f 2 | head -c -4`
-            size="$(($mem/4))K"
+            size="${mem}K"
         else
             size=$DEV_SIZE
         fi

@@ -46,8 +46,8 @@ start() {
         eend $?
         ebegin "Activating zram swap device"
         mkswap /dev/zram$DEVICE 2&>1 > /dev/null
-	# Make sure that we have discard set, this will cause pages
-	# to actually be freed when the kernel removes them.
+        # Make sure that we have discard set, this will cause pages
+        # to actually be freed when the kernel removes them.
         swapon -d -p 8 /dev/zram$DEVICE
         eend $?
     else

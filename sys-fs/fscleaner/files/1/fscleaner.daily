@@ -1,0 +1,19 @@
+#!/bin/bash
+# vi: set sw=4 tw=76 :
+
+. /etc/fscleaner.conf
+
+for item in ${daily_e4defrag} ; do
+    e4defrag ${item} || true
+done
+if [ ${daily_fstrim} ] ; then
+    fstrim -a || true
+fi
+for item in ${daily_zerofree} ; do
+    zerofree ${item} || true
+done
+for op in balance scrub ; do
+    for item in ${daily_btrfs_${op}} ; do
+        btrfs ${op} start ${btrfs_${op}_opts} ${item} || true
+    done
+done

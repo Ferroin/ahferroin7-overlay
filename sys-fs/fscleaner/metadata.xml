@@ -10,7 +10,7 @@ a variety of filesystems.  It includes support for:
 	* Balancing, scrubbing, and defragmenting BTRFS file systems
 
 I plan to eventually also include support for the following:
-	* Batch deduplication on BTRFs file systems
+	* Batch deduplication on BTRFS file systems
 	* Balancing, scrubbing, and resilvering ZFS file systems
 	* Preforming hardlink based deduplication in sspecific directories
 	* XFS defragmentation using xfs_fsr

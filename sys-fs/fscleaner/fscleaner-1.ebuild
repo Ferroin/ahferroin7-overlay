@@ -25,8 +25,12 @@ src_unpack() {
 src_install() {
 	insinto /etc
 	newins "${FILESDIR}"/${PV}/fscleaner.conf fscleaner.conf
-	insinto /etc/cron.houry
-	newins "${FILESDIR}"/${PV}/fscleaner.cron fscleaner
+	insinto /etc/cron.daily
+	newins "${FILESDIR}"/${PV}/fscleaner.daily fscleaner
+	insinto /etc/cron.weekly
+	newins "${FILESDIR}"/${PV}/fscleaner.weekly fscleaner
+	insinto /etc/cron.monthly
+	newins "${FILESDIR}"/${PV}/fscleaner.monthly fscleaner
 }
 
 pkg_postinst() {

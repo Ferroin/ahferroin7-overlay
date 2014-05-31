@@ -120,11 +120,11 @@ start() {
                     CRYPTTYPE="plain"
                 fi
                 if [ -z ${CRYPTOPTS} ] ; then
-                    CRYPTOPTS="--cipher=aes-xts-plain64 --hash=sha1 --keyfile=/dev/urandom --keysize=512"
+                    CRYPTOPTS="--cipher=aes-xts-plain64 --hash=sha1 --key-file=/dev/urandom --key-size=512"
                 fi
                 cryptsetup open ${SWAPFILE} crypt-auto-swap --type=${CRYPTTYPE} ${CRYPTOPTS}
                 eend $?
-                ${SWAPFILE}="/dev/mapper/crypt-auto-swap"
+                SWAPFILE="/dev/mapper/crypt-auto-swap"
             fi
         fi
         mkswap ${SWAPFILE} >/dev/null 2>&1

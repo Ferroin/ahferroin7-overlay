@@ -5,6 +5,8 @@ to get this stuff merged into the official tree.
 Currently, the programs in this overlay are:
 app-portage/disowned            A shell script to automate finding files that
                                 aren't owned by any package.
+sys-apps/auto-swap              An initscript to do advanced swapfile
+                                setup, intended to supersede btrfs-swap
 sys-apps/btrfs-swap             An initscript to setup a swapfile on BTRFS
 sys-apps/zram-swap              An initscript to setup swap on a compressed
                                 ramdisk.

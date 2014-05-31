@@ -1,0 +1,168 @@
+#!/sbin/runscript
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+depend() {
+    need localmount
+    after swap # We need to be started AFTER swap, otherwise hibernate won't work
+    after swapfiles
+    keyword -jail -openvz -prefix -vserver -lxc
+}
+
+getfstype() {
+# We use this to determine what type of FS the swapfile is on.
+    fstype=$(findmnt -An -o FSTYPE -T ${SWAPFILE})
+    for fs in btrfs nilfs2 logfs zfs ext3cow ; do
+        if [ ${fstype} = ${fs} ] ; then
+            fstype="cowloop"
+            return 0
+        fi
+    done
+    for fs in jffs2 ubifs jffs ; do
+        if [ ${fstype} = ${fs} ] ; then
+            fstype="flash"
+            return 0
+        fi
+    done
+    for fs in nfs nfs4 cifs smbfs coda cephfs ncpfs afs davfs fuse fuse.sshfs lustre shfs glusterfs ; do
+        if [ ${fstype} = ${fs} ] ; then
+            fstype="net"
+            return 0
+        fi
+    done
+}
+
+start() {
+    if [ -z ${SWAPFILE} ] ; then
+        eerror "auto-swap has not been configured, you need to edit /etc/conf.d/auto-swap"
+        exit 0
+    else
+        if [ ${REMOVE} -eq 1 ] ; then
+            if [ -e ${SWAPFILE} ] ; then
+                ebegin "Removing old swapfile"
+                rm -f ${SWAPFILE}
+                eend $?
+            fi
+        fi
+        if [ -z ${SIZE} ] ; then
+            SIZE=$(head -n 1 /proc/meminfo | cut -d ':' -f 2 | head -c -4)
+            SIZE=$(($SIZE/1024))
+            einfo "SIZE not specified for swapfile, defaulting to ${SIZE} MiB"
+        fi
+        ebegin "Creating swapfile"
+        touch ${SWAPFILE}
+        chown root:root ${SWAPFILE}
+        chmod 600 ${SWAPFILE}
+        if [ ${USELOOP} -eq 1 ] ; then
+            SIZE="${SIZE}M"
+            truncate -s ${SIZE} ${SWAPFILE}
+            SWAPFILE=$(losetup -f --show ${SWAPFILE})
+        elif [ ${USELOOP} -eq 0 ] ; then
+            if [ ! -e ${SWAPFILE} ] ; then
+                dd if=/dev/zero of=${SWAPFILE} bs=$((1024*1024)) count=${SIZE}
+            else
+                ewarn "Found existing swapfile, assuming it's the right size."
+            fi
+        else
+            fstype=$(getfstype)
+            if [ ${fstype} = cowloop ] ; then
+                # This is for COW filesystems that either don't honor
+                # the NOCOW attribute, or don't provide a proper block
+                # mapping for files.  This currently includes: BTRFS,
+                # NILFS2, ZFS and ext3cow
+                chattr +C ${SWAPFILE}
+                SIZE="${SIZE}M"
+                truncate -s ${SIZE} ${SWAPFILE}
+                SWAPFILE=$(losetup -f --show ${SWAPFILE})
+            elif [ ${fstype} = cow ] ; then
+                # This is for COW filesystems that honor the +C attribute,
+                # and provide a proper block mapping for files.
+                # Currently, there aren't any filesystems that I know of
+                # that fit this description.
+                chattr +C ${SWAPFILE}
+                if [ ! -e ${SWAPFILE} ] ; then
+                    dd if=/dev/zero of=${SWAPFILE} bs=$((1024*1024)) count=${SIZE}
+                else
+                    ewarn "Found existing swapfile, assuming it's the right size."
+                fi
+            elif [ ${fstype} = net ] ; then
+                # We always use a loop device for network filesystems,
+                # because most of them need it, and the difference in
+                # performance is mitigated by the lowered performance
+                # of the network filesystem
+                SIZE="${SIZE}M"
+                truncate -s ${SIZE} ${SWAPFILE}
+                SWAPFILE=$(losetup -f --show ${SWAPFILE})
+            elif [ ${fstype} = flash ] ; then
+                # This is for flash based filesystems, which shouldn't
+                # pre-allocate for the swapfile.  This includes JFFS2 and UBIFS
+                SIZE="${SIZE}M"
+                truncate -s ${SIZE} ${SWAPFILE}
+                SWAPFILE=$(losetup -f --show ${SWAPFILE})
+            else
+                # This is a catch all for other filesystem types
+                if [ ! -e ${SWAPFILE} ] ; then
+                    dd if=/dev/zero of=${SWAPFILE} bs=$((1024*1024)) count=${SIZE}
+                else
+                    ewarn "Found existing swapfile, assuming it's the right size."
+                fi
+            fi
+        fi
+        eend $?
+        if [ ${ENCRYPT} ]; then
+            if [ ! which cryptsetup >/dev/null 2>&1 ] ; then
+                eerror "Unable to find cryptsetup."
+                eend 1
+            else
+                ebegin "Configuring encryption for swapfile."
+                if [ -z ${CRYPTTYPE} ] ; then
+                    CRYPTTYPE="plain"
+                fi
+                if [ -z ${CRYPTOPTS} ] ; then
+                    CRYPTOPTS="--cipher=aes-xts-plain64 --hash=sha1 --keyfile=/dev/urandom --keysize=512"
+                fi
+                cryptsetup open ${SWAPFILE} crypt-auto-swap --type=${CRYPTTYPE} ${CRYPTOPTS}
+                eend $?
+                ${SWAPFILE}="/dev/mapper/crypt-auto-swap"
+            fi
+        fi
+        mkswap ${SWAPFILE} >/dev/null 2>&1
+        ebegin "Activating swapfile"
+        swapon -p 0 ${SWAPFILE}
+        eend $?
+    fi
+}
+
+stop() {
+    if [ -z ${SWAPFILE} ] ; then
+        eerror "auto-swap has not been configured, you need to edit /etc/conf.d/auto-swap"
+        exit 0
+    else
+        ebegin "Deactivating swapfile"
+        fstype=$(getfstype)
+        if [ ${USELOOP} -eq 1 -o ${fstype} = cowloop -o ${fstype} = net -o ${fstype} = flash ] ; then
+            SWAPFILE=$(losetup --show -f ${SWAPFILE})
+            if [ ${ENCRYPT} ] ; then
+                swapoff /dev/mapper/crypt-auto-swap
+                cryptsetup close crypt-auto-swap
+            else
+                swapoff ${SWAPFILE}
+            fi
+            losetup -d ${SWAPFILE}
+        else
+            if [ ${ENCRYPT} ] ; then
+                swapoff /dev/mapper/crypt-auto-swap
+                cryptsetup close crypt-auto-swap
+            else
+                swapoff ${SWAPFILE}
+            fi
+        fi
+        eend $?
+        if [ ${REMOVE} -eq 1 ] ; then
+            ebegin "Removing swapfile"
+            rm -f ${SWAPFILE}
+            eend $?
+        fi
+    fi
+}

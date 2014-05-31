@@ -1,0 +1,43 @@
+# /etc/conf.d/auto-swap
+# Configuration file for auto-swap
+#
+# SWAPFILE is the path to the file to use.
+# Note that the script forces the ownership to root:root and
+# changes permissions to 600 for security.  Also, we set NODATACOW
+# for efficency, and use truncate to set the file size (which means
+# that space isn't allocated until it's actually used).
+#SWAPFILE="/swap"
+
+# SIZE is how big to make the swap file.
+# If this isn't specified, then the file is made the same size as the
+# ammount of detected memory
+# The size is specified in megabytes.
+#SIZE=64
+
+# REMOVE is either 0 to leave the swap file during shutdown, or 1 to remove it
+REMOVE=1
+
+# USELOOP is used to determine whether or not to use a loop device.
+# If it is set to 1, then we unconditionally use a loop device, if 0,
+# then we never use a loop device.  If it is unset, the initscript will
+# try to detect whether or not we need a loop device.  You should
+# generally leave this unset unless the initscript makes the wrong choice
+# by default.
+#USELOOP=1
+
+# ENCRYPT is used to configure dmcrypt based encryption of the swapfile.
+# If it is set, then we use cryptsetup to encrypt the device.  Make sure
+# that you have cryptsetup installed and your kernel has the dmcrypt module
+# either loaded or built in before you use this, otherwise the initscript
+# will die.
+#ENCRYPT=1
+
+# CRYPTOPTS is the list of options to pass to cryptsetup.  It defaults
+# to "--cipher=aes-xts-plain64 --hash=sha1 --keyfile=/dev/urandom
+# --keysize=512".  This shouldn't include --type, use CRYPTTYPE for
+# that, and it shouldn't include --align-payload, as we compute that
+# automatically.
+#CRYPTOPTS=""
+
+# CRYPTTYPE is the device type for cryptsetup.  It defaults to "plain".
+#CRYPTTYPE="plain"

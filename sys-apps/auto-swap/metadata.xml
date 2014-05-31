@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+	This is a simple initscript to handle setup of a swapfile,
+	while correctly handling filesystems like BTRFS and NFS, and
+	with optional encryption and removal when deactivated.
+</longdescription>
+</pkgmetadata>

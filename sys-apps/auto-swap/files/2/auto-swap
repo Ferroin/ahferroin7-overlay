@@ -141,7 +141,7 @@ stop() {
     else
         ebegin "Deactivating swapfile"
         fstype=$(getfstype)
-        if [ ${USELOOP} -eq 1 -o ${fstype} = cowloop -o ${fstype} = net -o ${fstype} = flash ] ; then
+        if [ ${USELOOP} -eq 1 ] ; then
             SWAPFILE=$(losetup --show -f ${SWAPFILE})
             if [ ${ENCRYPT} ] ; then
                 swapoff /dev/mapper/crypt-auto-swap
@@ -151,12 +151,28 @@ stop() {
             fi
             losetup -d ${SWAPFILE}
         else
-            if [ ${ENCRYPT} ] ; then
-                swapoff /dev/mapper/crypt-auto-swap
-                cryptsetup close crypt-auto-swap
-            else
-                swapoff ${SWAPFILE}
-            fi
+            case fstype in
+                net) ;;
+                flash) ;;
+                cowloop)
+                    SWAPFILE=$(losetup --show -f ${SWAPFILE})
+                    if [ ${ENCRYPT} ] ; then
+                        swapoff /dev/mapper/crypt-auto-swap
+                        cryptsetup close crypt-auto-swap
+                    else
+                        swapoff ${SWAPFILE}
+                    fi
+                    losetup -d ${SWAPFILE}
+                    break ;;
+                *)
+                    if [ ${ENCRYPT} ] ; then
+                        swapoff /dev/mapper/crypt-auto-swap
+                        cryptsetup close crypt-auto-swap
+                    else
+                        swapoff ${SWAPFILE}
+                    fi
+                    break ;;
+            esac
         fi
         eend $?
         if [ ${REMOVE} -eq 1 ] ; then

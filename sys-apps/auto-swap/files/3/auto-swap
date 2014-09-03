@@ -149,7 +149,7 @@ stop() {
             else
                 swapoff ${SWAPFILE}
             fi
-            losetup -d ${SWAPFILE}
+            losetup -d $(losetup -j ${SWAPFILE})
         else
             case fstype in
                 net) ;;

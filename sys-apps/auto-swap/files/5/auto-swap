@@ -31,6 +31,7 @@ getfstype() {
             return 0
         fi
     done
+    fstype="other"
 }
 
 start() {
@@ -38,6 +39,9 @@ start() {
         eerror "auto-swap has not been configured, you need to edit /etc/conf.d/auto-swap"
         exit 0
     else
+        if [ -z ${REMOVE} ] ; then
+            REMOVE=1
+        fi
         if [ ${REMOVE} -eq 1 ] ; then
             if [ -e ${SWAPFILE} ] ; then
                 ebegin "Removing old swapfile"
@@ -54,15 +58,17 @@ start() {
         touch ${SWAPFILE}
         chown root:root ${SWAPFILE}
         chmod 600 ${SWAPFILE}
-        if [ ${USELOOP} -eq 1 ] ; then
-            SIZE="${SIZE}M"
-            truncate -s ${SIZE} ${SWAPFILE}
-            SWAPFILE=$(losetup -f --show ${SWAPFILE})
-        elif [ ${USELOOP} -eq 0 ] ; then
-            if [ ! -e ${SWAPFILE} ] ; then
-                fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
+        if [ ${USELOOP} ] ; then
+            if [ ${USELOOP} -eq 1 ] ; then
+                SIZE="${SIZE}M"
+                truncate -s ${SIZE} ${SWAPFILE}
+                SWAPFILE=$(losetup -f --show ${SWAPFILE})
             else
-                ewarn "Found existing swapfile, assuming it's the right size."
+                if [ ! -e ${SWAPFILE} ] ; then
+                    fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
+                else
+                    ewarn "Found existing swapfile, assuming it's the right size."
+                fi
             fi
         else
             fstype=$(getfstype)
@@ -71,6 +77,7 @@ start() {
                 # the NOCOW attribute, or don't provide a proper block
                 # mapping for files.  This currently includes: BTRFS,
                 # NILFS2, ZFS and ext3cow
+                einfo "Detected filesystem as being COW and needing a loop device."
                 chattr +C ${SWAPFILE}
                 SIZE="${SIZE}M"
                 truncate -s ${SIZE} ${SWAPFILE}
@@ -80,6 +87,7 @@ start() {
                 # and provide a proper block mapping for files.
                 # Currently, there aren't any filesystems that I know of
                 # that fit this description.
+                einfo "Detected filesystem as being COW and not needing a loop device."
                 chattr +C ${SWAPFILE}
                 if [ ! -e ${SWAPFILE} ] ; then
                     fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
@@ -91,12 +99,14 @@ start() {
                 # because most of them need it, and the difference in
                 # performance is mitigated by the lowered performance
                 # of the network filesystem
+                einfo "Detected filesystem as being a network filesystem."
                 SIZE="${SIZE}M"
                 truncate -s ${SIZE} ${SWAPFILE}
                 SWAPFILE=$(losetup -f --show ${SWAPFILE})
             elif [ ${fstype} = flash ] ; then
                 # This is for flash based filesystems, which shouldn't
                 # pre-allocate for the swapfile.  This includes JFFS2 and UBIFS
+                einfo "detected filesystem as being flash based."
                 SIZE="${SIZE}M"
                 truncate -s ${SIZE} ${SWAPFILE}
                 SWAPFILE=$(losetup -f --show ${SWAPFILE})

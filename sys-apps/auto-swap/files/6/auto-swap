@@ -71,7 +71,7 @@ start() {
                 fi
             fi
         else
-            fstype=$(getfstype)
+            getfstype
             if [ ${fstype} = cowloop ] ; then
                 # This is for COW filesystems that either don't honor
                 # the NOCOW attribute, or don't provide a proper block

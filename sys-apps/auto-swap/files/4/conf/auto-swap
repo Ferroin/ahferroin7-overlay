@@ -1,11 +1,11 @@
 # /etc/conf.d/auto-swap
 # Configuration file for auto-swap
-#
+
 # SWAPFILE is the path to the file to use.
 # Note that the script forces the ownership to root:root and
 # changes permissions to 600 for security.  Also, we set NODATACOW
-# for efficency, and use truncate to set the file size (which means
-# that space isn't allocated until it's actually used).
+# for efficency, and use truncate when possible to set the file size
+# (which means that space isn't allocated until it's actually used).
 #SWAPFILE="/swap"
 
 # SIZE is how big to make the swap file.

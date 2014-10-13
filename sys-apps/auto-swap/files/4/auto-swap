@@ -60,7 +60,7 @@ start() {
             SWAPFILE=$(losetup -f --show ${SWAPFILE})
         elif [ ${USELOOP} -eq 0 ] ; then
             if [ ! -e ${SWAPFILE} ] ; then
-                dd if=/dev/zero of=${SWAPFILE} bs=$((1024*1024)) count=${SIZE}
+                fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
             else
                 ewarn "Found existing swapfile, assuming it's the right size."
             fi
@@ -82,7 +82,7 @@ start() {
                 # that fit this description.
                 chattr +C ${SWAPFILE}
                 if [ ! -e ${SWAPFILE} ] ; then
-                    dd if=/dev/zero of=${SWAPFILE} bs=$((1024*1024)) count=${SIZE}
+                    fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
                 else
                     ewarn "Found existing swapfile, assuming it's the right size."
                 fi
@@ -103,7 +103,7 @@ start() {
             else
                 # This is a catch all for other filesystem types
                 if [ ! -e ${SWAPFILE} ] ; then
-                    dd if=/dev/zero of=${SWAPFILE} bs=$((1024*1024)) count=${SIZE}
+                    fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
                 else
                     ewarn "Found existing swapfile, assuming it's the right size."
                 fi

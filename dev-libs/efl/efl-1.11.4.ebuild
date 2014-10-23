@@ -48,9 +48,9 @@ RDEPEND="
 	gnutls? ( net-libs/gnutls )
 	!gnutls? ( ssl? ( dev-libs/openssl ) )
 	gstreamer? (
-		=media-libs/gstreamer-0.10*
-		=media-libs/gst-plugins-good-0.10*
-		=media-plugins/gst-plugins-ffmpeg-0.10*
+		media-libs/gstreamer:1.0
+		media-libs/gst-plugins-good:1.0
+		media-plugins/gst-plugins-ffmpeg:1.0
 	)
 	harfbuzz? ( media-libs/harfbuzz )
 	ibus? ( app-i18n/ibus )
@@ -208,7 +208,7 @@ src_configure() {
 	$(use_enable fontconfig)
 	$(use_enable fribidi)
 	$(use_enable gif image-loader-gif)
-	$(use_enable gstreamer)
+	$(use_enable gstreamer gstreamer1)
 	$(use_enable harfbuzz)
 	$(use_enable ico image-loader-ico)
 	$(use_enable ibus)
@@ -247,9 +247,9 @@ src_configure() {
 
 	--disable-tizen
 	--disable-gesture
-	--disable-gstreamer1
+	--disable-gstreamer
 	--enable-xinput2
-	--disable-xinput22
+	--enable-xinput22
 	--enable-libmount
 	"
 # disable gstreamer:1.0 support until evas_generic_loaders has it too

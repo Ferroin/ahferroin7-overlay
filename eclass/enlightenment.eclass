@@ -185,7 +185,7 @@ enlightenment_src_compile() {
 }
 
 enlightenment_src_install() {
-	V=1 emake install install-pkgconfig_DATA DESTDIR="${D}" || die
+	V=1 emake install install-pkgconfigDATA DESTDIR="${D}" || die
 	find "${D}" '(' -name CVS -o -name .svn -o -name .git ')' -type d -exec rm -rf '{}' \; 2>/dev/null
 	for d in AUTHORS ChangeLog NEWS README TODO ${EDOCS}; do
 		[[ -f ${d} ]] && dodoc ${d}

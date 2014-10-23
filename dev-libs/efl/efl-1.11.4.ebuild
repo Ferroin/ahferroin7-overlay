@@ -50,7 +50,6 @@ RDEPEND="
 	gstreamer? (
 		media-libs/gstreamer:1.0
 		media-libs/gst-plugins-good:1.0
-		media-plugins/gst-plugins-ffmpeg:1.0
 	)
 	harfbuzz? ( media-libs/harfbuzz )
 	ibus? ( app-i18n/ibus )

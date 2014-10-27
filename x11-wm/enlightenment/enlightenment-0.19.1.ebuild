@@ -53,6 +53,7 @@ RDEPEND="
 	>=dev-libs/efl-1.8.3
 	|| ( >=dev-libs/efl-1.8.3[X] >=dev-libs/efl-1.8.3[xcb] )
 	>=media-libs/elementary-1.8.2
+	>=media-libs/imlib2-1.2.2
 	x11-libs/xcb-util-keysyms"
 DEPEND="${RDEPEND}"
 

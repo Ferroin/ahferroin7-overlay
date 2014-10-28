@@ -17,7 +17,8 @@ IUSE="+pam +pskc"
 
 DEPEND="
 >=dev-libs/libxml2-2.0.0
-dev-util/pkgconfig"
+dev-util/pkgconfig
+pskc? ( dev-libs/xmlsec )"
 RDEPEND="${DEPEND}"
 
 src_configure() {

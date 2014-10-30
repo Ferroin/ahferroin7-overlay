@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-<longdescription lang="en">
-	A simple init script to start a qemu system emulation instance
-	in a secure manner, allowing multiple instantiation of the init
-	script itself.
-</longdescription>
-</pkgmetadata>

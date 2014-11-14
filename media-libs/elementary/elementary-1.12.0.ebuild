@@ -24,7 +24,7 @@ KEYWORDS="~amd64 ~arm ~x86"
 IUSE="debug examples fbcon quicklaunch sdl wayland X static-libs"
 
 DEPEND="
-	>=dev-libs/efl-1.11.2[sdl?,png,wayland?,X?]
+	>=dev-libs/efl-${PV}[sdl?,png,wayland?,X?]
 	"
 RDEPEND="${DEPEND}"
 
@@ -48,8 +48,6 @@ src_configure() {
 		$(use_enable X ecore-x)
 		$(use_enable quicklaunch quick-launch)
 	"
-#broken: make[4]: *** No rule to make target 'prefs_example_01.epb', needed by 'all-am'.  Stop
-#		$(use_enable examples build-examples)
 
 	enlightenment_src_configure
 }

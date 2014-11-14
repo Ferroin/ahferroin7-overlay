@@ -19,9 +19,9 @@ IUSE="gstreamer pdf postscript raw svg"
 S=${WORKDIR}/${MY_P}
 
 RDEPEND="
-	>=dev-libs/efl-1.8.0_beta2
-	gstreamer? ( media-libs/gstreamer:0.10
-		media-libs/gst-plugins-base:0.10 )
+	>=dev-libs/efl-${PV}
+	gstreamer? ( media-libs/gstreamer:1.0
+		media-libs/gst-plugins-base:1.0 )
 	pdf? ( app-text/poppler )
 	postscript? ( app-text/libspectre )
 	raw? ( media-libs/libraw )
@@ -30,7 +30,7 @@ RDEPEND="
 DEPEND="${RDEPEND}"
 
 src_configure() {
-	local MY_ECONF="$(use_enable gstreamer)
+	local MY_ECONF="$(use_enable gstreamer1)
 		$(use_enable pdf poppler)
 		$(use_enable postscript spectre)
 		$(use_enable raw libraw)

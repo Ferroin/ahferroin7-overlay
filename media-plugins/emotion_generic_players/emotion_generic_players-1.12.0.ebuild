@@ -17,7 +17,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
-	>=dev-libs/efl-1.8.0_beta2
+	>=dev-libs/efl-${PV}
 	media-video/vlc
 	"
 DEPEND="${RDEPEND}"

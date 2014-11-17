@@ -20,7 +20,7 @@ DESCRIPTION="Basic widget set, based on EFL for mobile touch-screen devices"
 HOMEPAGE="http://trac.enlightenment.org/e/wiki/Elementary"
 
 LICENSE="LGPL-2.1"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="debug examples fbcon quicklaunch sdl wayland X static-libs"
 
 DEPEND="

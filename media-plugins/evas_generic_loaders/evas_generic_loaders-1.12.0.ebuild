@@ -13,7 +13,7 @@ HOMEPAGE="http://www.enlightenment.org/"
 SRC_URI="http://download.enlightenment.org/rel/libs/${PN}/${MY_P}.tar.bz2"
 
 LOCENSE="GPL-2"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="gstreamer pdf postscript raw svg"
 
 S=${WORKDIR}/${MY_P}

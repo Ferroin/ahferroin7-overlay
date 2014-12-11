@@ -116,9 +116,6 @@ src_prepare() {
 	replace-flags -O3 -O2
 	strip-flags
 
-	# Build fix on Darwin 10.6; bug #519058
-	epatch "${FILESDIR}/${P}-darwin10.6.patch"
-
 	if ! use test ; then
 		# don't waste time building tests
 		strip_builddir SRC_SUBDIRS testsuite Makefile.am

@@ -29,10 +29,6 @@ src_install() {
 	doman lynis.8
 	dodoc CHANGELOG FAQ README
 
-	# Remove the old one during the next stabilize progress
-	exeinto /etc/cron.daily
-	newexe "${FILESDIR}"/lynis.cron-new lynis
-
 	dobashcomp extras/bash_completion.d/lynis
 
 	# stricter default perms - bug 507436
@@ -46,10 +42,4 @@ src_install() {
 
 	insinto /etc/${PN}
 	doins default.prf
-}
-
-pkg_postinst() {
-	einfo
-	einfo "A cron script has been installed to ${ROOT}etc/cron.daily/lynis."
-	einfo
 }

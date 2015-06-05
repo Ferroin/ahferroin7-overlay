@@ -75,8 +75,8 @@ RDEPEND="
 	!app-office/krita
 	!app-office/kspread
 	!app-office/kword
-	$(add_kdebase_dep kdelibs 'nepomuk?')
-	$(add_kdebase_dep knewstuff)
+	$(add_kdeapps_dep kdelibs 'nepomuk?')
+	$(add_kdeapps_dep knewstuff)
 	dev-lang/perl
 	dev-libs/boost
 	dev-qt/qtcore:4[exceptions]
@@ -108,17 +108,17 @@ RDEPEND="
 	)
 	jpeg? ( virtual/jpeg:0 )
 	jpeg2k? ( media-libs/openjpeg:0 )
-	kdcraw? ( $(add_kdebase_dep libkdcraw) )
+	kdcraw? ( $(add_kdeapps_dep libkdcraw) )
 	kde? ( $(add_kdebase_dep kactivities) )
 	kdepim? ( $(add_kdebase_dep kdepimlibs) )
 	lcms? (
 		media-libs/lcms:2
 		x11-libs/libX11
 	)
-	marble? ( $(add_kdebase_dep marble) )
+	marble? ( $(add_kdeapps_dep marble) )
 	mysql? ( virtual/mysql )
 	nepomuk? ( dev-libs/soprano )
-	okular? ( $(add_kdebase_dep okular) )
+	okular? ( $(add_kdeapps_dep okular) )
 	colorio? ( media-libs/opencolorio )
 	opengl? ( 
 		virtual/glu 

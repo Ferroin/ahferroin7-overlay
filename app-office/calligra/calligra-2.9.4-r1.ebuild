@@ -75,7 +75,7 @@ RDEPEND="
 	!app-office/krita
 	!app-office/kspread
 	!app-office/kword
-	$(add_kdeapps_dep kdelibs 'nepomuk?')
+	$(add_kdebase_dep kdelibs 'nepomuk?')
 	$(add_kdeapps_dep knewstuff)
 	dev-lang/perl
 	dev-libs/boost

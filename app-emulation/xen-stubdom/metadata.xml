@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name='custom-cflags'>Build with user-specified CFLAGS</flag>	
+		<flag name='vtpm'>Enable vTPM stubdoms (needed for proper TPM emulation in VM's)</flag>
+		<flag name='ioemu'>Enable the ioemu stubdom, for doing HVM IO emulation in a stub domain</flag>
+		<flag name='xenstore'>Enable the Xenstore stubdom</flag>
+	</use>
+</pkgmetadata>

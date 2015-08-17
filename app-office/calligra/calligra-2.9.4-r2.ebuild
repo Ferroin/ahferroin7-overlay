@@ -41,7 +41,7 @@ if [[ ${KDE_BUILD_TYPE} == release ]] ; then
 fi
 
 IUSE="attica +crypt +eigen +exif fftw +fontconfig freetds +glew +glib gold +gsf
-gsl import-filter +jpeg jpeg2k +kdcraw kde +kdepim +lcms marble mysql nepomuk
+gsl import-filter +jpeg jpeg2k +kdcraw kde +kdepim +lcms marble mysql
 +okular colorio openexr +pdf postgres spacenav sybase test tiff +threads
 +truetype vc xbase +xml"
 
@@ -75,7 +75,6 @@ RDEPEND="
 	!app-office/krita
 	!app-office/kspread
 	!app-office/kword
-	$(add_kdebase_dep kdelibs 'nepomuk?')
 	$(add_kdeapps_dep knewstuff)
 	dev-lang/perl
 	dev-libs/boost
@@ -117,7 +116,6 @@ RDEPEND="
 	)
 	marble? ( $(add_kdeapps_dep marble) )
 	mysql? ( virtual/mysql )
-	nepomuk? ( dev-libs/soprano )
 	okular? ( $(add_kdeapps_dep okular) )
 	colorio? ( media-libs/opencolorio )
 	opengl? ( 
@@ -226,7 +224,6 @@ src_configure() {
 		$(cmake-utils_use_with lcms LCMS2)
 		$(cmake-utils_use_with marble CalligraMarble)
 		$(cmake-utils_use_with mysql MySQL)
-		$(cmake-utils_use_with nepomuk Soprano)
 		$(cmake-utils_use_with okular Okular)
 		$(cmake-utils_use_with openexr OpenEXR)
 		$(cmake-utils_use_with opengl OpenGL)
@@ -241,6 +238,7 @@ src_configure() {
 		$(cmake-utils_use_with truetype Freetype)
 		$(cmake-utils_use_with vc Vc)
 		$(cmake-utils_use_with xbase XBase)
+		-D WITH_nepomuk=OFF
 	)
 
 	mycmakeargs+=( $(cmake-utils_use_build test cstester) )

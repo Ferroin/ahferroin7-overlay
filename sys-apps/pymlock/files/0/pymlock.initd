@@ -1,0 +1,20 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+depend() {
+    need localmount
+}
+
+start() {
+    ebegin "Starting pymlock"
+    start-stop-daemon --start --pidfile=/run/pymlock.pid --make-pidfile --background --chdir / --exec /usr/local/bin/pymlock -- ${PYMLOCK_FILES}
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping pymlock"
+    start-stop-daemon --stop --pidfile=/run/pymlock.pid --exec /usr/local/bin/pymlock
+    eend $?
+}

@@ -3,7 +3,9 @@
 
    In addition to being able to lock individual files into memory, it can
    also recursively lock executables and all their library dependencies
-   into memory.
+   into memory.  After doing so, it will sleep until it gets a signal.
+   A SIGHUP will cause it to re-map all the files it's mlocked (useful
+   for system updates).
 
    Copyright (c) 2015, Austin S. Hemmelgarn
    All rights reserved.
@@ -35,7 +37,8 @@
 
 import os
 from mmap import mmap, PROT_READ
-from signal import pause
+
+_maps = []
 
 def parse_args():
     '''Parse our commandline arguments'''
@@ -43,6 +46,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Lock files into memory.',
                                      fromfile_prefix_chars='@')
     parser.add_argument('files', nargs='+', help='A list of files to lock into memory.')
+    parser.add_argument('-p', type=int, dest='periodic', metavar='P', help='Remap everything every P seconds')
     parser.add_argument('-n', action='store_true', dest='nomap', help='Print the full list of files that would be mapped and locked, then exit.')
     return parser.parse_args()
 
@@ -106,6 +110,14 @@ def parse_list(files):
         files.remove('')
     return files
 
+def _sighup(signum, frame):
+    '''Handler for SIGHUP, remaps all mapped files.'''
+    oldmaps = maps
+    maps = []
+    for i in oldmaps:
+        i[1].close()
+        maps.append(mapfile(i[0])
+
 def main():
     args = parse_args()
     files = parse_list(args.files)
@@ -113,11 +125,17 @@ def main():
         for i in files:
             print(i)
         exit(0)
-    maps = []
     for i in files:
         maps.append(map_file(i))
     mlockall()
-    pause()
+    signal.signal(signal.SIGHUP, _sighup)
+    if args.periodic:
+        signal.signal(signal.SIGALRM, _sighup)
+        while True:
+            signal.alarm(args.periodic)
+            signal.pause()
+    else:
+        signal.pause()
 
 if __name__ == '__main__':
     exit(main())

@@ -59,7 +59,9 @@ def map_file(path):
         fd = os.open(path, os.O_RDONLY | os.O_NOATIME)
     except (OSError, PermissionError, AttributeError):
         fd = os.open(path, os.O_RDONLY)
-    return mmap(fd, 0, prot=PROT_READ)
+    mfile = mmap(fd, 0, prot=PROT_READ)
+    os.close(fd)
+    return (path, mfile)
 
 def parse_list(files):
     '''Parse through a list of files, and expand any dependencies for executables.

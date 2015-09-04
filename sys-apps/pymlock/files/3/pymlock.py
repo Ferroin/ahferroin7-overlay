@@ -39,6 +39,7 @@ import os
 from mmap import mmap, PROT_READ
 
 _maps = []
+_args = None
 
 def parse_args():
     '''Parse our commandline arguments'''
@@ -112,27 +113,28 @@ def parse_list(files):
 
 def _sighup(signum, frame):
     '''Handler for SIGHUP, remaps all mapped files.'''
-    oldmaps = maps
-    maps = []
     for i in oldmaps:
         i[1].close()
-        maps.append(mapfile(i[0])
+    _maps = []
+    files = parse_list(args.files)
+    for i in files:
+        _maps.append(map_file(i))
 
 def main():
-    args = parse_args()
+    _args = parse_args()
     files = parse_list(args.files)
     if args.nomap:
         for i in files:
             print(i)
         exit(0)
     for i in files:
-        maps.append(map_file(i))
+        _maps.append(map_file(i))
     mlockall()
     signal.signal(signal.SIGHUP, _sighup)
     if args.periodic:
         signal.signal(signal.SIGALRM, _sighup)
+        signal.setitimer(signal.ITIMER_REAL, args.periodic, args.periodic)
         while True:
-            signal.alarm(args.periodic)
             signal.pause()
     else:
         signal.pause()

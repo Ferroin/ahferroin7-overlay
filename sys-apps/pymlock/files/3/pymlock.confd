@@ -1,13 +1,12 @@
 # Configuration for the pymlock init script
-# The only significant variable is PYMLOCK_FILES, which is a white space
-# seperated list of files to mlock.
+
+# PYMLOCK_FILES: This is a whitespace separated list of files to map and then mlock.
 # Executables will be scanned for dependencies using ldd, and the
 # dependencies will get added to the list of files.
 # If a file is listed here, but doesn't exist on the system, then it
 # will simply be ignored with no error message.
 # Note that whatever version of Python is being used to run pymlock will
 # inherently be mlocked
-
 PYMLOCK_FILES="
 /bin/bash
 /bin/zsh
@@ -31,3 +30,9 @@ PYMLOCK_FILES="
 /bin/ps
 /usr/bin/killall
 "
+
+# PERIODIC: If this is set, then pymlock will set a timer to expire
+# once every PERIODIC seconds, and reparse and remap everything in the
+# list every time the timer expires.  When set to a low value or with a
+# long list of files, this can cause significant resource usage.
+#PERIODIC=300

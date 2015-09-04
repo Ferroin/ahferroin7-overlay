@@ -9,7 +9,7 @@ depend() {
 
 start() {
     ebegin "Starting pymlock"
-    start-stop-daemon --start --pidfile=/run/pymlock.pid --make-pidfile --background --chdir / --exec /usr/local/bin/pymlock -- ${PYMLOCK_FILES}
+    start-stop-daemon --start --pidfile=/run/pymlock.pid --make-pidfile --background --chdir / --exec /usr/local/bin/pymlock -- ${PERIODIC:+-p} ${PERIODIC} ${PYMLOCK_FILES}
     eend $?
 }
 

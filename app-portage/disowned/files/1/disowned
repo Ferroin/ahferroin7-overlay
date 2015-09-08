@@ -2,6 +2,7 @@
 
 print_help() {
     echo "Usage: disowned [dirname]"
+    echo "Prints a list of files not claimed by any package."
 }
 
 if [ -z ${1} ] ; then

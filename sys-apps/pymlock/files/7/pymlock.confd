@@ -5,6 +5,8 @@
 # dependencies will get added to the list of files.
 # If a file is listed here, but doesn't exist on the system, then it
 # will simply be ignored with no error message.
+# If a directory is listed, it will be recursively scanned, ignoring
+# files that start with '.', for files to lock.
 # Note that whatever version of Python is being used to run pymlock will
 # inherently be mlocked
 PYMLOCK_FILES="
@@ -20,6 +22,7 @@ PYMLOCK_FILES="
 /etc/passwd
 /etc/shadow
 /etc/group
+/etc/profile
 /etc/nsswitch.conf
 /etc/resolv.conf
 /etc/locale.alias
@@ -29,10 +32,15 @@ PYMLOCK_FILES="
 /bin/ls
 /bin/ps
 /usr/bin/killall
+/usr/sbin/xl
+/usr/bin/monit
 "
 
 # PERIODIC: If this is set, then pymlock will set a timer to expire
 # once every PERIODIC seconds, and reparse and remap everything in the
 # list every time the timer expires.  When set to a low value or with a
-# long list of files, this can cause significant resource usage.
+# long list of files, this can cause significant resource usage.  If this
+# is shorter than the amount of time it takes to expand the list and map
+# the files, it will cause a resource leak (use 'time pymlock -t' on the list of
+# files to determine how long it takes).
 #PERIODIC=300

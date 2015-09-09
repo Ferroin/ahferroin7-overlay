@@ -3,7 +3,9 @@
 
    In addition to being able to lock individual files into memory, it can
    also recursively lock executables and all their library dependencies
-   into memory.  After doing so, it will sleep until it gets a signal.
+   into memory, and if passed a directory, will lock all the files under
+   that directory.  After doing so, it will either sleep until it gets
+   a signal, or wake up on a specified interval and remap everything.
    A SIGHUP will cause it to re-map all the files it's mlocked (useful
    for system updates).
 
@@ -19,7 +21,7 @@
    2. Redistributions in binary form must reproduce the above copyright
       notice, this list of conditions and the following disclaimer in the
       documentation and/or other materials provided with the distribution.
-   3. Neither the name of the pymlock nor the names of its contributors
+   3. Neither the name of pymlock nor the names of its contributors
       may be used to endorse or promote products derived from this
       software without specific prior written permission.
 
@@ -48,8 +50,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Lock files into memory.',
                                      fromfile_prefix_chars='@')
     parser.add_argument('files', nargs='+', help='A list of files to lock into memory.')
-    parser.add_argument('-p', type=int, dest='periodic', metavar='P', help='Remap everything every P seconds')
-    parser.add_argument('-n', action='store_true', dest='nomap', help='Print the full list of files that would be mapped and locked, then exit.')
+    parser.add_argument('-p', type=int, dest='periodic', metavar='P', help='remap everything every P seconds')
+    parser.add_argument('-n', action='store_true', dest='nomap', help='print the full list of files that would be mapped and locked, then exit.')
+    parser.add_argument('-t', action='store_true', dest='timing', help='exit after mmaping and mlocking all the files (used for timing how long it takes).')
     return parser.parse_args()
 
 def mlockall():
@@ -59,7 +62,7 @@ def mlockall():
     return libc.mlockall(1 | 2)
 
 def map_file(path):
-    '''mmap() a file'''
+    '''mmap() a file, and return a tuple of the filename and fd.'''
     fd = None
     try:
         fd = os.open(path, os.O_RDONLY | os.O_NOATIME)
@@ -85,12 +88,16 @@ def parse_list(files):
         * Parsing Mono/.NET binaries for dependencies (may need
           development tools from Mono).'''
     from subprocess import check_output, CalledProcessError
+    from glob import glob
     i = 0
     while i < len(files):
         i += 1
         if files[i - 1] == '':
             continue
-        if os.access(files[i - 1], os.R_OK):
+        if os.path.isdir(files[i - 1]) and os.access(files[i - 1], os.R_OK | os.X_OK):
+            for item in glob(os.path.join(files[i - 1], '*')):
+                files.append(item)
+        elif os.path.isfile(files[i - 1]) and os.access(files[i - 1], os.R_OK):
             while files.count(files[i - 1]) > 1:
                 del files[files.index(files[i - 1], i)]
             if os.access(files[i - 1], os.X_OK):
@@ -113,11 +120,15 @@ def parse_list(files):
     return files
 
 def _sighup(signum, frame):
-    '''Handler for SIGHUP, remaps all mapped files.'''
-    for i in oldmaps:
+    '''Handler for SIGHUP, remaps all mapped files.
+
+       Currently, this does not atomically remap a file, and as such there
+       is a period of time between a file being unmapped and remapped.
+       Ideally, this should be fixed.'''
+    files = parse_list(_args.files)
+    for i in _maps:
         i[1].close()
     _maps = []
-    files = parse_list(_args.files)
     for i in files:
         _maps.append(map_file(i))
 
@@ -131,6 +142,8 @@ def main():
     for i in files:
         _maps.append(map_file(i))
     mlockall()
+    if _args.timing:
+        return 0
     signal(SIGHUP, _sighup)
     if _args.periodic:
         signal(SIGALRM, _sighup)

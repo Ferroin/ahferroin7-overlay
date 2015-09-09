@@ -116,14 +116,14 @@ def _sighup(signum, frame):
     for i in oldmaps:
         i[1].close()
     _maps = []
-    files = parse_list(args.files)
+    files = parse_list(_args.files)
     for i in files:
         _maps.append(map_file(i))
 
 def main():
     _args = parse_args()
-    files = parse_list(args.files)
-    if args.nomap:
+    files = parse_list(_args.files)
+    if _args.nomap:
         for i in files:
             print(i)
         exit(0)
@@ -131,9 +131,9 @@ def main():
         _maps.append(map_file(i))
     mlockall()
     signal.signal(signal.SIGHUP, _sighup)
-    if args.periodic:
+    if _args.periodic:
         signal.signal(signal.SIGALRM, _sighup)
-        signal.setitimer(signal.ITIMER_REAL, args.periodic, args.periodic)
+        signal.setitimer(signal.ITIMER_REAL, _args.periodic, _args.periodic)
         while True:
             signal.pause()
     else:

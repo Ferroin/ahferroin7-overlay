@@ -37,6 +37,7 @@
 
 import os
 from mmap import mmap, PROT_READ
+from signal import signal, pause, setitimer, SIGHUP, SIGALRM, ITIMER_REAL
 
 _maps = []
 _args = None
@@ -130,14 +131,14 @@ def main():
     for i in files:
         _maps.append(map_file(i))
     mlockall()
-    signal.signal(signal.SIGHUP, _sighup)
+    signal(SIGHUP, _sighup)
     if _args.periodic:
-        signal.signal(signal.SIGALRM, _sighup)
-        signal.setitimer(signal.ITIMER_REAL, _args.periodic, _args.periodic)
+        signal(SIGALRM, _sighup)
+        setitimer(ITIMER_REAL, _args.periodic, _args.periodic)
         while True:
-            signal.pause()
+            pause()
     else:
-        signal.pause()
+        pause()
 
 if __name__ == '__main__':
     exit(main())

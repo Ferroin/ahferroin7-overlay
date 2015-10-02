@@ -11,6 +11,8 @@ net-misc/dropbox                Custom dropbox ebuild to work around
                                 ncurses dependency issues
 sys-apps/auto-swap              An initscript to do advanced swapfile
                                 setup.
+sys-apps/kdump-init             A simple (and somewhat naieve) initscript
+                                to set up and run kernel crash dumps.
 sys-apps/pymlock                A python script to mlock arbitrary files,
                                 including an initscript to be used as
                                 a replacement for memlockd.

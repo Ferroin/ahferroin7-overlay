@@ -1,0 +1,36 @@
+# Configuration file for the kdump init script.
+
+# DUMP defines the location to write the generated crash dumps to.
+# This needs to be somewhere on your root filesystem, should (for security
+# reasons) be readable and writeable only by root, and should have
+# at least 1.2x as much free space as your system's RAM (we try to write
+# sparse files, it doesn't always work right though).  The default
+# location is a date and kernel version tagged file in /var/dump.
+#DUMP='/var/dump/crashdump'
+
+# BLOCKSIZE defines the size (in bytes) of blocks to use to copy the
+# memory dump.  In general, you should probably just use the default (4MB)
+#BLOCKSIZE=4194304
+
+# MOUNTBOOT Specifies whether or not to mount /boot before loading the
+# crashkernel.  If this is set to anything but an empty string, then we
+# will try to mount /boot.
+MOUNTBOOT=1
+
+# KERNEL is the path to the crashkernel image.  This will get loaded
+# during the regular boot process, and needs some specific options to
+# be turned on in the configuration for it to work.  It defaults to
+# /boot/kernel
+#KERNEL="/boot/kernel"
+
+# INITRD is the path to the initramfs/initrd to use with the crashkernel.
+# You can comment this out to avoid loading an initramfs.  Note that if
+# the specified file doesn't exist, then loading the crash kernel will fail.
+INITRD=/boot/initramfs
+
+# CMDLINE is the commandline arguments to pass to the crash kernel.
+# In addition to what is specified here, the options 'irqpoll maxcpus=1
+# reset_devices consoleblank=0' will be appended to make sure that the
+# crash dump works.  At the very least, you need a 'root=' option
+# specified here
+CMDLINE="root=/dev/sda1"

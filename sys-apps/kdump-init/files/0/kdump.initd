@@ -1,0 +1,66 @@
+#!/sbin/runscript
+# Copyright 2015 Austin S. Hemmelgarn
+# Distributed under the terms of the GNU General Public License v2
+
+depend() {
+    need sysfs root hwclock
+    before *
+}
+
+start() {
+    rc_controller_cgroups='NO'
+    if [ -e /proc/vmcore ] ; then
+        local fsize dump bsize count
+        if [ ${DUMP} ] ; then
+            dump=${DUMP}
+        else
+            dump=/var/dump/`uname -r`.`date +%FT%T`.dump
+        fi
+        if [ ${BLOCKSIZE} ] ; then
+            bsize=${blocksize}
+        else
+            bsize=4194304
+        fi
+        einfo "Writing kernel crash dump to ${dump}"
+        fsize=`stat -c %s /proc/vmcore`
+        count=$((${fsize}/${bsize}))
+        if [ $((${fsize}%${bsize})) -ne 0 ] ; then
+            count=$((${count}+1))
+        fi
+        einfo "About to copy ${fsize} bytes in ${count} chunks"
+        for i in `seq 0 $((${count}-1))` ; do
+            dd if=/proc/vmcore of="${dump}" bs=${bsize} conv=sparse,notrunc count=1 seek=${i} skip=${i} status=none
+            /bin/echo -e -n "\e[2K\e[0G[$((${i}+1))/${count}]"
+            sync
+        done
+        echo
+        einfo "Crash dump completed, rebooting system."
+        reboot
+    else
+        ebegin "Loading crashdump kernel"
+        local kernel cmdline initrd
+        if [ ${KERNEL} ] ; then
+            kernel="${KERNEL}"
+        else
+            kernel="/boot/kernel"
+        fi
+        if [ ${MOUNTBOOT} ] ; then
+            mount /boot
+        fi
+        if [ ${INITRD} ] ; then
+            initrd="--initrd=\"${INITRD}\""
+        else
+            initrd=""
+        fi
+        cmdline="${CMDLINE} irqpoll maxcpus=1 reset_devices consoleblank=0"
+        chmod 600 /proc/kcore
+        if kexec -p "${kernel}" --append="${cmdline}" ${initrd} ; then
+            echo 1 > /proc/sys/kernel/kexec_load_disabled 2>/dev/null
+        fi
+        eend $?
+        chmod 400 /proc/kcore
+        if [ ${MOUNTBOOT} ] ; then
+            umount /boot
+        fi
+    fi
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer>
+	<email>ahferroin7@gmail.com</email>
+</maintainer>
+	<longdescription>This is a somewhat simple (and naieve)
+	init-script to set up and preform kernel crash dumps using kdump
+	on Gentoo.</longdescription>
+</pkgmetadata>

@@ -16,6 +16,11 @@ sys-apps/kdump-init             A simple (and somewhat naieve) initscript
 sys-apps/pymlock                A python script to mlock arbitrary files,
                                 including an initscript to be used as
                                 a replacement for memlockd.
+sys-apps/vmlock                 A initscript intended to replace pymlock,
+                                it uses dev-util/vmtouch for the actual
+                                locking, and is more efficient overall.
+                                Also includes a python script with the
+                                file list expansion logic from pymlock.
 sys-apps/zram-swap              An initscript to setup swap on a compressed
                                 ramdisk.
 sys-block/iosched-ctld          A shell based daemon for configuring I/O

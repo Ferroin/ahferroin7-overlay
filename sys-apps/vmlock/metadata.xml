@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+	A simple initscript to start up a daemonized instance of vmtouch
+	to lock stuff into memory.  It adds parsing of binaries so that
+	libraries they use get locked too.  It also includes a script
+	to recursively expand dependencies of a file list.
+</longdescription>
+</pkgmetadata>

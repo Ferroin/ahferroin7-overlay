@@ -1,0 +1,35 @@
+# Configuration file for the vmlock initscript.
+
+# FILES: This is a whitespace separated list of files to map and then mlock.
+# Executables will be scanned for dependencies using ldd, and the
+# dependencies will get added to the list of files.
+# If a file is listed here, but doesn't exist on the system, then it
+# will simply be ignored with no error message.
+# If a directory is listed, it will be recursively scanned, ignoring
+# files that start with '.', for files to lock.
+FILES="
+/bin/bash
+/bin/zsh
+/usr/sbin/sshd
+/bin/busybox
+/sbin/agetty
+/sbin/qingy
+/sbin/btrfs
+/bin/login
+/usr/bin/coreutils
+/etc/passwd
+/etc/shadow
+/etc/group
+/etc/profile
+/etc/nsswitch.conf
+/etc/resolv.conf
+/etc/locale.alias
+/usr/lib/locale/locale-archive
+/etc/localtime
+/etc/ld.so.cache
+/bin/ls
+/bin/ps
+/usr/bin/killall
+/usr/sbin/xl
+/usr/bin/monit
+"

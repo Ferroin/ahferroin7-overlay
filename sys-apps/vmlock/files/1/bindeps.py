@@ -2,22 +2,14 @@
 '''Parse through a list of files, and expand any dependencies for executables.
 
    Currently, this only expands dependencies for standard ELF binaries
-   that are parseable by the system copy of ldd.
-
-   TODO:
-    * Add support for detecting the interpreter in #! based scripts.
-
-   Possible future ideas include:
-    * Support for parsing Python scripts and loading their dependencies.
-    * Support for parsing other scripts for dependencies.
-    * Parsing Java binaries for dependencies (may need an installed JDK).
-    * Parsing Mono/.NET binaries for dependencies (may need
-      development tools from Mono).'''
+   that are parseable by the system copy of ldd. '''
 from subprocess import check_output, CalledProcessError
 from glob import glob
 import os
-from sys import argv
-files = argv[1:]
+import argparse
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('files', nargs='+', help='A list of files')
+files = parser.parse_args().files
 i = 0
 while i < len(files):
     i += 1

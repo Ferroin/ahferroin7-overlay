@@ -5,8 +5,8 @@
 
 start() {
     ebegin "Starting vmlock"
-    files=`/usr/bin/bindeps.py ${FILES}`
-    start-stop-daemon --start --background --pidfile=/run/vmlock.pid --make-pidfile --exec /usr/sbin/vmtouch -- -l ${files}
+    files=$(/usr/bin/bindeps.py $(echo ${FILES}))
+    start-stop-daemon --start --background --pidfile=/run/vmlock.pid --make-pidfile --exec /usr/sbin/vmtouch -- -l -f ${files}
     eend $?
 }
 

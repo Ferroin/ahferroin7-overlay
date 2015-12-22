@@ -3,6 +3,10 @@ official Portage tree when I created it.  Some day I'll probably try
 to get this stuff merged into the official tree.
 
 Currently, the programs in this overlay are:
+app-crypt/efitools              Updated version relative to Portage,
+                                due to the apparent lack of support from
+                                the developers for getting the updated
+                                ebuild in tree.
 app-emulation/xen-stubdom       Experimental ebuild for Xen stubdomain
                                 components
 app-portage/disowned            A shell script to automate finding files that

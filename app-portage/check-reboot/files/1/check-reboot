@@ -19,14 +19,13 @@ exitcode=0
 
 truncate --size=0 /run/reboot-required.pkgs
 
-for pkgs in ${PKGS} ; do
-    version=$(eix --format='<installedversions:NAMEVERSION>' --pure-packages ${pkg} 2>/dev/null)
-    for line in ${version} ; do
+for pkg in ${PKGS} ; do
+    for line in `eix --format '<installedversions:NAMEVERSION>' --pure-packages ${pkg}` ; do
         if grep -q "${line}" /run/check-reboot.versions ; then
             continue
         fi
-        echo ${line} > /run/reboot-required.pkgs
-        exitcode+=1
+        echo ${line} >> /run/reboot-required.pkgs
+        exitcode=$((${exitcode} + 1))
     done
 done
 

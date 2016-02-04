@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer>
+	<email>ahferroin7@gmail.com</email>
+</maintainer>
+	<longdescription>A relatively simple tool to check if we need to
+	reboot due to a packge update.	It saves a bit of info on boot
+	about package versions for specified packages, which can later
+	be compared against installed versions to check if we need to
+	reboot to finalize the update.</longdescription>
+</pkgmetadata>

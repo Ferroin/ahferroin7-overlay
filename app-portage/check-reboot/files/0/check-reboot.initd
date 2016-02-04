@@ -1,0 +1,14 @@
+#!/sbin/runscript
+
+depend() {
+    need localmount
+}
+
+start() {
+    ebegin "Configuring update notifications"
+    truncate --size=0 /run/check-reboot.versions
+    for pkg in ${PKGS} ; do
+        eix --format '<installedversions:NAMEVERSION>' --pure-packages ${pkg} >> /run/check-reboot.versions 2>/dev/null
+    done
+    eend 0
+}

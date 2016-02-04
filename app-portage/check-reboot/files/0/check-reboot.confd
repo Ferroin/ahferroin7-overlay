@@ -1,0 +1,19 @@
+# check-reboot configuration file
+# This is used by both the init script and the command check-reboot
+# The only variable is PKGS, which is a whitespace separated list of
+# packages to check.  If a listed package isn't installed, it will
+# be ignored.  The default should be reasonable for most systems,
+# although it may be considered overzealous by some.
+PKGS="
+sys-libs/glibc
+sys-libs/pam
+sys-auth/pambase
+sys-fs/udev
+sys-fs/eudev
+sys-apps/systemd
+sys-apps/gentoo-systemd-integration
+sys-apps/openrc
+sys-apps/sysvinit
+app-emulation/xen
+app-emulation/xen-tools
+"

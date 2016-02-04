@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ ${#} -ge 1 ] ; then
+    if [ ${1} = '-h' ] ; then
+        echo "check-reboot: check if a package update nessecitates a reboot."
+        echo
+        echo "check-reboot verifies installed versions of packages against"
+        echo "those stored by the init script of the same name.  It returns 0"
+        echo "if none of the versions have changed, otherwise it returns the"
+        echo "number of packages for which versions have changed, and writes"
+        echo "package atoms for each one to /run/reboot-required.pkgs."
+        exit 0
+    fi
+fi
+
+. /etc/conf.d/check-reboot
+
+exitcode=0
+
+truncate --size=0 /run/reboot-required.pkgs
+
+for pkgs in ${PKGS} ; do
+    version=$(eix --format='<installedversions:NAMEVERSION>' --pure-packages ${pkg} 2>/dev/null)
+    for line in ${version} ; do
+        if grep -q "${line}" /run/check-reboot.versions ; then
+            continue
+        fi
+        echo ${line} > /run/reboot-required.pkgs
+        exitcode+=1
+    done
+done
+
+exit ${exitcode}

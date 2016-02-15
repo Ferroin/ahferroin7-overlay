@@ -1,4 +1,4 @@
-#!/sbin/runscript
+#!/bin/runscript
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
@@ -6,12 +6,12 @@
 start() {
     ebegin "Starting vmlock"
     files=$(/usr/bin/bindeps.py $(echo ${FILES}))
-    start-stop-daemon --start --background --pidfile=/run/vmlock.pid --make-pidfile --exec /usr/sbin/vmtouch -- -l -f ${files}
+    start-stop-daemon --start --background --pidfile=/run/vmlock.pid --make-pidfile --exec /usr/bin/vmtouch -- -l -f ${files}
     eend $?
 }
 
 stop() {
     ebegin "Stopping vmlock"
-    start-stop-daemon --stop --pidfile=/run/vmlock.pid --exec /usr/sbin/vmtouch
+    start-stop-daemon --stop --pidfile=/run/vmlock.pid --exec /usr/bin/vmtouch
     eend $?
 }

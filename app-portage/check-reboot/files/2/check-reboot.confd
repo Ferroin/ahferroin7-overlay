@@ -5,15 +5,18 @@
 # be ignored.  The default should be reasonable for most systems,
 # although it may be considered overzealous by some.
 PKGS="
-sys-libs/glibc
-sys-libs/pam
-sys-auth/pambase
-sys-fs/udev
-sys-fs/eudev
-sys-apps/systemd
+app-emulation/xen
+net-libs/libtirpc
+net-misc/netifrc
+sys-apps/dbus
 sys-apps/gentoo-systemd-integration
 sys-apps/openrc
+sys-apps/systemd
 sys-apps/sysvinit
-app-emulation/xen
-app-emulation/xen-tools
+sys-auth/pambase
+sys-fs/eudev
+sys-fs/udev
+sys-kernel/linux-firmware
+sys-libs/glibc
+sys-libs/pam
 "

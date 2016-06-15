@@ -1,4 +1,4 @@
-#!/sbin/runscript
+#!/sbin/openrc-run
 # Copyright 2015 Austin S. Hemmelgarn
 # Distributed under the terms of the GNU General Public License v2
 

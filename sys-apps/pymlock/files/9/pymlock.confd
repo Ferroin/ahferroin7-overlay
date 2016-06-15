@@ -9,14 +9,15 @@
 # files that start with '.', for files to lock.
 # Note that whatever version of Python is being used to run pymlock will
 # inherently be mlocked
+# The files listed here should cover the basics for most Gentoo systems
+# needed to log in and kill a process.  If root uses a shell other than
+# bash, it should be listed here.  If you use a tool other than getty for
+# logins, it should also be listed ehre.
 PYMLOCK_FILES="
 /bin/bash
-/bin/zsh
 /usr/sbin/sshd
 /bin/busybox
 /sbin/agetty
-/sbin/qingy
-/sbin/btrfs
 /bin/login
 /usr/bin/coreutils
 /etc/passwd
@@ -32,8 +33,6 @@ PYMLOCK_FILES="
 /bin/ls
 /bin/ps
 /usr/bin/killall
-/usr/sbin/xl
-/usr/bin/monit
 "
 
 # PERIODIC: If this is set, then pymlock will set a timer to expire

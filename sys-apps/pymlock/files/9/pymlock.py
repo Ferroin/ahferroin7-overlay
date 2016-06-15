@@ -9,7 +9,21 @@
    A SIGHUP will cause it to re-map all the files it's mlocked (useful
    for system updates).
 
-   Copyright (c) 2015, Austin S. Hemmelgarn
+   Because of how Python works, this will additionally lock the python
+   interpreter and all of it's dependencies into memory, even if not
+   requested.
+
+   TODO:
+   * Add support for detecting the interpreter in #! based scripts.
+
+   Possible future TODO items:
+   * Support for parsing Python scripts and loading their dependencies.
+   * Support for parsing other scripts for dependencies.
+   * Parsing Java binaries for dependencies (may need an installed JDK).
+   * Parsing Mono/.NET binaries for dependencies (may need development
+   tools from Mono).
+
+   Copyright (c) 2015 2016, Austin S. Hemmelgarn
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -35,7 +49,8 @@
    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.'''
+   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+   '''
 
 import os
 from mmap import mmap, PROT_READ
@@ -75,18 +90,8 @@ def map_file(path):
 def parse_list(files):
     '''Parse through a list of files, and expand any dependencies for executables.
 
-       Currently, this only expands dependencies for standard ELF binaries
-       that are parseable by the system copy of ldd.
-
-       TODO:
-        * Add support for detecting the interpreter in #! based scripts.
-
-       Possible future ideas include:
-        * Support for parsing Python scripts and loading their dependencies.
-        * Support for parsing other scripts for dependencies.
-        * Parsing Java binaries for dependencies (may need an installed JDK).
-        * Parsing Mono/.NET binaries for dependencies (may need
-          development tools from Mono).'''
+       Currently, this only expands dependencies for binaries that can
+       be parsed by the system version of ldd.'''
     from subprocess import check_output, CalledProcessError
     from glob import glob
     i = 0

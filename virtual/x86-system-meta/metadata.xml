@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription>This is a really basic metapackage to pull
+	in some stuff which Gentoo doesn't include by default but
+	is generally considered standard on almost every other big
+	distribution of Linux (and most other UNIX derivatives).
+	This builds on phsy-system-meta by pulling in mcelog,
+	microcode-data, acpid, usbutils, pciutils, irqbalance, dmidecode
+	and hdparm.  All of these are pretty standard on x86 systems,
+	but not necessarily other architectures.</longdescription>
+</pkgmetadata>

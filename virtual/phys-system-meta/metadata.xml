@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<longdescription>This is a really basic metapackage to pull
+	in some stuff which Gentoo doesn't include by default but
+	is generally considered standard on almost every other big
+	distribution of Linux (and most other UNIX derivatives).  This
+	adds on to virtual/basic-system-meta by pulling in linux-firmware,
+	pm-utils, and a network time daemon (net-misc/ntp by default),
+	all of which are standard on most other distros, but only really
+	make sense on physical hardware.</longdescription>
+</pkgmetadata>

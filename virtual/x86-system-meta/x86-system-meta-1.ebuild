@@ -17,11 +17,11 @@ DEPEND=""
 RDEPEND="
 virtual/phys-system-meta
 app-admin/mcelog
-sys-apps/microcode-data
-sys-power/acpid
-sys-apps/usbutils
-sys-apps/pciutils
-sys-apps/irqbalance
 sys-apps/dmidecode
 sys-apps/hdparm
+sys-apps/irqbalance
+sys-apps/pciutils
+sys-apps/usbutils
+sys-firmware/intel-microcode
+sys-power/acpid
 "

@@ -1,8 +1,8 @@
-Everything in here is stuff that had no exact equivalent in the
-official Portage tree when I created it.  Some day I'll probably try
-to get this stuff merged into the official tree.
+Some of the stuff in here is stuff that I wrote myself and am to lazy
+to put in it's won repo, other stuff is versions that aren't (or weren't
+at some point) availible in the regular protage tree.
 
-Currently, the programs in this overlay are:
+Currently, the things I've wrtten in here are:
 app-crypt/efitools              Updated version relative to Portage,
                                 due to the apparent lack of support from
                                 the developers for getting the updated
@@ -14,8 +14,6 @@ app-portage/disowned            A shell script to automate finding files that
 app-portage/portage-tools-meta  Simple meta-package that pulls in
                                 gentoolkit, eix, layman, and
                                 smart-live-rebuild.
-net-misc/dropbox                Custom dropbox ebuild to work around
-                                ncurses dependency issues
 sys-apps/auto-swap              An initscript to do advanced swapfile
                                 setup.
 sys-apps/kdump-init             A simple (and somewhat naieve) initscript
@@ -41,3 +39,11 @@ virtual/phys-system-meta        Same as above, just adds more which are
 virtual/x86-system-meta         Same as above, just adds more which are
                                 usually standard on x86 systems, but
                                 may not be needed on others.
+
+And this is a list of 3rd-party stuff:
+app-crypt/efitools              Updated version relative to Portage,
+                                due to the apparent lack of support from
+                                the developers for getting the updated
+                                ebuild in tree.
+net-misc/dropbox                Custom dropbox ebuild to work around
+                                ncurses dependency issues

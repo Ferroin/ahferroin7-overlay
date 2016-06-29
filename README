@@ -45,5 +45,7 @@ app-crypt/efitools              Updated version relative to Portage,
                                 due to the apparent lack of support from
                                 the developers for getting the updated
                                 ebuild in tree.
+dev-python/nbt2yaml             A library and tools for converting
+                                Minecraft's NBT format to YAML
 net-misc/dropbox                Custom dropbox ebuild to work around
                                 ncurses dependency issues

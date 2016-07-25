@@ -61,11 +61,7 @@ start() {
                 truncate -s ${SIZE} ${SWAPFILE}
                 SWAPFILE=$(losetup -f --show ${SWAPFILE})
             else
-                if [ ! -e ${SWAPFILE} ] ; then
-                    fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
-                else
-                    ewarn "Found existing swapfile, assuming it's the right size."
-                fi
+                fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
             fi
         else
             getfstype
@@ -86,11 +82,7 @@ start() {
                 # that fit this description.
                 einfo "Detected filesystem as being COW and not needing a loop device."
                 chattr +C ${SWAPFILE}
-                if [ ! -e ${SWAPFILE} ] ; then
-                    fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
-                else
-                    ewarn "Found existing swapfile, assuming it's the right size."
-                fi
+                fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
             elif [ ${fstype} = net ] ; then
                 # We always use a loop device for network filesystems,
                 # because most of them need it, and the difference in
@@ -109,11 +101,7 @@ start() {
                 SWAPFILE=$(losetup -f --show ${SWAPFILE})
             else
                 # This is a catch all for other filesystem types
-                if [ ! -e ${SWAPFILE} ] ; then
-                    fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
-                else
-                    ewarn "Found existing swapfile, assuming it's the right size."
-                fi
+                fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}
             fi
         fi
         eend $?

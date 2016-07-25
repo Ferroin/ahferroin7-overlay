@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
 DESCRIPTION="An initscript to handle setup of a swapfile"
 HOMEPAGE="https://github.com/Ferroin/ahferroin7-overlay"

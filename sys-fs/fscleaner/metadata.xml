@@ -8,9 +8,9 @@ a variety of filesystems.  It includes support for:
 	* Running zerofree on a given set of filesystems
 	* Defragmenting EXT4 filesystems
 	* Balancing, scrubbing, and defragmenting BTRFS file systems
+	* Batch deduplication using duperemove
 
 I plan to eventually also include support for the following:
-	* Batch deduplication on BTRFS file systems
 	* Balancing, scrubbing, and resilvering ZFS file systems
 	* Preforming hardlink based deduplication in sspecific directories
 	* XFS defragmentation using xfs_fsr

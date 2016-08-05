@@ -37,7 +37,8 @@ pkg_postinst() {
 	einfo
 	einfo "Depending on what functionality you want, you may also need to install"
 	einfo "some of the following packages:"
-	einfo "    sys-fs/btrfs-progs (for BTRFS balance and scrub support)"
+	einfo "    sys-fs/btrfs-progs (for BTRFS balance, scrub, and defrag support)"
+	einfo "    sys-fs/duperemove (for BTRFS batch deduplication support)"
 	einfo "    sys-fs/zerofree (for wiping free space with zeroes)"
 	einfo "    sys-fs/e2fsprogs (for ext4 defragmentation support)"
 }

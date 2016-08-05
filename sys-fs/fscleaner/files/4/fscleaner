@@ -17,3 +17,6 @@ for op in balance scrub defrag ; do
         btrfs ${op} start ${btrfs_${op}_opts} ${item} || true
     done
 done
+for item in ${${1}_duperemove} ; do
+    duperemove -x -d ${duperemove_opts} ${item}
+done

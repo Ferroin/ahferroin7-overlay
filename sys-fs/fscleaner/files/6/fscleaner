@@ -1,0 +1,106 @@
+#!/bin/bash
+# vi: set sw=4 tw=76 :
+
+. /etc/fscleaner.conf
+
+case ${1}; in
+    daily)
+        for item in ${daily_duperemove} ; do
+            duperemove -x -d ${duperemove_opts} ${item} || true
+        done
+
+        for item in ${daily_sparse} ; do
+            find / -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
+        done
+
+        for item in ${daily_e4defrag} ; do
+            e4defrag ${item} || true
+        done
+
+        for item in ${daily_btrfs_defrag} ; do
+            btrfs defrag start ${btrfs_defrag_opts} ${item} || true
+        done
+
+        for item in ${daily_btrfs_scrub} ; do
+            btrfs scrub start ${btrfs_scrub_opts} ${item} || true
+        done
+
+        for item in ${daily_btrfs_balance} ; do
+            btrfs balance start ${btrfs_balance_opts} ${item} || true
+        done
+
+        if [ ${daily_fstrim} ] ; then
+            fstrim -a ${fstrim_opts} || true
+        fi
+
+        for item in ${daily_zerofree} ; do
+            zerofree ${item} || true
+        done
+        ;;
+    weekly)
+        for item in ${weekly_duperemove} ; do
+            duperemove -x -d ${duperemove_opts} ${item} || true
+        done
+
+        for item in ${weekly_sparse} ; do
+            find / -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
+        done
+
+        for item in ${weekly_e4defrag} ; do
+            e4defrag ${item} || true
+        done
+
+        for item in ${weekly_btrfs_defrag} ; do
+            btrfs defrag start ${btrfs_defrag_opts} ${item} || true
+        done
+
+        for item in ${weekly_btrfs_scrub} ; do
+            btrfs scrub start ${btrfs_scrub_opts} ${item} || true
+        done
+
+        for item in ${weekly_btrfs_balance} ; do
+            btrfs balance start ${btrfs_balance_opts} ${item} || true
+        done
+
+        if [ ${weekly_fstrim} ] ; then
+            fstrim -a ${fstrim_opts} || true
+        fi
+
+        for item in ${weekly_zerofree} ; do
+            zerofree ${item} || true
+        done
+        ;;
+    daily)
+        for item in ${daily_duperemove} ; do
+            duperemove -x -d ${duperemove_opts} ${item} || true
+        done
+
+        for item in ${daily_sparse} ; do
+            find / -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
+        done
+
+        for item in ${daily_e4defrag} ; do
+            e4defrag ${item} || true
+        done
+
+        for item in ${daily_btrfs_defrag} ; do
+            btrfs defrag start ${btrfs_defrag_opts} ${item} || true
+        done
+
+        for item in ${daily_btrfs_scrub} ; do
+            btrfs scrub start ${btrfs_scrub_opts} ${item} || true
+        done
+
+        for item in ${daily_btrfs_balance} ; do
+            btrfs balance start ${btrfs_balance_opts} ${item} || true
+        done
+
+        if [ ${daily_fstrim} ] ; then
+            fstrim -a ${fstrim_opts} || true
+        fi
+
+        for item in ${daily_zerofree} ; do
+            zerofree ${item} || true
+        done
+        ;;
+esac

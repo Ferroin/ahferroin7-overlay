@@ -15,7 +15,9 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="
+app-shells/bash
 sys-apps/util-linux
+virtual/cron
 ${DEPEND}"
 
 src_unpack() {
@@ -25,12 +27,9 @@ src_unpack() {
 src_install() {
 	insinto /etc
 	newins "${FILESDIR}"/${PV}/fscleaner.conf fscleaner.conf
-	insinto /etc/cron.daily
-	newins "${FILESDIR}"/${PV}/fscleaner.daily fscleaner
-	insinto /etc/cron.weekly
-	newins "${FILESDIR}"/${PV}/fscleaner.weekly fscleaner
-	insinto /etc/cron.monthly
-	newins "${FILESDIR}"/${PV}/fscleaner.monthly fscleaner
+	insinto /etc/cron.d
+	newins "${FILESDIR}"/${PV}/fscleaner.cron fscleaner
+	newsbin "${FILESDIR}"/${PV}/fscleaner fscleaner
 }
 
 pkg_postinst() {

@@ -14,5 +14,9 @@ I plan to eventually also include support for the following:
 	* Balancing, scrubbing, and resilvering ZFS file systems
 	* Preforming hardlink based deduplication in sspecific directories
 	* XFS defragmentation using xfs_fsr
+
+It can also be invoked directly, so you can use things other than cron
+to determine when things happen.  It takes one argument, which specifies
+which set of actions to run (daily, weekly, or monthly).
 </longdescription>
 </pkgmetadata>

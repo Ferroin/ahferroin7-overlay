@@ -3,17 +3,17 @@
 
 . /etc/fscleaner.conf
 
-for item in ${weekly_e4defrag} ; do
+for item in ${${1}_e4defrag} ; do
     e4defrag ${item} || true
 done
-if [ ${weekly_fstrim} ] ; then
+if [ ${${1}_fstrim} ] ; then
     fstrim -a ${fstrim_opts} || true
 fi
-for item in ${weekly_zerofree} ; do
+for item in ${${1}_zerofree} ; do
     zerofree ${item} || true
 done
 for op in balance scrub defrag ; do
-    for item in ${weekly_btrfs_${op}} ; do
+    for item in ${${1}_btrfs_${op}} ; do
         btrfs ${op} start ${btrfs_${op}_opts} ${item} || true
     done
 done

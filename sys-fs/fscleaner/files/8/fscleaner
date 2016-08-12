@@ -18,7 +18,7 @@ case ${1} in
         done
 
         for item in ${daily_btrfs_defrag} ; do
-            btrfs defrag start ${btrfs_defrag_opts} ${item} || true
+            btrfs filesystem defrag start ${btrfs_defrag_opts} ${item} || true
         done
 
         for item in ${daily_btrfs_scrub} ; do
@@ -51,7 +51,7 @@ case ${1} in
         done
 
         for item in ${weekly_btrfs_defrag} ; do
-            btrfs defrag start ${btrfs_defrag_opts} ${item} || true
+            btrfs filesystem defrag start ${btrfs_defrag_opts} ${item} || true
         done
 
         for item in ${weekly_btrfs_scrub} ; do
@@ -84,7 +84,7 @@ case ${1} in
         done
 
         for item in ${daily_btrfs_defrag} ; do
-            btrfs defrag start ${btrfs_defrag_opts} ${item} || true
+            btrfs filesystem defrag start ${btrfs_defrag_opts} ${item} || true
         done
 
         for item in ${daily_btrfs_scrub} ; do

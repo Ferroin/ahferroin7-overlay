@@ -3,7 +3,7 @@
 
 . /etc/fscleaner.conf
 
-case ${1}; in
+case ${1} in
     daily)
         for item in ${daily_duperemove} ; do
             duperemove -x -d ${duperemove_opts} ${item} || true

@@ -10,7 +10,7 @@ case ${1} in
         done
 
         for item in ${daily_sparse} ; do
-            find / -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
+            find ${item} -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
         done
 
         for item in ${daily_e4defrag} ; do
@@ -43,7 +43,7 @@ case ${1} in
         done
 
         for item in ${weekly_sparse} ; do
-            find / -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
+            find ${item} -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
         done
 
         for item in ${weekly_e4defrag} ; do
@@ -76,7 +76,7 @@ case ${1} in
         done
 
         for item in ${daily_sparse} ; do
-            find / -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
+            find ${item} -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
         done
 
         for item in ${daily_e4defrag} ; do

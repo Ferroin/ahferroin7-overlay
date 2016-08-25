@@ -1,8 +1,0 @@
-SHELL=/bin/bash
-PATH=/sbin:/bin:/usr/sbin:/usr/bin
-MAILTO=root@localhost
-HOME=/
-
-0 0 * * * root fscleaner daily
-0 1 * * 6 root fscleaner weekly
-0 2 1 * * root fscleaner monthly

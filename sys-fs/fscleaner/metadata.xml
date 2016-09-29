@@ -5,13 +5,13 @@
 Fscleaner is a relatively simple cron job for preformaing maintnence on
 a variety of filesystems.  It includes support for:
 	* Running fstrim on a given set of filesystems
-	* Running zerofree on a given set of filesystems
 	* Defragmenting EXT4 filesystems
 	* Balancing, scrubbing, and defragmenting BTRFS file systems
 	* Batch deduplication using duperemove
 	* Batch conversion of files above a specified size limit to sparse files
 
 The following items may be added in the future:
+	* Clearing free space on mounted filesystems
 	* Balancing, scrubbing, and resilvering ZFS file systems
 	* Preforming hardlink based deduplication in sspecific directories
 	* XFS defragmentation using xfs_fsr

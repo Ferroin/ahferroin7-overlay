@@ -5,11 +5,12 @@ at some point) availible in the regular protage tree.
 Currently, the things I've wrtten in here are:
 app-portage/check-reboot        Check to see if we've updated any of a
                                 set of packages and thus need to reboot.
-app-portage/disowned            A shell script to automate finding files that
-                                aren't owned by any package.
-app-portage/portage-tools-meta  Simple meta-package that pulls in
-                                gentoolkit, eix, layman, and
-                                smart-live-rebuild.
+app-portage/disowned            A shell script to automate finding
+                                files that aren't owned by any package.
+app-portage/portage-tools-meta  Simple meta-package that pulls in a
+                                handful of useful portage tools that
+                                arguably should be in the standard
+                                install.
 sys-apps/auto-swap              An initscript to do advanced swapfile
                                 setup.
 sys-apps/kdump-init             A simple (and somewhat naieve) initscript
@@ -45,3 +46,5 @@ dev-python/nbt2yaml             A library and tools for converting
                                 Minecraft's NBT format to YAML
 media-sound/clementine          Fixed live-ebuild to work around broken
                                 version in portage
+net-fs/samba                    Testing ebuild to try and get some
+                                progress on unmasking >=net-fs/samba-4.3

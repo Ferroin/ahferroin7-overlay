@@ -45,7 +45,3 @@ dev-python/nbt2yaml             A library and tools for converting
                                 Minecraft's NBT format to YAML
 media-sound/clementine          Fixed live-ebuild to work around broken
                                 version in portage
-net-misc/dropbox                Custom dropbox ebuild to work around
-                                ncurses dependency issues
-x11-themes/greybird             Custom ebuild to work around README
-                                being renamed to README.md

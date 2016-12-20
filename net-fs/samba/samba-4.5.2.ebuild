@@ -68,7 +68,9 @@ CDEPEND="${PYTHON_DEPS}
 	gnutls? ( dev-libs/libgcrypt:0
 		>=net-libs/gnutls-1.4.0 )
 	ldap? ( net-nds/openldap[${MULTILIB_USEDEP}] )
-	systemd? ( sys-apps/systemd:0= )"
+	systemd? ( sys-apps/systemd:0= )
+	!app-crypt/mitkrb5
+	!app-crypt/heimdal"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig"
 RDEPEND="${CDEPEND}
@@ -121,8 +123,7 @@ multilib_src_configure() {
 		--localstatedir="${EPREFIX}/var"
 		--with-modulesdir="${EPREFIX}/usr/$(get_libdir)/samba"
 		--with-piddir="${EPREFIX}/run/${PN}"
-		--bundled-libraries=NONE
-		--builtin-libraries=NONE
+		--bundled-libraries=heimdal
 		--disable-rpath
 		--disable-rpath-install
 		--nopyc

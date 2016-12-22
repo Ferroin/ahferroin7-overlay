@@ -69,7 +69,6 @@ CDEPEND="${PYTHON_DEPS}
 		>=net-libs/gnutls-1.4.0 )
 	ldap? ( net-nds/openldap[${MULTILIB_USEDEP}] )
 	systemd? ( sys-apps/systemd:0= )
-	!app-crypt/mitkrb5
 	!app-crypt/heimdal"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig"

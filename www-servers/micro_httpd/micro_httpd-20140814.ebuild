@@ -32,11 +32,11 @@ src_compile() {
 # developer in years, it's not likely to change.
 # Given that it's a single source file, it's much easier to just compile
 # it by hand than to patch the Makefile.
-	$(tc_getCC) ${CFLAGS} -ansi -pedantic -U__STRICT_ANSI__ \\
-		-Wall -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align \\
-		-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \\
+	$(tc-getCC) ${CFLAGS} -ansi -pedantic -U__STRICT_ANSI__ \
+		-Wall -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align \
+		-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \
 		-Wredundant-decls -Wno-long-long -c micro_httpd.c
-	$(tc_getCC) micro_httpd.o -s ${LDFLAGS} micro_httpd
+	$(tc-getCC) micro_httpd.o -s ${LDFLAGS} micro_httpd
 }
 
 src_install() {

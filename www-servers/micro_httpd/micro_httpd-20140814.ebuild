@@ -4,6 +4,8 @@
 
 EAPI=6
 
+inherit toolchain-funcs
+
 DESCRIPTION="A simple, tiny (~250 lines of code) inetd based HTTP seerver."
 HOMEPAGE="http://acme.com/software/micro_httpd/"
 SRC_URI="http://acme.com/software/micro_httpd/micro_httpd_14Aug2014.tar.gz"
@@ -32,11 +34,7 @@ src_compile() {
 # developer in years, it's not likely to change.
 # Given that it's a single source file, it's much easier to just compile
 # it by hand than to patch the Makefile.
-	$(tc-getCC) ${CFLAGS} -ansi -pedantic -U__STRICT_ANSI__ \
-		-Wall -Wpointer-arith -Wshadow -Wcast-qual -Wcast-align \
-		-Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations \
-		-Wredundant-decls -Wno-long-long -c micro_httpd.c
-	$(tc-getCC) micro_httpd.o -s ${LDFLAGS} micro_httpd
+	$(tc-getCC) ${CFLAGS} ${LDFLAGS} -ansi -pedantic -U__STRICT_ANSI__ -o ${PN} ${PN}.c || die
 }
 
 src_install() {

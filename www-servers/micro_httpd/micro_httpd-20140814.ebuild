@@ -18,6 +18,10 @@ RDEPEND="
 virtual/inetd
 ${DEPEND}"
 
+src_prepare() {
+	S="${WORKDIR}/${PN}"
+}
+
 src_configure() {
 # No configure script since it's ANSI C and portable to pretty much any
 # UNIX-like system.

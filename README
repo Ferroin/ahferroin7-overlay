@@ -48,4 +48,6 @@ media-sound/clementine          Fixed live-ebuild to work around broken
                                 version in portage
 net-fs/samba                    Testing ebuild to try and get some
                                 progress on unmasking >=net-fs/samba-4.3
+sys-apps/usbguard               USB device whitelisting tool.
+sys-apps/usbguard-applet        Qt applet for sys-apps/usbguard.
 www-servers/micro_httpd         Tiny inetd based HTTP/1.0 server.

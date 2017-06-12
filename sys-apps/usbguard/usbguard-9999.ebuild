@@ -28,9 +28,7 @@ SLOT="0"
 IUSE="systemd qt4"
 
 DEPEND="sys-cluster/libqb
-		dev-cpp/catch
 		dev-libs/libsodium
-		dev-libs/pegtl
 		sys-libs/libseccomp
 		sys-libs/libcap-ng
 		qt4? ( sys-apps/usbguard-applet )"
@@ -44,7 +42,9 @@ src_prepare() {
 src_configure() {
 	econf \
 		$(use_enable systemd) \
+		--with-bundled-catch \
 		--with-bundled-json \
+		--with-bundled-pegtl \
 		--with-bundled-spdlog
 }
 

@@ -55,7 +55,7 @@ src_compile() {
 src_install() {
 	emake DESTDIR="${D}" install
 
-	systemd_dounit dist/usbguard.service
+	use systemd && systemd_dounit dist/usbguard.service
 
 	insinto /etc/usbguard
 	doins dist/usbguard-daemon.conf

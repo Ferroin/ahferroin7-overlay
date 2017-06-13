@@ -58,12 +58,12 @@ src_install() {
 
 	use systemd && systemd_dounit dist/usbguard.service
 
-	enewgroup usbguard
-
 	keepdir /var/log/usbguard
 }
 
 pkg_postinst() {
+	enewgroup usbguard
+
 	einfo "Add users to the 'usbguard' group to allow them to authorize devices and update rules."
 	einfo
 	einfo "You probably want to edit the rules prior to starting usbguard, the default is to block"

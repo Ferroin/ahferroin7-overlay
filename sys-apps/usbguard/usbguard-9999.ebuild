@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit autotools git-r3 systemd versionator
+inherit autotools git-r3 systemd versionator user
 
 DESCRIPTION="The USBGuard software framework helps to protect your computer against BadUSB."
 HOMEPAGE="https://github.com/dkopecek/usbguard"
@@ -36,6 +36,7 @@ DEPEND="sys-cluster/libqb
 RDEPEND="${DEPEND}"
 
 src_prepare() {
+	epatch ${FILESDIR}/usbguard-daemon-conf.patch
 	eautoreconf
 }
 
@@ -57,6 +58,15 @@ src_install() {
 
 	use systemd && systemd_dounit dist/usbguard.service
 
-	insinto /etc/usbguard
-	doins dist/usbguard-daemon.conf
+	enewgroup usbguard
+
+	keepdir /var/log/usbguard
+}
+
+pkg_postinst() {
+	einfo "Add users to the 'usbguard' group to allow them to authorize devices and update rules."
+	einfo
+	einfo "You probably want to edit the rules prior to starting usbguard, the default is to block"
+	einfo "everything pending authorization, which may make the system unusable if your primary"
+	einfo "input device is connected via USB."
 }

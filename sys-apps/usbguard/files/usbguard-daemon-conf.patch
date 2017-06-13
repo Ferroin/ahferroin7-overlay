@@ -1,0 +1,17 @@
+--- usbguard-daemon.conf.in	2017-06-13 07:30:05.938331879 -0400
++++ usbguard-daemon.conf.in.new	2017-06-13 08:47:55.809489244 -0400
+@@ -117,7 +117,7 @@
+ #
+ # IPCAllowedGroups=groupname1 groupname2 ...
+ #
+-IPCAllowedGroups=
++IPCAllowedGroups=usbguard
+ 
+ #
+ # IPC access control definition files path.
+@@ -157,4 +157,4 @@
+ #
+ # USBGuard audit events log file path.
+ #
+-AuditFilePath=%localstatedir%/log/usbguard/usbguard-audit.log
++AuditFilePath=/var/log/usbguard/usbguard-audit.log

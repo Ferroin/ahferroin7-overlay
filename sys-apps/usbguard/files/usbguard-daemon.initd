@@ -10,7 +10,7 @@ depend() {
 
 start() {
     ebegin "Starting usbguard"
-    start-stop-daemon --start --pidfile ${USBGUARD_PIDFILE} --exec /usr/sbin/usbguard-daemon -- -s -p ${USBGUARD_PIDFILE}
+    start-stop-daemon --start --background --make-pidfile --pidfile ${USBGUARD_PIDFILE} --exec /usr/sbin/usbguard-daemon -- -s
     eend $?
 }
 

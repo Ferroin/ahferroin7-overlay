@@ -31,6 +31,7 @@ DEPEND="sys-cluster/libqb
 		dev-libs/libsodium
 		sys-libs/libseccomp
 		sys-libs/libcap-ng
+		!systemd? ( virtual/logger )
 		qt4? ( sys-apps/usbguard-applet )"
 
 RDEPEND="${DEPEND}"
@@ -59,11 +60,13 @@ src_install() {
 	use systemd && systemd_dounit dist/usbguard.service
 
 	keepdir /var/log/usbguard
+	newinitd ${FILESDIR}/usbguard-daemon.init.d usbguard-daemon
 }
 
 pkg_postinst() {
 	enewgroup usbguard
 
+	einfo
 	einfo "Add users to the 'usbguard' group to allow them to authorize devices and update rules."
 	einfo
 	einfo "You probably want to edit the rules prior to starting usbguard, the default is to block"

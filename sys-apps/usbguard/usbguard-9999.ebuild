@@ -60,7 +60,7 @@ src_install() {
 	use systemd && systemd_dounit dist/usbguard.service
 
 	keepdir /var/log/usbguard
-	newinitd ${FILESDIR}/usbguard-daemon.init.d usbguard-daemon
+	newinitd ${FILESDIR}/usbguard-daemon.initd usbguard-daemon
 }
 
 pkg_postinst() {

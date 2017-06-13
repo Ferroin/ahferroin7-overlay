@@ -108,7 +108,7 @@ src_install() {
 	doman doc/*.5
 	doman doc/*.8
 
-	systemd_dounit usbguard.service
+	use systemd && systemd_dounit usbguard.service
 
 	newinitd ${FILESDIR}/usbguard-daemon.initd usbguard-daemon
 	insinto /etc/usbguard

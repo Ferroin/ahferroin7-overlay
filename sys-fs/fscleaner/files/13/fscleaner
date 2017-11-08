@@ -35,10 +35,10 @@ case ${1} in
             btrfs balance start ${btrfs_balance_opts} ${item} || true
         done
 
-        if [ ${daily_fstrim} ] ; then
+        for item in ${daily_fstrim} ; do
             cd ${item}
-            fstrim -a ${fstrim_opts} || true
-        fi
+            fstrim ${fstrim_opts} ${item} || true
+        done
         ;;
     weekly)
         for item in ${weekly_duperemove} ; do
@@ -71,45 +71,45 @@ case ${1} in
             btrfs balance start ${btrfs_balance_opts} ${item} || true
         done
 
-        if [ ${weekly_fstrim} ] ; then
+        for item in ${weekly_fstrim} ; do
             cd ${item}
-            fstrim -a ${fstrim_opts} || true
-        fi
+            fstrim ${fstrim_opts} ${item} || true
+        done
         ;;
-    daily)
-        for item in ${daily_duperemove} ; do
+    monthly)
+        for item in ${monthly_duperemove} ; do
             cd ${item}
             duperemove -x -d ${duperemove_opts} ${item} || true
         done
 
-        for item in ${daily_sparse} ; do
+        for item in ${monthly_sparse} ; do
             cd ${item}
             find ${item} -xdev -size +${sparse_size} -exec fallocate -d '{}' \; || true
         done
 
-        for item in ${daily_e4defrag} ; do
+        for item in ${monthly_e4defrag} ; do
             cd ${item}
             e4defrag ${item} || true
         done
 
-        for item in ${daily_btrfs_defrag} ; do
+        for item in ${monthly_btrfs_defrag} ; do
             cd ${item}
             btrfs filesystem defrag ${btrfs_defrag_opts} ${item} || true
         done
 
-        for item in ${daily_btrfs_scrub} ; do
+        for item in ${monthly_btrfs_scrub} ; do
             cd ${item}
             btrfs scrub start ${btrfs_scrub_opts} ${item} || true
         done
 
-        for item in ${daily_btrfs_balance} ; do
+        for item in ${monthly_btrfs_balance} ; do
             cd ${item}
             btrfs balance start ${btrfs_balance_opts} ${item} || true
         done
 
-        if [ ${daily_fstrim} ] ; then
+        for item in ${monthly_fstrim} ; do
             cd ${item}
-            fstrim -a ${fstrim_opts} || true
-        fi
+            fstrim ${fstrim_opts} ${item} || true
+        done
         ;;
 esac

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=6
 
 DESCRIPTION="A cron job to preform automated filesystem maintnence."
 HOMEPAGE="https://github.com/Ferroin/ahferroin7-overlay"

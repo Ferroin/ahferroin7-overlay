@@ -28,7 +28,7 @@ IUSE+=" crypt_gcrypt crypt_sodium"
 DEPEND="sys-cluster/libqb
 		sys-libs/libseccomp
 		sys-libs/libcap-ng
-		<=dev-libs/protobuf-3.5.1.1
+		<=dev-libs/protobuf-3.4.1
 		systemd? ( sys-apps/systemd )
 		dbus? ( sys-apps/dbus
 						dev-libs/dbus-glib )

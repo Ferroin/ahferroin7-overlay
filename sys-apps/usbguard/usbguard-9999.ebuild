@@ -29,7 +29,7 @@ DEPEND="sys-cluster/libqb
 		sys-libs/libseccomp
 		sys-libs/libcap-ng
 		dev-ruby/asciidoctor
-		<=dev-libs/protobuf-3.4.1
+		dev-libs/protobuf
 		systemd? ( sys-apps/systemd )
 		dbus? ( sys-apps/dbus
 						dev-libs/dbus-glib )

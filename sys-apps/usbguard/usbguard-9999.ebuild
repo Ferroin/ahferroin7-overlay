@@ -7,8 +7,8 @@ EAPI=6
 inherit autotools git-r3 systemd
 
 DESCRIPTION="The USBGuard software framework helps to protect your computer against BadUSB."
-HOMEPAGE="https://github.com/dkopecek/usbguard"
-MY_AUTHOR="dkopecek"
+HOMEPAGE="https://github.com/USBGuard/usbguard"
+MY_AUTHOR="USBGuard"
 EGIT_REPO_URI="https://github.com/${MY_AUTHOR}/${PN}.git"
 EGIT_SUBMODULES=( src/ThirdParty/Catch src/ThirdParty/PEGTL src/ThirdParty/usbmon )
 
@@ -28,6 +28,7 @@ IUSE+=" crypt_gcrypt crypt_sodium"
 DEPEND="sys-cluster/libqb
 		sys-libs/libseccomp
 		sys-libs/libcap-ng
+		dev-ruby/asciidoctor
 		<=dev-libs/protobuf-3.4.1
 		systemd? ( sys-apps/systemd )
 		dbus? ( sys-apps/dbus

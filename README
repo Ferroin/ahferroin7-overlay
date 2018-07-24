@@ -48,6 +48,8 @@ app-crypt/efitools              Updated version relative to Portage,
 app-crypt/certbot-dns-route53   Amazon Route 53 plugin for Certbot,
                                 will be removed when it finally gets
                                 added to portage.
+app-portage/gs-pypi             Updated ebuild for gs-pypi with Python
+                                3.6 support.
 dev-python/nbt2yaml             A library and tools for converting
                                 Minecraft's NBT format to YAML
 sys-apps/usbguard               USB device whitelisting tool.

@@ -26,7 +26,7 @@ IUSE=""
 CDEPEND=">=dev-python/setuptools-1.0[${PYTHON_USEDEP}]"
 RDEPEND="${CDEPEND}
 	~app-crypt/certbot-${PV}[${PYTHON_USEDEP}]
-	~app-crypt/acme-${PV}[${PYTHON_USEDEP}]
+	>app-crypt/acme-0.25[${PYTHON_USEDEP}]
 	dev-python/mock[${PYTHON_USEDEP}]
 	dev-python/zope-interface[${PYTHON_USEDEP}]
 	dev-python/boto3[${PYTHON_USEDEP}]"

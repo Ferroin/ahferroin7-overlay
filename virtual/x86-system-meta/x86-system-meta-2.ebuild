@@ -15,16 +15,12 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="
-virtual/basic-system-meta
-sys-kernel/linux-firmware
-sys-power/pm-utils
-|| (
-	net-misc/ntp
-	net-misc/ntpclient
-	net-misc/openntpd
-	net-misc/chrony
-	net-misc/clockspeed
-	net-misc/netdate
-	net-misc/ptpd
-)
+virtual/phys-system-meta
+sys-apps/dmidecode
+sys-apps/hdparm
+sys-apps/irqbalance
+sys-apps/pciutils
+sys-apps/usbutils
+sys-firmware/intel-microcode
+sys-power/acpid
 "

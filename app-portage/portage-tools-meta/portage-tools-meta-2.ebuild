@@ -17,7 +17,7 @@ DEPEND=""
 RDEPEND="
 app-portage/gentoolkit
 app-portage/eix
-app-portage/layman
+app-portage/eselect-repository
 app-portage/smart-live-rebuild
 app-portage/genlop
 "

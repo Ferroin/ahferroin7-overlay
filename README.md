@@ -1,9 +1,23 @@
+# ahferroin7’s Portage overlay.
+
 Some of the stuff in here is stuff that I wrote myself and am to lazy
 to put in it's won repo, other stuff is versions that aren't (or weren't
 at some point) availible in the regular protage tree.
 
-If you want to add this overlay to your system, point Layman at:
+## Using it
+
+### With eselect repository
+
+Just run `eselect repository add ahferroin7-overlay git git://github.com/Ferroin/ahferroin7-overlay`
+to add the overlay to your system.
+
+### With Layman
+
+To use this with layman, you need to update your layman configuration to point at
 https://raw.githubusercontent.com/Ferroin/ahferroin7-overlay/master/overlays.xml
+as an additional unsigned overlay list.
+
+## Contents
 
 Currently, the things I've wrtten in here are:
 app-portage/check-reboot        Check to see if we've updated any of a

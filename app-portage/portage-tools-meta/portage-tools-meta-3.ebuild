@@ -15,9 +15,9 @@ IUSE=""
 
 DEPEND=""
 RDEPEND="
+app-eselect/eselect-repository
 app-portage/gentoolkit
 app-portage/eix
-app-portage/eselect-repository
 app-portage/smart-live-rebuild
 app-portage/genlop
 "

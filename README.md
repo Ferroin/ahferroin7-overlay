@@ -55,19 +55,9 @@ virtual/x86-system-meta         Same as above, just adds more which are
                                 may not be needed on others.
 
 And this is a list of 3rd-party stuff:
-app-crypt/efitools              Updated version relative to Portage,
-                                due to the apparent lack of support from
-                                the developers for getting the updated
-                                ebuild in tree.
 app-crypt/certbot-dns-route53   Amazon Route 53 plugin for Certbot,
                                 will be removed when it finally gets
                                 added to portage.
-app-portage/gs-pypi             Updated ebuild for gs-pypi with Python
-                                3.6 support.
 dev-python/nbt2yaml             A library and tools for converting
                                 Minecraft's NBT format to YAML
-net-fs/samba                    Modified Samba ebuild that allows
-                                disabling samba-regedit.
-sys-apps/usbguard               USB device whitelisting tool.
-sys-apps/usbguard-applet        Qt applet for sys-apps/usbguard.
 www-servers/micro_httpd         Tiny inetd based HTTP/1.0 server.

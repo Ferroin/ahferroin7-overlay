@@ -1,9 +1,28 @@
 # check-reboot configuration file
+#
 # This is used by both the init script and the command check-reboot
+#
 # The only variable is PKGS, which is a whitespace separated list of
-# packages to check.  If a listed package isn't installed, it will
-# be ignored.  The default should be reasonable for most systems,
-# although it may be considered overzealous by some.
+# packages to check. If a listed package isn't installed, it will
+# be ignored.
+#
+# If a package on this list was already installed when the system booted
+# up, and the version has changed since boot up, then the `check-reboot`
+# command will report a reboot as being required.
+#
+# In general, a package should be on this list if any of the following
+# are true:
+#
+#   - It truly requires a reboot to upgrade, such as kernel images or
+#     type-1 hypervisors.
+#   - It's an out-of-tree kernel module that cannot be reasonably reloaded
+#     at runtime.
+#   - It's a library used by a very large percentage of the system.
+#   - It's a service that cannot be cleanly restarted without rebooting.
+#   - It's something involved in core system setup during boot and cannot
+#     be cleanly reconfigured at runtime.
+#
+# The default list should work sensibly for a vast majority of systems.
 PKGS="
 app-emulation/xen
 net-libs/libtirpc
@@ -12,11 +31,20 @@ sys-apps/dbus
 sys-apps/gentoo-systemd-integration
 sys-apps/openrc
 sys-apps/systemd
+sys-apps/systemd-utils
 sys-apps/sysvinit
+sys-auth/elogind
 sys-auth/pambase
 sys-fs/eudev
 sys-fs/udev
+sys-fs/udev-init-scripts
+sys-fs/zfs-kmod
+sys-kernel/gentoo-kernel
+sys-kernel/gentoo-kernel-bin
 sys-kernel/linux-firmware
+sys-kernel/raspberrypi-image
+sys-kernel/vanilla-kernel
 sys-libs/glibc
 sys-libs/pam
+x11-drivers/nvidia-drivers
 "

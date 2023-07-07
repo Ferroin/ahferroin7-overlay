@@ -28,14 +28,6 @@ sys-apps/kdump-init             A simple (and somewhat naieve) initscript
                                 to set up and run kernel crash dumps.
 sys-apps/mm-init-scripts        A collection of init scripts to set up
                                 various Linux memory management features.
-sys-apps/pymlock                A python script to mlock arbitrary files,
-                                including an initscript to be used as
-                                a replacement for memlockd.
-sys-apps/vmlock                 A initscript intended to replace pymlock,
-                                it uses dev-util/vmtouch for the actual
-                                locking, and is more efficient overall.
-                                Also includes a python script with the
-                                file list expansion logic from pymlock.
 sys-apps/zram-swap              An initscript to setup swap on a compressed
                                 ramdisk.
 sys-fs/fscleaner                A cron job to automate basic filesystem

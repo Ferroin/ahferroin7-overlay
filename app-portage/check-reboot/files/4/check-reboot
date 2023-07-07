@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ ${#} -ge 1 ] ; then
+    echo "check-reboot: check if a package update nessecitates a reboot."
+    echo
+    echo "check-reboot determines when packages that require a reboot for"
+    echo "a proper upgrade were last merged. It returns 0 if none of"
+    echo "them have been merged since the last reboot, otherwise it"
+    echo "returns the number of packages for which versions have changed"
+    echo "and writes package atoms for each one to /run/reboot-required.pkgs."
+    exit 0
+fi
+
+if [ -r /etc/conf.d/check-reboot ]; then
+    . /etc/conf.d/check-reboot
+else
+    . /etc/check-reboot.conf
+fi
+
+exitcode=0
+bootdate="$(date -d "$(cut -f1 -d. /proc/uptime) seconds ago" -u +%s)"
+
+truncate --size=0 /run/reboot-required.pkgs
+
+for pkg in ${PKGS} ; do
+    lastmerge="$(qlop -m "${pkg}" | tail -n 1 | cut -f 1 -d ' ')"
+
+    if [ -z "${lastmerge}" ]; then
+        continue
+    fi
+
+    lmdate="$(date -d "${lastmerge}" +%s)"
+
+    if [ "${lmdate}" -gt "${bootdate}" ]; then
+        echo "${pkg}" >> /run/reboot-required.pkgs
+        exitcode=$((exitcode + 1))
+    fi
+done
+
+exit ${exitcode}

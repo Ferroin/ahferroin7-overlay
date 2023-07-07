@@ -10,9 +10,15 @@ depend() {
 getfstype() {
 # We use this to determine what type of FS the swapfile is on.
     fstype=$(findmnt -An -o FSTYPE -T ${SWAPFILE})
-    for fs in btrfs nilfs2 logfs zfs ext3cow ; do
+    for fs in nilfs2 logfs zfs ext3cow ; do
         if [ ${fstype} = ${fs} ] ; then
             fstype="cowloop"
+            return 0
+        fi
+    done
+    for fs in btrfs ; do
+        if [ ${fstype} = ${fs} ]; then
+            fstype="cow"
             return 0
         fi
     done
@@ -68,8 +74,7 @@ start() {
             if [ ${fstype} = cowloop ] ; then
                 # This is for COW filesystems that either don't honor
                 # the NOCOW attribute, or don't provide a proper block
-                # mapping for files.  This currently includes: BTRFS,
-                # NILFS2, ZFS and ext3cow
+                # mapping for files.  This currently includes: NILFS2, ZFS and ext3cow
                 einfo "Detected filesystem as being COW and needing a loop device."
                 chattr +C ${SWAPFILE}
                 SIZE="${SIZE}M"
@@ -78,8 +83,7 @@ start() {
             elif [ ${fstype} = cow ] ; then
                 # This is for COW filesystems that honor the +C attribute,
                 # and provide a proper block mapping for files.
-                # Currently, there aren't any filesystems that I know of
-                # that fit this description.
+                # This currently includes BTRFS
                 einfo "Detected filesystem as being COW and not needing a loop device."
                 chattr +C ${SWAPFILE}
                 fallocate -l $((1024*1024*${SIZE})) ${SWAPFILE}

@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=8
 
 DESCRIPTION="A simple initscript for kernel crash dumps on Gentoo."
 HOMEPAGE="https://github.com/Ferroin/ahferroin7-overlay"

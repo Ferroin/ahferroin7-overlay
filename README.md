@@ -55,11 +55,3 @@ virtual/phys-system-meta        Same as above, just adds more which are
 virtual/x86-system-meta         Same as above, just adds more which are
                                 usually standard on x86 systems, but
                                 may not be needed on others.
-
-And this is a list of 3rd-party stuff:
-app-crypt/certbot-dns-route53   Amazon Route 53 plugin for Certbot,
-                                will be removed when it finally gets
-                                added to portage.
-dev-python/nbt2yaml             A library and tools for converting
-                                Minecraft's NBT format to YAML
-www-servers/micro_httpd         Tiny inetd based HTTP/1.0 server.

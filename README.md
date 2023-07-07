@@ -32,6 +32,8 @@ sys-apps/auto-swap              An initscript to do advanced swapfile
                                 setup.
 sys-apps/kdump-init             A simple (and somewhat naieve) initscript
                                 to set up and run kernel crash dumps.
+sys-apps/mm-init-scripts        A collection of init scripts to set up
+                                various Linux memory management features.
 sys-apps/pymlock                A python script to mlock arbitrary files,
                                 including an initscript to be used as
                                 a replacement for memlockd.

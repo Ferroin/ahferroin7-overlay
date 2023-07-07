@@ -1,0 +1,57 @@
+#!/sbin/openrc-run
+# Copyright 2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="KSM setup"
+description="Configure and enable KSM"
+KSM_PATH="${KSM_PATH:-/sys/kernel/mm/ksm}"
+KSM_USE_ZERO_PAGES="${KSM_USE_ZERO_PAGES:-1}"
+
+depend() {
+    need sysfs
+}
+
+is_enabled() {
+    case "${1}" in
+        1) echo "Enabled" ;;
+        0) echo "Disabled" ;;
+    esac
+}
+
+start() {
+    if [ -e "${KSM_PATH}/run" ] ; then
+        einfo "Configuring KSM"
+
+        if echo "${KSM_PAGES_TO_SCAN}" | grep -eq '^[1-9][0-9]*$' ; then
+            ebegin "Setting KSM pages to scan: ${KSM_PAGES_TO_SCAN}"
+            echo "${KSM_PAGES_TO_SCAN}" > "${KSM_PATH}/pages_to_scan"
+            ewend $?
+        fi
+
+        if echo "${KSM_SLEEP_MILLISECS}" | grep -eq '^[1-9][0-9]*$' ; then
+            ebegin "Setting KSM sleep delay: ${KSM_SLEEP_MILLISECS}ms"
+            echo "${KSM_SLEEP_MILLISECS}" > "${KSM_PATH}/sleep_millisecs"
+            ewend $?
+        fi
+
+        if echo "${KSM_USE_ZERO_PAGES}" | grep -eq '^[1-9][0-9]*$' ; then
+            ebegin "Configuring KSM use of zero pages: $(is_enabled "${KSM_USE_ZERO_PAGES}")"
+            echo "${KSM_USE_ZERO_PAGES}" > "${KSM_PATH}/use_zero_pages"
+            ewend $?
+        fi
+
+        ebegin "Enabling KSM"
+        echo 1 > "${KSM_PATH}/run"
+        eend $?
+    else
+        ewarn "KSM is not supported by this system, not attempting to enable it."
+    fi
+}
+
+stop() {
+    if [ -e "${KSM_PATH}/run" ] ; then
+        ebegin "Disabling KSM"
+        echo 0 > "${KSM_PATH}/run"
+        eend 0
+    fi
+}

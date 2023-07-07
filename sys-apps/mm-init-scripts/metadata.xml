@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+	A collection of simplistic init scripts for configuring certain
+	memory management features of the Linux kernel. Includes support
+	for KSM, transparent hugepages (THP), DAMON proactive reclaim,
+	and MGLRU.
+</longdescription>
+</pkgmetadata>

@@ -1,0 +1,36 @@
+#!/sbin/openrc-run
+# Copyright 2023 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="Multi-Gen LRU"
+description="Configure Multi-Gen LRU"
+MGLRU_PATH="${MGLRU_PATH:-/sys/kernel/mm/lru_gen}"
+
+depend() {
+    need sysfs
+}
+
+start() {
+    if [ -d "${MGLRU_PATH}" ]; then
+        ebegin "Configuring Multi-Gen LRU"
+
+        if echo "${MGLRU_MIN_TTL}" | grep -eq '^[1-9][0-9]*$' ; then
+            ebegin "Setting MGLRU min TTL: ${MGLRU_MIN_TTL}"
+            echo "${MGLRU_MIN_TTL}" > "${MGLRU_PATH}/min_ttl_ms"
+            ewend $?
+        fi
+
+        echo "Y" > "${MGLRU_PATH}/enabled"
+        eend 0
+    else
+        ewarn "This system does not support Multi-Gen LRU, not attempting to enable it."
+    fi
+}
+
+stop() {
+    if [ -d "${MGLRU_PATH}" ]; then
+        ebegin "Disabling Multi-Gen LRU"
+        echo "N" > "${MGLRU_PATH}/enabled"
+        eend $?
+    fi
+}

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-	<longdescription>This is a simple metapackage to pull in
-	gentoolkit, eix, layman, and smart-live-rebuild.  A significant
-	majority of people who use Gentoo regularly install some
-	subset of these, this ebuild is just to make it a bit
-	easier.</longdescription>
-</pkgmetadata>

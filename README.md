@@ -22,10 +22,6 @@ as an additional unsigned overlay list.
 Currently, the things I've wrtten in here are:
 app-portage/check-reboot        Check to see if we've updated any of a
                                 set of packages and thus need to reboot.
-app-portage/portage-tools-meta  Simple meta-package that pulls in a
-                                handful of useful portage tools that
-                                arguably should be in the standard
-                                install.
 sys-apps/auto-swap              An initscript to do advanced swapfile
                                 setup.
 sys-apps/kdump-init             A simple (and somewhat naieve) initscript

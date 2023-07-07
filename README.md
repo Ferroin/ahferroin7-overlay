@@ -22,8 +22,6 @@ as an additional unsigned overlay list.
 Currently, the things I've wrtten in here are:
 app-portage/check-reboot        Check to see if we've updated any of a
                                 set of packages and thus need to reboot.
-app-portage/disowned            A shell script to automate finding
-                                files that aren't owned by any package.
 app-portage/portage-tools-meta  Simple meta-package that pulls in a
                                 handful of useful portage tools that
                                 arguably should be in the standard
@@ -46,12 +44,3 @@ sys-apps/zram-swap              An initscript to setup swap on a compressed
                                 ramdisk.
 sys-fs/fscleaner                A cron job to automate basic filesystem
                                 maintnence tasks.
-virtual/basic-system-meta       Pulls in some of the packages that most
-                                other distros include by default, but
-                                Gentoo doesn't.
-virtual/phys-system-meta        Same as above, just adds more which are
-                                normally only used on physical hardware
-                                (instad of in VM's).
-virtual/x86-system-meta         Same as above, just adds more which are
-                                usually standard on x86 systems, but
-                                may not be needed on others.

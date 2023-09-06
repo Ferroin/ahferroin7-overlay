@@ -7,7 +7,6 @@
             <email>ahferroin7@gmail.com</email>
             <name>Austin S. Hemmelgarn</name>
         </owner>
-        <source type='git'>git://github.com/Ferroin/ahferroin7-overlay</source>
         <source type='git'>https://github.com/Ferroin/ahferroin7-overlay</source>
     </repo>
 </repositories>

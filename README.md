@@ -22,6 +22,7 @@ as an additional unsigned overlay list.
 Currently, the things I've wrtten in here are:
 
 - app-portage/check-reboot: Check to see if we've updated any of a set of packages and thus need to reboot.
+- app-shells/powerline-service: Per-user Powerline daemons as OpenRC services.
 - sys-apps/auto-swap: An initscript to do advanced swapfile setup.
 - sys-apps/kdump-init: A simple (and somewhat naieve) initscript to set up and run kernel crash dumps.
 - sys-apps/mm-init-scripts: A collection of init scripts to set up various Linux memory management features.

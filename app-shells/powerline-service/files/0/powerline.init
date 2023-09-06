@@ -1,0 +1,31 @@
+#!/sbin/openrc-run
+# Copyright 2023 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+usr="${RC_SVCNAME#*.}"
+name="Powerline daemon for ${usr}"
+description="Persistent powerline daemon for ${usr}"
+command=/usr/bin/powerline-daemon
+command_args="${powerline_args}"
+command_args_foreground="--foreground"
+supervisor="supervise-daemon"
+
+depend() {
+    need root localmount
+}
+
+start_pre() {
+        if [ "${usr}" = "$RC_SVCNAME" ]; then
+                eerror "${RC_SVCNAME} cannot be started directly. You must create"
+                eerror "symbolic links to it for the users you want to start"
+                eerror "a persistent powerline daemon for. Links should follow the pattern"
+                eerror "powerline.<user>, where <user> is the username of the user to run the daemon for."
+                return 1
+        elif ! /usr/bin/getent passwd "${usr}" > /dev/null 2>&1; then
+                eerror "Cannot start powerline daemon for ${usr}, as they do not exist."
+                return 1
+        else
+                home="$(getent passwd "${usr}" | cut -f 6 -d ':')"
+                start_stop_daemon_args="--chdir ${home} --user ${usr} --env USER=${usr} --env HOME=${home}"
+        fi
+}

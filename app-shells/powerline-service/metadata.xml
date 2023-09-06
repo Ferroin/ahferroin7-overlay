@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<longdescription lang="en">
+	A small init script to start persistent Powerline daemons as
+	OpenRC services for individual users. This speeds up shell startup
+	slightly when using powerline, especially on subsequent logins,
+	and ensures the daemons get shut down properly when the system
+	switches runlevels.
+</longdescription>
+</pkgmetadata>

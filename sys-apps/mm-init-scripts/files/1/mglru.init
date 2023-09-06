@@ -12,14 +12,15 @@ depend() {
 
 start() {
     if [ -d "${MGLRU_PATH}" ]; then
-        ebegin "Configuring Multi-Gen LRU"
+        einfo "Configuring Multi-Gen LRU"
 
-        if echo "${MGLRU_MIN_TTL}" | grep -eq '^[1-9][0-9]*$' ; then
+        if echo "${MGLRU_MIN_TTL}" | grep -Eq '^[1-9][0-9]*$' ; then
             ebegin "Setting MGLRU min TTL: ${MGLRU_MIN_TTL}"
             echo "${MGLRU_MIN_TTL}" > "${MGLRU_PATH}/min_ttl_ms"
             ewend $?
         fi
 
+        ebegin "Enabling Multi-Gen LRU"
         echo "Y" > "${MGLRU_PATH}/enabled"
         eend 0
     else

@@ -28,55 +28,55 @@ start() {
     if [ -d "${DAMON_RECLAIM_PATH}/parameters" ]; then
         einfo "Configuring DAMON reclaim"
 
-        if echo "${DAMON_RECLAIM_MIN_AGE}" | grep -eq '^[1-9][0-9]*$'; then
+        if echo "${DAMON_RECLAIM_MIN_AGE}" | grep -Eq '^[1-9][0-9]*$'; then
             ebegin "Configuring minimum age for DAMON reclaim regions: ${DAMON_RECLAIM_MIN_AGE}ms"
             echo "${DAMON_RECLAIM_MIN_AGE}" > "${DAMON_RECLAIM_PATH}/parameters/min_age"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_QUOTA_TIME}" | grep -eq '^[1-9][0-9]*$'; then
+        if echo "${DAMON_RECLAIM_QUOTA_TIME}" | grep -Eq '^[1-9][0-9]*$'; then
             ebegin "Configuring tine quota for DAMON reclaim: ${DAMON_RECLAIM_QUOTA_TIME}ms"
             echo "${DAMON_RECLAIM_QUOTA_TIME}" > "${DAMON_RECLAIM_PATH}/parameters/quota_ms"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_QUOTA_SIZE}" | grep -eq '^[1-9][0-9]*$'; then
+        if echo "${DAMON_RECLAIM_QUOTA_SIZE}" | grep -Eq '^[1-9][0-9]*$'; then
             ebegin "Configuring size quota for DAMON reclaim: ${DAMON_RECLAIM_QUOTA_SIZE} bytes"
             echo "${DAMON_RECLAIM_QUOTA_SIZE}" > "${DAMON_RECLAIM_PATH}/parameters/quota_sz"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_QUOTA_PERIOD}" | grep -eq '^[1-9][0-9]*$'; then
+        if echo "${DAMON_RECLAIM_QUOTA_PERIOD}" | grep -Eq '^[1-9][0-9]*$'; then
             ebegin "Configuring quota period for DAMON reclaim: ${DAMON_RECLAIM_QUOTA_PERIOD}ms"
             echo "${DAMON_RECLAIM_QUOTA_PERIOD}" > "${DAMON_RECLAIM_PATH}/parameters/quota_reset_interval_ms"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_WMARK_CHECK}" | grep -eq '^[1-9][0-9]*$'; then
+        if echo "${DAMON_RECLAIM_WMARK_CHECK}" | grep -Eq '^[1-9][0-9]*$'; then
             ebegin "Configuring watermark check interval for DAMON reclaim: ${DAMON_RECLAIM_WMARK_CHECK} microseconds"
             echo "${DAMON_RECLAIM_WMARK_CHECK}" > "${DAMON_RECLAIM_PATH}/parameters/wmarks_interval"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_WMARK_LOW}" | grep -eq '^[1-9][0-9]{0,3}$'; then
+        if echo "${DAMON_RECLAIM_WMARK_LOW}" | grep -Eq '^[1-9][0-9]{0,3}$'; then
             ebegin "Configuring low watermark for DAMON reclaim: $(permille2percent "${DAMON_RECLAIM_WMARK_LOW}")%"
             echo "${DAMON_RECLAIM_WMARK_LOW}" > "${DAMON_RECLAIM_PATH}/parameters/wmarks_low"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_WMARK_MID}" | grep -eq '^[1-9][0-9]{0,3}$'; then
+        if echo "${DAMON_RECLAIM_WMARK_MID}" | grep -Eq '^[1-9][0-9]{0,3}$'; then
             ebegin "Configuring mid watermark for DAMON reclaim: $(permille2percent "${DAMON_RECLAIM_WMARK_MID}")%"
             echo "${DAMON_RECLAIM_WMARK_MID}" > "${DAMON_RECLAIM_PATH}/parameters/wmarks_mid"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_WMARK_HIGH}" | grep -eq '^[1-9][0-9]{0,3}$'; then
+        if echo "${DAMON_RECLAIM_WMARK_HIGH}" | grep -Eq '^[1-9][0-9]{0,3}$'; then
             ebegin "Configuring high watermark for DAMON reclaim: $(permille2percent "${DAMON_RECLAIM_WMARK_HIGH}")%"
             echo "${DAMON_RECLAIM_WMARK_HIGH}" > "${DAMON_RECLAIM_PATH}/parameters/wmarks_high"
             ewend $?
         fi
 
-        if echo "${DAMON_RECLAIM_SKIP_ANON}" | grep -eq '^[YyNn]$'; then
+        if echo "${DAMON_RECLAIM_SKIP_ANON}" | grep -Eq '^[YyNn]$'; then
             ebegin "Configuring anonymous page reclaim for DAMON reclaim: $(is_skip_enabled "${DAMON_RECLAIM_SKIP_ANON}")"
             echo "${DAMON_RECLAIM_SKIP_ANON}" > "${DAMON_RECLAIM_PATH}/parameters/skip_anon"
             ewend $?

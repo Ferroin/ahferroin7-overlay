@@ -1,0 +1,83 @@
+[Unit]
+Description='Configure Transparent Hugepage settings'
+RequiresMountsFor=/sys/kernel/mm /run
+ConditionUser=@system
+AssertPathExists=/etc/conf.d/thp
+AssertDirectoryNotEmpty=/sys/kernel/mm/transparent_hugepage
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+# THP_MODE specifies when the kernel will try to use transparent
+# hugepages. Supported values are:
+#
+# - always: Enable THP for all userspace memory.
+# - madvise: Only enable THP for regions of memory marked as benefitting
+#   from THP.
+# - never: Completely disable THP.
+#
+# The usual (and safe) default is madvise. However, boot options or
+# kernel config options may change what mode is used on boot.
+Environment=THP_MODE=madvise
+
+# THP_DEFRAG controls how and when the kernel will attempt memory reclaim
+# to free up space for hugepage allocations. Supported values are:
+#
+# - always: Hugepage allocations will stall for direct reclaim.
+# - madvise: Like 'always', but only for regions that would have THP
+#   enabled when THP_MODE is 'madvise'.
+# - defer: Hugepage allocations will trigger reclaim in the background
+#   and convert the allocation to a hugepage asynchronously.
+# - defer+madvise: Same as madvise, but use defer behavior for things
+#   not covered by madvise.
+# - never: Never use reclaim to satisfy hugepage allocations.
+#
+# The kernel default is madvise. However, if you are using THP_MODE=always
+# and can tolerate slightly higher CPU usage, you probably want defer,
+# defer+madvise, or always instead.
+Environment=THP_DEFRAG=madvise
+
+# THP_SHMEM controls THP allocations for anonymous shared memory
+# segments. Supported values are:
+#
+# - always: Always attempt to use transparent hugepages for shared memory.
+# - advise: Only use THP if requested by the application allocating the
+#   shared memory segment.
+# - within_size: Same as advise, but also also use huge pages when the
+#   allocations would fit properly.
+# - never: Don't use transparent hugepages for anonymous shared memory
+#   at all.
+#
+# The kernel default is never. The advise option is generally safe for
+# most normal systems.
+Environment=THP_SHMEM=advise
+
+# THP_USE_ZERO_PAGE controls whether special handling is done for new
+# allocations. You almost always want this enabled, which is the
+# default.
+Environment=THP_USE_ZERO_PAGE=1
+
+Environment=THP_KHUGEPAGED_PAGES_TO_SCAN=4096
+Environment=THP_KHUGEPAGED_SCAN_SLEEP_MILLISECS=10000
+Environment=THP_KHUGEPAGED_ALLOC_SLEEP_MILLISECS=60000
+
+ExecStart=/bin/sh -c 'echo "${THP_DEFRAG}" > /sys/kernel/mm/transparent_hugepage/defrag'
+ExecStart=/bin/sh -c 'echo "${THP_SHMEM}" > /sys/kernel/mm/transparent_hugepage/shmem_enabled'
+ExecStart=/bin/sh -c 'echo "${THP_USE_ZERO_PAGE}" > /sys/kernel/mm/transparent_hugepage/use_zero_page'
+ExecStart=/bin/sh -c 'echo "${THP_MODE}" > /sys/kernel/mm/transparent_hugepage/enabled'
+ExecStart=/bin/sh -c 'echo "${THP_KHUGEPAGED_PAGES_TO_SCAN}" > /sys/kernel/mm/transparent_hugepage/khugepaged/pages_to_scan'
+ExecStart=/bin/sh -c 'echo "${THP_KHUGEPAGED_SCAN_SLEEP_MILLISECS}" > /sys/kernel/mm/transparent_hugepage/khugepaged/scan_sleep_millisecs'
+ExecStart=/bin/sh -c 'echo "${THP_KHUGEPAGED_ALLOC_SLEEP_MILLISECS}" > /sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs'
+
+# Disable and restore kernel defaults on stop
+ExecStop=/bin/sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/enabled'
+ExecStop=/bin/sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/defrag'
+ExecStop=/bin/sh -c 'echo never > /sys/kernel/mm/transparent_hugepage/shmem_enabled'
+ExecStop=/bin/sh -c 'echo 1 > /sys/kernel/mm/transparent_hugepage/use_zero_page'
+ExecStop=/bin/sh -c 'echo 4096 > /sys/kernel/mm/transparent_hugepage/khugepaged/pages_to_scan'
+ExecStop=/bin/sh -c 'echo 10000 > /sys/kernel/mm/transparent_hugepage/khugepaged/scan_sleep_millisecs'
+ExecStop=/bin/sh -c 'echo 60000 > /sys/kernel/mm/transparent_hugepage/khugepaged/alloc_sleep_millisecs'
+
+[Install]
+WantedBy=basic.target

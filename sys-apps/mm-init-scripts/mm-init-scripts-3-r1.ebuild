@@ -21,9 +21,9 @@ src_unpack() {
 
 src_install() {
 	for feature in ksm mglru thp; do
-		newconfd "${FILESDIR}/${PV}/${feature}.conf" "${feature}"
-		newinitd "${FILESDIR}/${PV}/${feature}.init" "${feature}"
+		newconfd "${FILESDIR}/${PVR}/${feature}.conf" "${feature}"
+		newinitd "${FILESDIR}/${PVR}/${feature}.init" "${feature}"
 		insinto "${ROOT}/usr/lib/systemd/system"
-		newins "${FILESDIR}/${PV}/${feature}.service" "${feature}.service"
+		newins "${FILESDIR}/${PVR}/${feature}.service" "${feature}.service"
 	done
 }

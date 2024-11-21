@@ -1,0 +1,29 @@
+[Unit]
+Description='Configure KSM settings'
+RequiresMountsFor=/sys/kernel/mm /run
+ConditionUser=@system
+AssertPathExists=/etc/conf.d/ksm
+AssertDirectoryNotEmpty=/sys/kernel/mm/ksm
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+
+ExecStartPre=/bin/sh -c 'echo "KSM_PAGES_TO_SCAN=$(cat /sys/kernel/mm/ksm/pages_to_scan)" > /run/ksm.defaults'
+ExecStart=/bin/sh -c '. /etc/conf.d/ksm && [ -n ${KSM_PAGES_TO_SCAN} ] && echo "${KSM_PAGES_TO_SCAN}" > /sys/kernel/mm/ksm/pages_to_scan'
+ExecStop=/bin/sh -c '. /run/ksm.defaults && [ -n ${KSM_PAGES_TO_SCAN} ] && echo "${KSM_PAGES_TO_SCAN}" > /sys/kernel/mm/ksm/pages_to_scan'
+
+ExecStartPre=/bin/sh -c 'echo "KSM_SLEEP_MILLISECS=$(cat /sys/kernel/mm/ksm/sleep_millisecs)" >> /run/ksm.defaults'
+ExecStart=/bin/sh -c '. /etc/conf.d/ksm && [ -n ${KSM_SLEEP_MILLISECS} ] && echo "${KSM_SLEEP_MILLISECS}" > /sys/kernel/mm/ksm/sleep_millisecs'
+ExecStop=/bin/sh -c '. /run/ksm.defaults && [ -n ${KSM_SLEEP_MILLISECS} ] && echo "${KSM_SLEEP_MILLISECS}" > /sys/kernel/mm/ksm/sleep_millisecs'
+
+ExecStartPre=/bin/sh -c 'echo "KSM_USE_ZERO_PAGES=$(cat /sys/kernel/mm/ksm/use_zero_pages)" >> /run/ksm.defaults'
+ExecStart=/bin/sh -c '. /etc/conf.d/ksm && echo "${KSM_USE_ZERO_PAGES:-1}" > /sys/kernel/mm/ksm/use_zero_pages'
+ExecStop=/bin/sh -c '. /run/ksm.defaults && [ -n ${KSM_USE_ZERO_PAGES} ] && echo "${KSM_USE_ZERO_PAGES}" > /sys/kernel/mm/ksm/use_zero_pages'
+
+ExecStartPre=/bin/sh -c 'echo "KSM_ENABLE=$(cat /sys/kernel/mm/ksm/run)" >> /run/ksm.defaults'
+ExecStart=/bin/sh -c '. /etc/conf.d/ksm && [ -n ${KSM_ENABLE} ] && echo "${KSM_ENABLE}" > /sys/kernel/mm/ksm/run'
+ExecStop=/bin/sh -c '. /run/ksm.defaults && [ -n ${KSM_ENABLE} ] && echo "${KSM_ENABLE}" > /sys/kernel/mm/ksm/run'
+
+[Install]
+WantedBy=basic.target

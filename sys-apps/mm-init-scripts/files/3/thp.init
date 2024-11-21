@@ -1,0 +1,95 @@
+#!/sbin/openrc-run
+# Copyright 2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="THP"
+description="Configure Transparent Huge Pages"
+THP_PATH="/sys/kernel/mm/transparent_hugepage"
+THP_MODE="${THP_MODE:-madvise}"
+
+depend() {
+    need sysfs
+}
+
+is_enabled() {
+    case "${1}" in
+        1) echo "Enabled" ;;
+        0) echo "Disabled" ;;
+    esac
+}
+
+start() {
+    if [ -e "${THP_PATH}/enabled" ] ; then
+        einfo "Configuring Global THP"
+
+        {
+            echo "THP_DEFRAG=$(cat "${THP_PATH}/defrag")"
+            echo "THP_SHMEM=$(cat "${THP_PATH}/shmem_enabled")"
+            echo "THP_USE_ZERO_PAGE=$(cat "${THP_PATH}/use_zero_page")"
+            echo "THP_MODE=$(cat "${THP_PATH}/enable")"
+            echo "THP_KHUGEPAGED_PAGES_TO_SCAN=$(cat "${THP_PATH}/khugepaged/pages_to_scan")"
+            echo "THP_KHUGEPAGED_SCAN_SLEEP_MILLISECS=$(cat "${THP_PATH}/khugepaged/scan_sleep_millisecs")"
+            echo "THP_KHUGEPAGED_ALLOC_SLEEP_MILLISECS=$(cat "${THP_PATH}/khugepaged/alloc_sleep_millisecs")"
+        } > /run/thp.defaults
+
+        if [ -n "${THP_DEFRAG}" ]; then
+            ebegin "Setting THP defrag mode: ${THP_DEFRAG}"
+            echo "${THP_DEFRAG}" > "${THP_PATH}/defrag"
+            ewend $?
+        fi
+
+        if [ -n "${THP_SHMEM}" ]; then
+            ebegin "Setting THP shared memory mode: ${THP_SHMEM}"
+            echo "${THP_SHMEM}" > "${THP_PATH}/shmem_enabled"
+            ewend $?
+        fi
+
+        if [ -n "${THP_USE_ZERO_PAGE}" ]; then
+            ebegin "Configuring THP use of zero page: $(is_enabled "${THP_USE_ZERO_PAGE}")"
+            echo "${THP_USE_ZERO_PAGE}" > "${THP_PATH}/use_zero_page"
+            ewend $?
+        fi
+
+        ebegin "Setting THP mode: ${THP_MODE}"
+        echo "${THP_MODE}" > "${THP_PATH}/enabled"
+        eend $?
+
+        if echo "${THP_KHUGEPAGED_PAGES_TO_SCAN}" | grep -Eq '^[1-9][0-9]*$'; then
+            ebegin "Setting khugepaged pages to scan: ${THP_KHUGEPAGED_PAGES_TO_SCAN}"
+            echo "${THP_KHUGEPAGED_PAGES_TO_SCAN}" > "${THP_PATH}/khugepaged/pages_to_scan"
+            ewend $?
+        fi
+
+        if echo "${THP_KHUGEPAGED_SCAN_SLEEP_MILLISECS}" | grep -Eq '^[1-9][0-9]*$'; then
+            ebegin "Setting khugepaged scan delay: ${THP_KHUGEPAGED_SCAN_SLEEP_MILLISECS}ms"
+            echo "${THP_KHUGEPAGED_SCAN_SLEEP_MILLISECS}" > "${THP_PATH}/khugepaged/scan_sleep_millisecs"
+            ewend $?
+        fi
+
+        if echo "${THP_KHUGEPAGED_ALLOC_SLEEP_MILLISECS}" | grep -Eq '^[1-9][0-9]*$'; then
+            ebegin "Setting khugepaged alloc delay: ${THP_KHUGEPAGED_ALLOC_SLEEP_MILLISECS}ms"
+            echo "${THP_KHUGEPAGED_ALLOC_SLEEP_MILLISECS}" > "${THP_PATH}/khugepaged/alloc_sleep_millisecs"
+            ewend $?
+        fi
+    else
+        ewarn "Transparent hugepages are not supported by this system, not attempting to enable them."
+    fi
+}
+
+stop() {
+    if [ -e ${THP_PATH}/enabled ] ; then
+        ebegin "Restoring default THP settings"
+
+        . /run/thp.defaults
+
+        echo "${THP_DEFRAG}" > "${THP_PATH}/defrag"
+        echo "${THP_SHMEM}" > "${THP_PATH}/shmem_enabled"
+        echo "${THP_USE_ZERO_PAGE}" > "${THP_PATH}/use_zero_page"
+        echo "${THP_MODE}" > "${THP_PATH}/enabled"
+        echo "${THP_KHUGEPAGED_PAGES_TO_SCAN}" > "${THP_PATH}/khugepaged/pages_to_scan"
+        echo "${THP_KHUGEPAGED_SCAN_SLEEP_MILLISECS}" > "${THP_PATH}/khugepaged/scan_sleep_millisecs"
+        echo "${THP_KHUGEPAGED_ALLOC_SLEEP_MILLISECS}" > "${THP_PATH}/khugepaged/alloc_sleep_millisecs"
+
+        eend 0
+    fi
+}

@@ -1,0 +1,19 @@
+[Unit]
+Description='Configure Multi-Gen LRU settings'
+RequiresMountsFor=/sys/kernel/mm /run
+ConditionUser=@system
+AssertPathExists=/etc/conf.d/mglru
+AssertDirectoryNotEmpty=/sys/kernel/mm/lru_gen
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/bin/sh -c 'echo "MGLRU_MIN_TTL=$(cat /sys/kernel/mm/lru_gen/min_ttl_ms)" > /run/mglru.defaults'
+ExecStartPre=/bin/sh -c 'echo "MGLRU_ENABLE=$(cat /sys/kernel/mm/lru_gen/enable)" > /run/mglru.defaults'
+ExecStart=/bin/sh -c '. /etc/conf.d/mglru && [ -n ${MGLRU_MIN_TTL} ] && echo "${MGLRU_MIN_TTL}" > /sys/kernel/mm/lru_gen/min_ttl_ms'
+ExecStart=/bin/sh -c '. /etc/conf.d/mglru && [ -n ${MGLRU_ENABLE} ] && echo "${MGLRU_ENABLE}" > /sys/kernel/mm/lru_gen/enable'
+ExecStop=/bin/sh -c '. /run/mglru.defaults && [ -n ${MGLRU_MIN_TTL} ] && echo "${MGLRU_MIN_TTL}" > /sys/kernel/mm/lru_gen/min_ttl_ms'
+ExecStop=/bin/sh -c '. /run/mglru.defaults && [ -n ${MGLRU_ENABLE} ] && echo "${MGLRU_ENABLE}" > /sys/kernel/mm/lru_gen/enable'
+
+[Install]
+WantedBy=basic.target

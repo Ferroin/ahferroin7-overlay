@@ -8,12 +8,12 @@ AssertDirectoryNotEmpty=/sys/kernel/mm/ksm
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-EnvironmentFile=/etc/conf.d/ksm
+Environment=KSM_USE_ZERO_PAGES=1
 
 ExecStart=/bin/sh -c '[ -n "${KSM_PAGES_TO_SCAN}" ] && echo "${KSM_PAGES_TO_SCAN}" > /sys/kernel/mm/ksm/pages_to_scan'
 ExecStart=/bin/sh -c '[ -n "${KSM_SLEEP_MILLISECS}" ] && echo "${KSM_SLEEP_MILLISECS}" > /sys/kernel/mm/ksm/sleep_millisecs'
 ExecStart=/bin/sh -c 'echo "${KSM_USE_ZERO_PAGES:-1}" > /sys/kernel/mm/ksm/use_zero_pages'
-ExecStart=/bin/sh -c '[ -n "${KSM_ENABLE}" ] && echo "${KSM_ENABLE}" > /sys/kernel/mm/ksm/run'
+ExecStart=/bin/sh -c 'echo 1 > /sys/kernel/mm/ksm/run'
 
 ExecStop=/bin/sh -c 'echo 0 > /sys/kernel/mm/ksm/run'
 ExecStop=/bin/sh -c 'echo 100 > /sys/kernel/mm/ksm/pages_to_scan'

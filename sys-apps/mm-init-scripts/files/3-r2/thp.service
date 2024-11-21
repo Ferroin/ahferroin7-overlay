@@ -8,7 +8,7 @@ AssertDirectoryNotEmpty=/sys/kernel/mm/transparent_hugepage
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-EnvironmentFile=/etc/conf.d/thp
+Environment=THP_MODE=madvise
 
 ExecStart=/bin/sh -c '[ -n "${THP_DEFRAG}" ] && echo "${THP_DEFRAG}" > /sys/kernel/mm/transparent_hugepage/defrag'
 ExecStart=/bin/sh -c '[ -n "${THP_SHMEM}" ] && echo "${THP_SHMEM}" > /sys/kernel/mm/transparent_hugepage/shmem_enabled'

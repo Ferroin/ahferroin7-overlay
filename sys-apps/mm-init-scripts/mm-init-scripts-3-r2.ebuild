@@ -3,6 +3,8 @@
 
 EAPI=8
 
+inherit systemd
+
 DESCRIPTION="A collection of init scripts to manage Linux kernel memory management features"
 HOMEPAGE="https://github.com/Ferroin/ahferroin7-overlay"
 SRC_URI=""
@@ -15,15 +17,22 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+IUSE="+openrc systemd"
+REQUIRED_USE="|| ( openrc systemd )"
+
 src_unpack() {
 	S="${WORKDIR}"
 }
 
 src_install() {
 	for feature in ksm mglru thp; do
-		newconfd "${FILESDIR}/${PVR}/${feature}.conf" "${feature}"
-		newinitd "${FILESDIR}/${PVR}/${feature}.init" "${feature}"
-		insinto "${ROOT}/usr/lib/systemd/system"
-		newins "${FILESDIR}/${PVR}/${feature}.service" "${feature}.service"
+		if use openrc; then
+			newconfd "${FILESDIR}/${PVR}/${feature}.conf" "${feature}"
+			newinitd "${FILESDIR}/${PVR}/${feature}.init" "${feature}"
+		fi
+
+		if use systemd; then
+			systemd_dounit "${FILESDIR}/${PVR}/${feature}.service"
+		fi
 	done
 }

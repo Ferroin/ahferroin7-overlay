@@ -9,7 +9,7 @@ AssertDirectoryNotEmpty=/sys/kernel/mm/lru_gen
 Type=oneshot
 RemainAfterExit=yes
 
-ExecStart=/bin/sh -c '[ -n "${MGLRU_MIN_TTL}" ] && echo "${MGLRU_MIN_TTL}" > /sys/kernel/mm/lru_gen/min_ttl_ms'
+ExecStart=/bin/sh -c '[ -n "${MGLRU_MIN_TTL:-}" ] && echo "${MGLRU_MIN_TTL}" > /sys/kernel/mm/lru_gen/min_ttl_ms'
 ExecStart=/bin/sh -c 'echo Y > /sys/kernel/mm/lru_gen/enabled'
 
 ExecStop=/bin/sh -c 'echo N > /sys/kernel/mm/lru_gen/enabled'

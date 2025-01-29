@@ -29,7 +29,7 @@ src_unpack() {
 
 src_install() {
 	systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-done.target
-	systemd_dounit "${FILESDIR}"/${PV}/emerge-sync-done@.service
+	systemd_newunit "${FILESDIR}"/${PV}/emerge-sync-done.service emerge-sync-done@.service
 	systemd_dounit "${FILESDIR}"/${PV}/emerge-sync-done.target
 	systemd_dounit "${FILESDIR}"/${PV}/emerge-sync.service
 	systemd_dounit "${FILESDIR}"/${PV}/emerge-sync.timer
@@ -37,10 +37,10 @@ src_install() {
 	systemd_dounit "${FILESDIR}"/${PV}/trim-emerge-log.service
 	systemd_dounit "${FILESDIR}"/${PV}/trim-emerge-log.timer
 
-	systemd_douserunit "${FILESDIR}"/${PV}/glsa-check-notify.target
-	systemd_dounit "${FILESDIR}"/${PV}/glsa-check-notify@.service
+	systemd_douserunit "${FILESDIR}"/${PV}/glsa-notify.target
+	systemd_newunit "${FILESDIR}"/${PV}/glsa-notify.service glsa-notify@.service
 	systemd_dounit "${FILESDIR}"/${PV}/glsa-notify-mail.service
-	systemd_dounit "${FILESDIR}"/${PV}/glsa-check-notify.target
+	systemd_dounit "${FILESDIR}"/${PV}/glsa-notify.target
 	systemd_dounit "${FILESDIR}"/${PV}/glsa-check.service
 	systemd_dounit "${FILESDIR}"/${PV}/glsa-check.timer
 
@@ -61,5 +61,9 @@ src_install() {
 pkg_postinst() {
 	if [ "${MERGE_TYPE}" != "buildonly" ]; then
 		systemd_is_booted && systemctl daemon-reload
+	fi
+
+	if use notify; then
+		einfo "For desktop notification delivery, the system emerge-sync-done@.service and glsa-notify@.service services must be enabled for users who should recieve notifications."
 	fi
 }

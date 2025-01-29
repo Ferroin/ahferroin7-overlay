@@ -51,7 +51,7 @@ src_install() {
 		done
 	fi
 
-	if use notify-send; then
+	if use notify; then
 		systemd_douserunit "${FILESDIR}"/${PV}/emerge-update-notify-desktop.service
 		systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-notify-desktop.service
 		systemd_douserunit "${FILESDIR}"/${PV}/glsa-notify-desktop.service

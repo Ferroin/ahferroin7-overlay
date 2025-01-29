@@ -1,0 +1,14 @@
+[Unit]
+Description=Trim emerge logs to limit overall size
+RequireMountsFor=/var/log
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+Environment=MAX_LINES=100000
+Environment=LOG_PATH=/var/log
+ExecStart=/bin/sh -c 'tail -n ${MAX_LINES} ${LOG_PATH}/emerge.log > ${LOG_PATH}/emerge.log.tmp'
+ExecStart=/bin/mv ${LOG_PATH}/emerge.log.tmp ${LOG_PATH}/emerge.log
+ExecStart=/bin/sh -c 'tail -n ${MAX_LINES} ${LOG_PATH}/emerge-fetch.log > ${LOG_PATH}/emerge-fetch.log.tmp'
+ExecStart=/bin/mv ${LOG_PATH}/emerge-fetch.log.tmp ${LOG_PATH}/emerge-fetch.log

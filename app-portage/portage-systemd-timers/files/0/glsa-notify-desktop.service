@@ -1,0 +1,12 @@
+[Unit]
+Description=Send a desktop notification when the system is affected by one or more Gentoo Linux Security Advisories
+PartOf=glsa-notify.target
+
+[Service]
+Type=oneshot
+Environment=URGENCY=critical
+ExecCondition=/bin/sh -c 'dbus-send --print-reply --dest=org.freedesktop.DBus  /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep -q org.freedesktop.Notifications'
+ExecStart=notify-send -a Portage -u ${URGENCY} -c x-gentoo.portage "System security vulnerabilities detected" "This system is affected by one or more published Gentoo Linux Security Advisories. For details, check the output of `glsa-check -t all`."
+
+[Install]
+WantedBy=glsa-notify.target

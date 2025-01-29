@@ -1,0 +1,13 @@
+[Unit]
+Description=Synchronize portage repositories
+RequireMountsFor=/var/db/repos
+Wants=network-online.target
+After=network-online.target emerge-sync-done.target
+Conflicts=emerge-sync-done.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=emerge --sync
+OnSuccess=emerge-sync-done.target

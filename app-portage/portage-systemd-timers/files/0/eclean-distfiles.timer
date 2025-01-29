@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily cleanup of old distfiles
+RequireMountsFor=/var/cache/distfiles
+
+[Timer]
+Persistent=true
+OnCalendar=daily
+
+[Install]
+WantedBy=timers.target

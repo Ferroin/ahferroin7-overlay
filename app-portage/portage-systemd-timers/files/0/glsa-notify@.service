@@ -1,0 +1,12 @@
+[Unit]
+Description=glsa-notify.target proxy for user %I
+PartOf=glsa-notify.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=systemctl --user --machine=%i@ start glsa-notify.target
+ExecStop=systemctl --user --machine=%i@ stop glsa-notify.target
+
+[Install]
+WantedBy=glsa-notify.target

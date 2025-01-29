@@ -1,0 +1,14 @@
+[Unit]
+Description=Notify the system administrator via email of GLSAs affecting the system.
+Wants=network-online.target
+After=network-online.target
+PartOf=glsa-notify.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=glsa-check -m affected
+
+[Install]
+WantedBy=glsa-notify.target

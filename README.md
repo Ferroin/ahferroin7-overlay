@@ -1,7 +1,7 @@
 # ahferroin7’s Portage overlay.
 
 Some of the stuff in here is stuff that I wrote myself and am to lazy
-to put in it's won repo, other stuff is versions that aren't (or weren't
+to put in it's own repo, other stuff is versions that aren't (or weren't
 at some point) availible in the regular protage tree.
 
 ## Using it
@@ -22,6 +22,7 @@ as an additional unsigned overlay list.
 Currently, the things I've wrtten in here are:
 
 - app-portage/check-reboot: Check to see if we've updated any of a set of packages and thus need to reboot.
+- app-portage/portage-systemd-timers: Assorted systemd timers and services to automate common Portage tasks.
 - app-shells/powerline-service: Per-user Powerline daemons as OpenRC services.
 - sys-apps/auto-swap: An initscript to do advanced swapfile setup.
 - sys-apps/kdump-init: A simple (and somewhat naieve) initscript to set up and run kernel crash dumps.

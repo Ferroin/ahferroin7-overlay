@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+	<email>ahferroin7@gmail.com</email>
+	<name>Austin S. Hemmelgarn</name>
+</maintainer>
+<longdescription>
+	A collection of systemd units for automating common tasks involving portage.
+</longdescription>
+<use>
+	<flag name='gentoolkit'>Install timers for running eclean</flag>
+	<flag name='notify'>Include support for desktop notifications</flag>
+</use>
+</pkgmetadata>

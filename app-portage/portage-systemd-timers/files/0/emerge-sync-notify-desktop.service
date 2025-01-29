@@ -1,0 +1,12 @@
+[Unit]
+Description=Send a desktop notification when emerge-sync.service finishes successfully.
+PartOf=emerge-sync-done.target
+
+[Service]
+Type=oneshot
+Environment=URGENCY=normal
+ExecCondition=/bin/sh -c 'dbus-send --print-reply --dest=org.freedesktop.DBus  /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep -q org.freedesktop.Notifications'
+ExecStart=notify-send -a Portage -u ${URGENCY} -c x-gentoo.portage "Portage repository sync finished" "Portage repositories have finished syncing in the background."
+
+[Install]
+WantedBy=emerge-sync-done.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Clean up old distfiles
+RequireMountsFor=/var/cache/distfiles
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=eclean -dv distfiles

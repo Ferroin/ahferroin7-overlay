@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily check if system is affected by any Gentoo Linux Security Advisories
+RequireMountsFor=/var/db/repos
+
+[Timer]
+Persistent=true
+OnCalendar=daily
+
+[Install]
+WantedBy=timers.target

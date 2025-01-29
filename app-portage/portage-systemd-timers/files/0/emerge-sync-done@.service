@@ -1,0 +1,12 @@
+[Unit]
+Description=emerge-sync-done.target proxy for user %I
+PartOf=emerge-sync-done.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=systemctl --user --machine=%i@ start emerge-sync-done.target
+ExecStop=systemctl --user --machine=%i@ stop emerge-sync-done.target
+
+[Install]
+WantedBy=emerge-sync-done.target

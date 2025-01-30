@@ -1,6 +1,6 @@
 [Unit]
 Description=Clean up old distfiles
-RequireMountsFor=/var/cache/distfiles
+RequiresMountsFor=/var/cache/distfiles
 
 [Service]
 Type=oneshot

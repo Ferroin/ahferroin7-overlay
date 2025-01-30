@@ -1,6 +1,6 @@
 [Unit]
 Description=Trim emerge logs to limit overall size
-RequireMountsFor=/var/log
+RequiresMountsFor=/var/log
 
 [Service]
 Type=oneshot

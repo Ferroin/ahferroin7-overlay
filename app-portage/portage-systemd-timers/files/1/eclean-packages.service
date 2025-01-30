@@ -1,6 +1,6 @@
 [Unit]
 Description=Clean up old binary packages
-RequireMountsFor=/var/cache/binpkgs
+RequiresMountsFor=/var/cache/binpkgs
 
 [Service]
 Type=oneshot

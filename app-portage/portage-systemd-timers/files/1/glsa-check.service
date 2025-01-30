@@ -1,16 +1,16 @@
 [Unit]
 Description=Check if system is affected by any Gentoo Linux Security Advisories
-RequireMountsFor=/var/db/repos
+RequiresMountsFor=/var/db/repos
 After=emerge-sync.service glsa-notify.target
 Conflicts=glsa-notify.target
 PartOf=emerge-sync-done.target
+OnFailure=glsa-notify.target
 
 [Service]
 Type=oneshot
 User=root
 Group=root
 ExecStart=glsa-check -t all
-OnFailure=glsa-notify.target
 
 [Install]
 WantedBy=emerge-sync-done.target

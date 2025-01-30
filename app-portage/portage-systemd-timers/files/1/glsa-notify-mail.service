@@ -1,5 +1,6 @@
 [Unit]
 Description=Notify the system administrator via email of GLSAs affecting the system.
+RequiresMountsFor=/var/db/repos
 Wants=network-online.target
 After=network-online.target
 PartOf=glsa-notify.target

@@ -1,6 +1,6 @@
 [Unit]
 Description=Daily cleanup of old binary packages
-RequireMountsFor=/var/cache/binpkgs
+RequiresMountsFor=/var/cache/binpkgs
 
 [Timer]
 Persistent=true

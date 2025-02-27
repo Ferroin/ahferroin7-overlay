@@ -1,6 +1,6 @@
 [Unit]
 Description=Daily synchronization of portage repositories
-RequireMountsFor=/var/db/repos
+RequiresMountsFor=/var/db/repos
 Wants=network-online.target
 After=network-online.target
 

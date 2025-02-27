@@ -1,6 +1,6 @@
 [Unit]
 Description=Daily cleanup of old distfiles
-RequireMountsFor=/var/cache/distfiles
+RequiresMountsFor=/var/cache/distfiles
 
 [Timer]
 Persistent=true

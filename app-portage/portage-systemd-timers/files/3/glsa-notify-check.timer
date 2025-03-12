@@ -1,0 +1,10 @@
+[Unit]
+Description=Track whether the system glsa-notify target is active or not
+
+[Timer]
+Persistent=true
+OnCalender=*:00/15
+AccuracySec=900
+
+[Install]
+WantedBy=timers.target

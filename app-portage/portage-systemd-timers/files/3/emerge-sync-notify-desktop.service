@@ -10,3 +10,4 @@ ExecStart=notify-send -a Portage -u ${URGENCY} -c x-gentoo.portage "Portage repo
 
 [Install]
 WantedBy=emerge-sync-done.target
+Also=emerge-sync-check.timer

@@ -13,3 +13,4 @@ ExecStart=glsa-check -m affected
 
 [Install]
 WantedBy=glsa-notify.target
+Also=glsa-check.timer

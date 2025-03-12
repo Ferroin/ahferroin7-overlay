@@ -10,3 +10,4 @@ ExecStart=notify-send -a Portage -u ${URGENCY} -c x-gentoo.portage "System secur
 
 [Install]
 WantedBy=glsa-notify.target
+Also=glsa-notify-check.timer

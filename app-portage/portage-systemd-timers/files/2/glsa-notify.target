@@ -1,3 +1,0 @@
-[Unit]
-Description=Send notifications about the system being affected by one or more GLSAs
-AllowIsolate=No

@@ -6,10 +6,13 @@
 	<name>Austin S. Hemmelgarn</name>
 </maintainer>
 <longdescription>
-	A collection of systemd units for automating common tasks involving portage.
+	A collection of systemd units for automating common tasks
+	involving portage.  Includes timers for syncing Portage
+	repositories, trimming the emerge log, and checking the system
+	against security advisories
 </longdescription>
 <use>
-	<flag name='gentoolkit'>Install timers for running eclean</flag>
-	<flag name='notify'>Include support for desktop notifications</flag>
+	<flag name='gentoolkit'>Install timers for running eclean to clean up packages and distfiles</flag>
+	<flag name='notify'>Include support for desktop notifications when updates are available or the system is affected by security advisories</flag>
 </use>
 </pkgmetadata>

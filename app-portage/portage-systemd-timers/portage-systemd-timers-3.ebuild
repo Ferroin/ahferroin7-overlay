@@ -29,7 +29,8 @@ src_unpack() {
 
 src_install() {
 	systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-done.target
-	systemd_newunit "${FILESDIR}"/${PV}/emerge-sync-done.service emerge-sync-done@.service
+	systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-check.service
+	systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-check.timer
 	systemd_dounit "${FILESDIR}"/${PV}/emerge-sync-done.target
 	systemd_dounit "${FILESDIR}"/${PV}/emerge-sync.service
 	systemd_dounit "${FILESDIR}"/${PV}/emerge-sync.timer
@@ -38,7 +39,8 @@ src_install() {
 	systemd_dounit "${FILESDIR}"/${PV}/trim-emerge-log.timer
 
 	systemd_douserunit "${FILESDIR}"/${PV}/glsa-notify.target
-	systemd_newunit "${FILESDIR}"/${PV}/glsa-notify.service glsa-notify@.service
+	systemd_douserunit "${FILESDIR}"/${PV}/glsa-notify-check.service
+	systemd_douserunit "${FILESDIR}"/${PV}/glsa-notify-check.timer
 	systemd_dounit "${FILESDIR}"/${PV}/glsa-notify-mail.service
 	systemd_dounit "${FILESDIR}"/${PV}/glsa-notify.target
 	systemd_dounit "${FILESDIR}"/${PV}/glsa-check.service
@@ -64,6 +66,11 @@ pkg_postinst() {
 	fi
 
 	if use notify; then
-		einfo "For desktop notification delivery, the system emerge-sync-done@.service and glsa-notify@.service services must be enabled for users who should recieve notifications."
+		ewarn "Handling of user notification delivery has been changed starting with version 3."
+		ewarn "The system administrator no longer needs to enable per-user proxy services."
+		ewarn "Instead, individual users need to ensure that the emerge-sync-check.timer and/or"
+		ewarn "glsa-notify-check.timer are enabled in their session for sync and GLSA notifications"
+		ewarn "respectively. These will be enabled automatically when a user enables the associated"
+		ewarn "notification service, but existing users may need to enable them manually."
 	fi
 }

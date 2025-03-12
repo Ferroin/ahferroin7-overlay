@@ -3,7 +3,7 @@ Description=Track whether the system emerge-sync-done target is active or not
 
 [Timer]
 Persistent=true
-OnCalender=*:00/15
+OnCalendar=*:00/15
 AccuracySec=900
 
 [Install]

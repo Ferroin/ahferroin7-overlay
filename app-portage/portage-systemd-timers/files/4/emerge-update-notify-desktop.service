@@ -5,7 +5,7 @@ PartOf=emerge-sync-done.target
 [Service]
 Type=oneshot
 Environment=URGENCY=normal
-Environment="CHECK_OPTS=--update --deep --changed-deps --newuse"
+Environment="CHECK_OPTS=--update --deep --newuse"
 ExecCondition=/bin/sh -c 'dbus-send --print-reply --dest=org.freedesktop.DBus  /org/freedesktop/DBus org.freedesktop.DBus.ListNames | grep -q org.freedesktop.Notifications'
 ExecStart=/bin/sh -e -c '[ "$(emerge ${CHECK_OPTS} -q -p | wc -l)" = 0 ] || notify-send -a Portage -u ${URGENCY} -c x-gentoo.portage "Updates available" "One or more updates are available for the system."'
 

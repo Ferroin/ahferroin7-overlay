@@ -1,7 +1,0 @@
-[Unit]
-Description=Track whether the system glsa-notify target is active or not
-
-[Service]
-Type=oneshot
-ExecStart=/bin/sh -c "systemctl is-active glsa-notify.target > /dev/null && systemctl start --user glsa-notify.target ; true"
-ExecStart=/bin/sh -c "systemctl is-active glsa-notify.target > /dev/null || systemctl stop --user glsa-notify.target"

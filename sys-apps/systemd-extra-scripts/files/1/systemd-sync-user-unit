@@ -1,0 +1,56 @@
+#!/usr/bin/env sh
+
+set -e
+
+print_usage() {
+    printf "systemd-sync-user-unit SYSTEM_UNIT [USER_UNIT]\n"
+    printf "\n"
+    printf "Start or stop a user unit for the current user so that it's state matches a system unit.\n"
+    printf "This allows working around systemd's inability to make user units depend on the state of system units.\n"
+    printf "\n"
+    printf "If only a system unit is specified, the user unit is assumed to have the same name.\n"
+    printf "\n"
+    printf "Unit naming works the same as for systemctl.\n"
+}
+
+main() {
+    system_active=0
+    user_active=0
+
+    if ! systemctl cat "${1}" > /dev/null 2>&1; then
+        printf "System unit %s does not exist\n" "${1}"
+        exit 1
+    fi
+
+    if ! systemctl cat "${2}" > /dev/null 2>&1; then
+        printf "User unit %s does not exist\n" "${2}"
+        exit 1
+    fi
+
+    if systemctl is-active "${1}"; then
+        system_active=1
+    fi
+
+    if systemctl is-active "${2}"; then
+        user_active=1
+    fi
+
+    if [ "${system_active}" -eq 1 ] && [ "${user_active}" -ne 1 ]; then
+        systemctl --user start "${2}"
+    elif [ "${system_active}" -ne 1 ] && [ "${user_active}" -eq 1 ]; then
+        systemctl --user stop "${2}"
+    fi
+}
+
+case "${#}" in
+    0) print_usage ; exit 1 ;;
+    1)
+        if [ "${1}" = '--help' ] || [ "${1}" = '-h' ]; then
+            print_usage ; exit 0
+        else
+            main "${1}" "${1}"
+        fi
+        ;;
+    2) main "${1}" "${2}" ;;
+    *) print_usage ; exit 1 ;;
+esac

@@ -3,8 +3,9 @@ Description=Track whether the system emerge-sync-done target is active or not
 
 [Timer]
 Persistent=true
-OnCalendar=*:00/15
+OnUnitActiveSec=900
 AccuracySec=900
 
 [Install]
-WantedBy=timers.target
+WantedBy=emerge-user-timers.target
+Also=emerge-user-timer-delay.timer

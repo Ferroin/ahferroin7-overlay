@@ -18,7 +18,8 @@ gentoolkit? ( app-portage/gentoolkit )
 notify? (
 	|| ( x11-libs/libnotify x11-misc/tinynotify-send )
 	sys-apps/dbus
-)"
+)
+sys-apps/systemd-extra-scripts"
 BDEPEND=""
 
 inherit systemd
@@ -28,6 +29,9 @@ src_unpack() {
 }
 
 src_install() {
+	systemd_douserunit "${FILESDIR}"/${PV}/emerge-user-timers.target
+	systemd_douserunit "${FILESDIR}"/${PV}/emerge-user-timer-delay.timer
+
 	systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-done.target
 	systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-check.service
 	systemd_douserunit "${FILESDIR}"/${PV}/emerge-sync-check.timer

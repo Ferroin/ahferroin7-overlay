@@ -1,0 +1,6 @@
+[Unit]
+Description=Track whether the system glsa-notify target is active or not
+
+[Service]
+Type=oneshot
+ExecStart=systemd-sync-user-unit glsa-notify.target

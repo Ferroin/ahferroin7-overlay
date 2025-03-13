@@ -1,7 +1,0 @@
-[Unit]
-Description=Track whether the system emerge-sync-done target is active or not
-
-[Service]
-Type=oneshot
-ExecStart=/bin/sh -c "systemctl is-active emerge-sync-done.target > /dev/null && systemctl start --user emerge-sync-done.target ; true"
-ExecStart=/bin/sh -c "systemctl is-active emerge-sync-done.target > /dev/null || systemctl stop --user emerge-sync-done.target"

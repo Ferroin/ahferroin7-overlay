@@ -1,0 +1,6 @@
+[Unit]
+Description=Track whether the system emerge-sync-done target is active or not
+
+[Service]
+Type=oneshot
+ExecStart=systemd-sync-user-unit emerge-sync-done.target

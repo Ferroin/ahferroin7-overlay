@@ -1,0 +1,9 @@
+[Unit]
+Description=Enforce a startup delay for emerge-related user timers.
+
+[Timer]
+Persistent=False
+OnActiveSec=300
+
+[Install]
+WantedBy=timers.target

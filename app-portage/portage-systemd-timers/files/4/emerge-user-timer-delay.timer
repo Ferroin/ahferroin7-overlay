@@ -4,6 +4,7 @@ Description=Enforce a startup delay for emerge-related user timers.
 [Timer]
 Persistent=False
 OnActiveSec=300
+Unit=emerge-user-timers.target
 
 [Install]
 WantedBy=timers.target

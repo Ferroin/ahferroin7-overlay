@@ -31,7 +31,7 @@ main() {
         system_active=1
     fi
 
-    if systemctl is-active "${2}"; then
+    if systemctl --user is-active "${2}"; then
         user_active=1
     fi
 
